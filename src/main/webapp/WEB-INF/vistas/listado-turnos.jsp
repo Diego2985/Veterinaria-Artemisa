@@ -15,8 +15,8 @@
         <title>Veterinaria</title>
     </head>
     <body>
-        <div class="row d-flex">
-            <a href="${pageContext.request.contextPath}/reservar-turno" class="btn btn-lg btn-primary mt-4">Reservar Turno</a>
+        <div class="row d-flex text-center mt-4 mb-4">
+            <h4><span>Turnos Disponibles</span></h4>
         </div>
 
         <c:if test="${empty turnos}">
@@ -31,17 +31,15 @@
             <div class="row container-fluid d-flex align-items-center mt-3">
                 <div class="card-turno d-flex col-8" >
                     <img
-                            src="<c:url value=""/>"
+                            src="<c:url value="/images/pelu-1.jpeg"/>"
                             class="img-fluid"
                             alt="..."
                             height="200px"
                             width="200px"
                     />
                     <div class="card-body">
-                        <h5 class="card-title">Servicios: ${turno.serviciosSeleccionados}</h5>
                         <h5 class="card-title">Fecha: <fmt:formatDate value="${turno.fecha}" pattern="dd MMMM" /> ${turno.hora} hs</h5>
-                        <h5 class="card-title">Estado: ${turno.estado.name()}</h5>
-                        <button class="btn" style="background-color: #a4ebf3" href="#">Ver más</button>
+                        <button class="btn" style="background-color: #a4ebf3" href="#">Reservar</button>
                     </div>
                 </div>
 

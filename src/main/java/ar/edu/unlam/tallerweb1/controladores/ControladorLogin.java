@@ -55,15 +55,16 @@ public class ControladorLogin {
 			return new ModelAndView("redirect:/home");
 		} else {
 			// si el usuario no existe agrega un mensaje de error en el modelo.
-			model.put("error", "Usuario o clave incorrecta");
+//			model.put("error", "Usuario o clave incorrecta");
+			return new ModelAndView("redirect:/home");
 		}
-		return new ModelAndView("login", model);
+//		return new ModelAndView("login", model);
 	}
 
 	// Escucha la URL /home por GET, y redirige a una vista.
 	@RequestMapping(path = "/home", method = RequestMethod.GET)
 	public ModelAndView irAHome() {
-		return new ModelAndView("home");
+		return new ModelAndView("listado-turnos");
 	}
 
 	// Escucha la url /, y redirige a la URL /login, es lo mismo que si se invoca la url /login directamente.

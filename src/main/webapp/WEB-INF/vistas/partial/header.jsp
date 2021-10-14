@@ -52,14 +52,14 @@
             </a>
             <!-- Left links -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+<%--                <li class="nav-item">--%>
+<%--                    <a class="nav-link" href="#">Dashboard</a>--%>
+<%--                </li>--%>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Dashboard</a>
+                    <a class="nav-link" href="${contextPath}/listado-turnos">Turnos Disponibles</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Team</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${contextPath}/listado-turnos">Mis Turnos</a>
+                    <a class="nav-link" href="${contextPath}/articulos">Articulos</a>
                 </li>
             </ul>
             <!-- Left links -->

@@ -9,15 +9,14 @@ public class DatosTurno {
 
     private String fechaDesde;
     private String fechaHasta;
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date fecha;
+    private String fecha;
     private List<String> horas;
     private String horaSeleccionada;
     private Double precio;
     private List<String> serviciosSeleccionados;
 
     public DatosTurno(Date fecha, Double precio) {
-        this.fecha = fecha;
+        this.fecha = fecha.toString();
         this.precio = precio;
     }
 
@@ -41,11 +40,11 @@ public class DatosTurno {
         return this;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public DatosTurno setFecha(Date fecha) {
+    public DatosTurno setFecha(String fecha) {
         this.fecha = fecha;
         return this;
     }

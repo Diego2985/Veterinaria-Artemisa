@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Embeddable
 public class Turno {
 
     @Id
@@ -25,7 +24,7 @@ public class Turno {
     public Turno() {}
 
     public Turno(DatosTurno datosTurno) {
-        this.fecha = datosTurno.getFecha();
+        this.fecha = new Date();
         this.hora = datosTurno.getHoraSeleccionada();
     }
 

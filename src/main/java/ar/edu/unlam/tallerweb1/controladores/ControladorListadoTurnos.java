@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.modelo.DatosTurno;
 import ar.edu.unlam.tallerweb1.modelo.Turno;
 import ar.edu.unlam.tallerweb1.servicios.ServicioListadoTurno;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,15 @@ public class ControladorListadoTurnos {
     @RequestMapping(path="/listado-turnos", method= RequestMethod.GET)
     public ModelAndView irAListadoDeTurnos() {
         ModelMap model = new ModelMap();
+
+        String fechaDesde = servicioListadoTurno.getFechaDesde();
+        String fechaHasta = servicioListadoTurno.getFechaHasta();
+
+        DatosTurno datosTurno = new DatosTurno()
+                .setFechaDesde(fechaDesde)
+                .setFechaHasta(fechaHasta);
+
+        model.put("datosTurno", datosTurno);
         model.put("turnos", getListadoDeTurnos());
 
         return new ModelAndView("listado-turnos", model);

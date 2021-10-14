@@ -26,7 +26,7 @@ public class RepositorioListadoTurnoImpl implements RepositorioListadoTurno {
     public List<Turno> getListadoDeTurnos() {
         return (List<Turno>) sessionFactory.getCurrentSession()
                 .createCriteria(Turno.class)
-                .addOrder(Order.desc("fecha"))
+                .addOrder(Order.asc("fecha"))
                 .list();
     }
 }

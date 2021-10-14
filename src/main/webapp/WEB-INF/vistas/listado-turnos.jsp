@@ -1,12 +1,6 @@
 <%@ taglib prefix="th" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: nicolasduarte
-  Date: 07/06/2021
-  Time: 22:44
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file = "partial/header.jsp" %>
 <!DOCTYPE html>
@@ -27,6 +21,14 @@
             </div>
         </c:if>
 
+        <form:form action="listado-turnos" method="post" modelAttribute="datosTurno">
+            <div class="m-3">
+                <label class="text-dark">Seleccione fecha para un turno:</label><br>
+                <form:input type="date" id="fecha" value="${datosTurno.fechaDesde}" min="${datosTurno.fechaDesde}" max="${datosTurno.fechaHasta}" path="fecha"/>
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </div>
+        </form:form>
+
         <c:forEach var="turno" items="${turnos}">
             <div class="row container-fluid d-flex align-items-center mt-3">
                 <div class="card-turno d-flex col-8" >
@@ -39,7 +41,7 @@
                     />
                     <div class="card-body">
                         <h5 class="card-title">Fecha: <fmt:formatDate value="${turno.fecha}" pattern="dd MMMM" /> ${turno.hora} hs</h5>
-                        <button class="btn" style="background-color: #a4ebf3" href="#">Reservar</button>
+<%--                        <button class="btn" style="background-color: #a4ebf3" href="#">Reservar</button>--%>
                     </div>
                 </div>
 

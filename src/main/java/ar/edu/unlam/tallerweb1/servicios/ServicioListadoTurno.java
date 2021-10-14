@@ -7,4 +7,8 @@ import java.util.List;
 public interface ServicioListadoTurno {
 
     List<Turno> getListadoDeTurnos();
+
+    String getFechaDesde();
+
+    String getFechaHasta();
 }

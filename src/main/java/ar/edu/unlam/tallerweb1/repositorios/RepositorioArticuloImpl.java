@@ -27,4 +27,9 @@ public class RepositorioArticuloImpl implements  RepositorioArticulo {
                 .createCriteria(Articulo.class)
                 .list();
     }
+
+    @Override
+    public List<Articulo> buscarArticuloPorNombre(String busqueda) {
+        return null;
+    }
 }

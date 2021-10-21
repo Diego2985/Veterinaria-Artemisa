@@ -28,6 +28,6 @@ public class ServicioArticuloImpl implements ServicioArticulo {
 
     @Override
     public List<Articulo> buscarArticulosPorNombre(String busqueda) {
-        return null;
+        return repositorioArticulo.buscarArticuloPorNombre(busqueda);
     }
 }

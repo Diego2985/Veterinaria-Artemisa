@@ -25,4 +25,10 @@ public class ControladorArticulo {
 
         return new ModelAndView("articulos", model);
     }
+
+    public ModelAndView buscarArticulosPorNombre(String busqueda) {
+        ModelMap model=new ModelMap();
+        model.put("articulos", servicioArticulo.buscarArticulosPorNombre(busqueda));
+        return new ModelAndView("articulos", model);
+    }
 }

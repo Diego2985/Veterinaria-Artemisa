@@ -18,7 +18,7 @@ public class BusquedaArticulosTest {
     private String busqueda;
     private RepositorioArticulo repositorioArticulo=mock(RepositorioArticulo.class);
     private ServicioArticulo servicioArticulo=new ServicioArticuloImpl(repositorioArticulo);
-    List<Articulo> articulos=new ArrayList<>();
+    private List<Articulo> articulos=new ArrayList<>();
 
     @Before
     public void init(){

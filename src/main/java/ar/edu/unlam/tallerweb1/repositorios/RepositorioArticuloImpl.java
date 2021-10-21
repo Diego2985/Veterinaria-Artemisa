@@ -1,7 +1,10 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.modelo.Articulo;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -30,6 +33,10 @@ public class RepositorioArticuloImpl implements  RepositorioArticulo {
 
     @Override
     public List<Articulo> buscarArticuloPorNombre(String busqueda) {
-        return null;
+        return getCurrentSession().createCriteria(Articulo.class).add(Restrictions.like("descripcion", "%"+busqueda+"%")).list();
+    }
+
+    private Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
     }
 }

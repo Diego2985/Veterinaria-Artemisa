@@ -28,6 +28,9 @@ public class BusquedaArticulosTest extends SpringTest {
         art2.setDescripcion("Sabor pollo");
         art2.setTituloArticulo("Alimentos Raza");
         art2.setPrecio(1200.0F);
+
+        session().save(art1);
+        session().save(art2);
     }
 
     @Rollback @Transactional
@@ -40,7 +43,6 @@ public class BusquedaArticulosTest extends SpringTest {
 
     private void givenUnArticuloYUnaBusqueda() {
         busqueda="carne";
-        session().save(art1);
     }
 
     private List<Articulo> whenRealizoLaBusqueda(String busqueda) {
@@ -62,7 +64,6 @@ public class BusquedaArticulosTest extends SpringTest {
 
     private void givenUnArticuloYUnaBusquedaConUnaPalabraConMayusculasYMinusculas() {
         busqueda="pOlLo";
-        session().save(art2);
     }
 
     private void thenMeDevuelveUnaListaConLosResultadosCorrectos(List<Articulo> articulos) {
@@ -79,13 +80,24 @@ public class BusquedaArticulosTest extends SpringTest {
 
     private void givenUnaListaDeArticulosConLaPalabraSabor() {
         busqueda="sabor";
-        session().save(art1);
-        session().save(art2);
+
     }
 
     private void thenMeDevuelveUnaListaConLosDosArticulos(List<Articulo> articulos) {
         assertThat(articulos).contains(art1);
         assertThat(articulos).contains(art2);
         assertThat(articulos).hasSize(2);
+    }
+
+    @Rollback @Transactional
+    @Test
+    public void realizoUnaBusquedaPorTituloArticulo(){
+        givenUnaListaDeArticulosConLaPalabraAlimento();
+        List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
+        thenMeDevuelveUnaListaConLosDosArticulos(articulos);
+    }
+
+    private void givenUnaListaDeArticulosConLaPalabraAlimento() {
+        busqueda="alimento";
     }
 }

@@ -36,7 +36,12 @@ public class RepositorioArticuloImpl implements  RepositorioArticulo {
     public List<Articulo> buscarArticuloPorNombre(String busqueda) {
         String busquedaConLetraCapital="%"+busqueda.substring(0, 1).toUpperCase() + busqueda.substring(1)+"%";
         String busquedaMinuscula="%"+busqueda.toLowerCase()+"%";
-        return getCurrentSession().createCriteria(Articulo.class).add(Restrictions.disjunction().add(Restrictions.like("descripcion", busquedaMinuscula)).add(Restrictions.like("descripcion", busquedaConLetraCapital)) ).list();
+        return getCurrentSession().createCriteria(Articulo.class).add(Restrictions.disjunction()
+                .add(Restrictions.like("descripcion", busquedaMinuscula))
+                .add(Restrictions.like("descripcion", busquedaConLetraCapital))
+                .add(Restrictions.like("titulo", busquedaMinuscula))
+                .add(Restrictions.like("titulo", busquedaConLetraCapital)))
+                .list();
     }
 
     private Session getCurrentSession() {

@@ -27,7 +27,7 @@ public class ControladorArticulo {
         return new ModelAndView("articulos", model);
     }
 
-    @RequestMapping(path="buscar-articulo", method = RequestMethod.POST)
+    @RequestMapping(path="/articulos", method = RequestMethod.POST)
     public ModelAndView buscarArticulosPorNombre(@RequestParam(required = false) String busqueda) {
         ModelMap model=new ModelMap();
         model.put("articulos", servicioArticulo.buscarArticulosPorNombre(busqueda));

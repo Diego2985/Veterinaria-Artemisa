@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 
 @Repository
 @Transactional
@@ -33,7 +34,9 @@ public class RepositorioArticuloImpl implements  RepositorioArticulo {
 
     @Override
     public List<Articulo> buscarArticuloPorNombre(String busqueda) {
-        return getCurrentSession().createCriteria(Articulo.class).add(Restrictions.like("descripcion", "%"+busqueda+"%")).list();
+        String busquedaConLetraCapital="%"+busqueda.substring(0, 1).toUpperCase() + busqueda.substring(1)+"%";
+        String busquedaMinuscula="%"+busqueda.toLowerCase()+"%";
+        return getCurrentSession().createCriteria(Articulo.class).add(Restrictions.disjunction().add(Restrictions.like("descripcion", busquedaMinuscula)).add(Restrictions.like("descripcion", busquedaConLetraCapital)) ).list();
     }
 
     private Session getCurrentSession() {

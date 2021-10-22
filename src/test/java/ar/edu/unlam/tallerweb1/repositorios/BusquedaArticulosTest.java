@@ -33,12 +33,12 @@ public class BusquedaArticulosTest extends SpringTest {
     @Rollback @Transactional
     @Test
     public void encuentroUnSoloResultado(){
-        givenUnArticulo();
+        givenUnArticuloYUnaBusqueda();
         List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
         thenMeDevuelveUnaListaConUnSoloResultado(articulos);
     }
 
-    private void givenUnArticulo() {
+    private void givenUnArticuloYUnaBusqueda() {
         busqueda="carne";
         session().save(art1);
     }
@@ -50,5 +50,42 @@ public class BusquedaArticulosTest extends SpringTest {
     private void thenMeDevuelveUnaListaConUnSoloResultado(List<Articulo> articulos) {
         assertThat(articulos).hasSize(1);
         assertThat(articulos).contains(art1);
+    }
+
+    @Rollback @Transactional
+    @Test
+    public void buscoUnaPalabraConMayusculasAlteradasYMeEncuentraIgual(){
+        givenUnArticuloYUnaBusquedaConUnaPalabraConMayusculasYMinusculas();
+        List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
+        thenMeDevuelveUnaListaConLosResultadosCorrectos(articulos);
+    }
+
+    private void givenUnArticuloYUnaBusquedaConUnaPalabraConMayusculasYMinusculas() {
+        busqueda="pOlLo";
+        session().save(art2);
+    }
+
+    private void thenMeDevuelveUnaListaConLosResultadosCorrectos(List<Articulo> articulos) {
+        assertThat(articulos).contains(art2);
+    }
+
+    @Rollback @Transactional
+    @Test
+    public void realizoUnaBusquedaQueArrojeVariosResultados(){
+        givenUnaListaDeArticulosConLaPalabraSabor();
+        List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
+        thenMeDevuelveUnaListaConLosDosArticulos(articulos);
+    }
+
+    private void givenUnaListaDeArticulosConLaPalabraSabor() {
+        busqueda="sabor";
+        session().save(art1);
+        session().save(art2);
+    }
+
+    private void thenMeDevuelveUnaListaConLosDosArticulos(List<Articulo> articulos) {
+        assertThat(articulos).contains(art1);
+        assertThat(articulos).contains(art2);
+        assertThat(articulos).hasSize(2);
     }
 }

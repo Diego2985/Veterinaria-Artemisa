@@ -100,4 +100,22 @@ public class BusquedaArticulosTest extends SpringTest {
     private void givenUnaListaDeArticulosConLaPalabraAlimento() {
         busqueda="alimento";
     }
+
+    @Rollback @Transactional
+    @Test
+    public void realizoUnaBusquedaPorUnArticuloQueNoEstaEnLaBD(){
+        givenUnaListaDeArticulosConLaPalabraFruta();
+        List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
+        thenMeDevuelveUnaListaVacia(articulos);
+    }
+
+    private void givenUnaListaDeArticulosConLaPalabraFruta() {
+        busqueda="fruta";
+    }
+
+    private void thenMeDevuelveUnaListaVacia(List<Articulo> articulos) {
+        assertThat(articulos).hasSize(0);
+    }
+
+
 }

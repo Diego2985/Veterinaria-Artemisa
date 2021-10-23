@@ -9,6 +9,16 @@
     <body>
 
         <div class="row container-fluid d-flex align-items-center mt-3">
+            <form method="post" action="articulos">
+                <div class="form-group">
+                    <label for="articulo">Buscar artículo:</label>
+                    <input id="articulo" type="text" name="busqueda" placeholder="Ingrese el titulo o descripción del artículo">
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+            </form>
+            <c:if test="${articulos.size()==0}">
+                <h2>No se encontraron artículos</h2>
+            </c:if>
             <c:forEach var="articulo" items="${articulos}">
                     <div class="col-6 col-sm-3 d-flex justify-content-center">
                         <div class="card text-center d-flex justify-content-center" >

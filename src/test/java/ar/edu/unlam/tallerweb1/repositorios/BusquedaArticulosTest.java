@@ -117,5 +117,20 @@ public class BusquedaArticulosTest extends SpringTest {
         assertThat(articulos).hasSize(0);
     }
 
+    @Rollback @Transactional
+    @Test
+    public void ingresoUnNombreConEspaciosEnBlancoAlPrincipioYAlFinal(){
+        givenUnaPalabraConEspacios();
+        List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
+        thenMeDevuelveUnaListaConLaPalabraSinEspacios(articulos);
+    }
 
+    private void givenUnaPalabraConEspacios() {
+        busqueda="  pollo  ";
+    }
+
+    private void thenMeDevuelveUnaListaConLaPalabraSinEspacios(List<Articulo> articulos) {
+        assertThat(articulos).contains(art2);
+        assertThat(articulos).hasSize(1);
+    }
 }

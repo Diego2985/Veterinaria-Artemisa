@@ -14,12 +14,13 @@ public class ControladorArticulo {
 
     @Autowired
     private ServicioArticulo servicioArticulo;
+
     @Autowired
     public ControladorArticulo(ServicioArticulo servicioArticulo) {
         this.servicioArticulo = servicioArticulo;
     }
 
-    @RequestMapping(path="/articulos", method= RequestMethod.GET)
+    @RequestMapping(path = "/articulos", method = RequestMethod.GET)
     public ModelAndView irADetalleArticulo() {
         ModelMap model = new ModelMap();
         model.put("articulos", servicioArticulo.getArticulos());
@@ -27,9 +28,9 @@ public class ControladorArticulo {
         return new ModelAndView("articulos", model);
     }
 
-    @RequestMapping(path="/articulos", method = RequestMethod.POST)
+    @RequestMapping(path = "/articulos", method = RequestMethod.POST)
     public ModelAndView buscarArticulosPorNombre(@RequestParam(required = false) String busqueda) {
-        ModelMap model=new ModelMap();
+        ModelMap model = new ModelMap();
         model.put("articulos", servicioArticulo.buscarArticulosPorNombre(busqueda));
         return new ModelAndView("articulos", model);
     }

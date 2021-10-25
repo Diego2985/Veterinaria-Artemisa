@@ -32,7 +32,7 @@ public class BusquedaArticulosTest {
     }
 
     @Test
-    public void encontrarUnArticuloEspecifico(){
+    public void encuentoUnSoloArticulo(){
         givenUnaListaDeArticulosConUnSoloResultado();
         List<Articulo> articulosEncontrados=whenRealizoLaBusqueda(busqueda);
         thenDeberiaRetornarUnaListaConUnSoloArticulo(articulosEncontrados);

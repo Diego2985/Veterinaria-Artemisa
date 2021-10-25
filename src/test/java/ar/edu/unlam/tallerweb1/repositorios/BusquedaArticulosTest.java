@@ -36,12 +36,12 @@ public class BusquedaArticulosTest extends SpringTest {
     @Rollback @Transactional
     @Test
     public void encuentroUnSoloResultado(){
-        givenUnArticuloYUnaBusqueda();
+        givenUnaBusqueda();
         List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
         thenMeDevuelveUnaListaConUnSoloResultado(articulos);
     }
 
-    private void givenUnArticuloYUnaBusqueda() {
+    private void givenUnaBusqueda() {
         busqueda="carne";
     }
 
@@ -57,16 +57,16 @@ public class BusquedaArticulosTest extends SpringTest {
     @Rollback @Transactional
     @Test
     public void buscoUnaPalabraConMayusculasAlteradasYMeEncuentraIgual(){
-        givenUnArticuloYUnaBusquedaConUnaPalabraConMayusculasYMinusculas();
+        givenUnaBusquedaConUnaPalabraConMayusculasYMinusculas();
         List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
-        thenMeDevuelveUnaListaConLosResultadosCorrectos(articulos);
+        thenMeDevuelveUnaListaConResultados(articulos);
     }
 
-    private void givenUnArticuloYUnaBusquedaConUnaPalabraConMayusculasYMinusculas() {
+    private void givenUnaBusquedaConUnaPalabraConMayusculasYMinusculas() {
         busqueda="pOlLo";
     }
 
-    private void thenMeDevuelveUnaListaConLosResultadosCorrectos(List<Articulo> articulos) {
+    private void thenMeDevuelveUnaListaConResultados(List<Articulo> articulos) {
         assertThat(articulos).contains(art2);
     }
 
@@ -92,12 +92,12 @@ public class BusquedaArticulosTest extends SpringTest {
     @Rollback @Transactional
     @Test
     public void realizoUnaBusquedaPorTituloArticulo(){
-        givenUnaListaDeArticulosConLaPalabraAlimento();
+        givenUnaBusquedaConLaPalabraAlimento();
         List<Articulo> articulos=whenRealizoLaBusqueda(busqueda);
         thenMeDevuelveUnaListaConLosDosArticulos(articulos);
     }
 
-    private void givenUnaListaDeArticulosConLaPalabraAlimento() {
+    private void givenUnaBusquedaConLaPalabraAlimento() {
         busqueda="alimento";
     }
 

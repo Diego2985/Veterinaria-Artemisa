@@ -32,13 +32,13 @@ public class BusquedaArticulosTest {
     }
 
     @Test
-    public void encuentroUnArticuloYLoMandoALavista(){
-        givenUnaListaDeArticulosEncontradosConUnNombre();
+    public void encuentroUnSoloArticuloYLoMandoALavista(){
+        givenUnaFraseYUnSoloArticuloQueContieneEsaFrase();
         mav=whenRealizoLaBusqueda(busqueda);
-        thenEncuentroElArticuloEspecifico(mav);
+        thenEncuentroElUnicoArticuloQueEsperaba(mav);
     }
 
-    private void givenUnaListaDeArticulosEncontradosConUnNombre() {
+    private void givenUnaFraseYUnSoloArticuloQueContieneEsaFrase() {
         busqueda="Sabor pollo";
         List<Articulo> articulos=new ArrayList<>();
         articulos.add(art2);
@@ -49,7 +49,7 @@ public class BusquedaArticulosTest {
         return controladorArticulo.buscarArticulosPorNombre(busqueda);
     }
 
-    private void thenEncuentroElArticuloEspecifico(ModelAndView mav) {
+    private void thenEncuentroElUnicoArticuloQueEsperaba(ModelAndView mav) {
         List<Articulo> articulosEncontrados= (List<Articulo>) mav.getModel().get("articulos");
         assertThat(articulosEncontrados).contains(art2);
     }
@@ -77,7 +77,7 @@ public class BusquedaArticulosTest {
     }
 
     @Test
-    public void noEncuentraNingunArticuloConUnNombre(){
+    public void noEncuentraNingunArticuloConUnNombreEspecifico(){
         givenUnaPalabraQueNoCoincideConNingunArticulo();
         mav=whenRealizoLaBusqueda(busqueda);
         thenDeberiaRetornarUnaListaVacia();

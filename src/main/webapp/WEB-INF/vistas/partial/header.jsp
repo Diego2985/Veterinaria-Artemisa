@@ -56,10 +56,10 @@
 <%--                    <a class="nav-link" href="#">Dashboard</a>--%>
 <%--                </li>--%>
                 <li class="nav-item">
-                    <a class="nav-link" href="${contextPath}/listado-turnos">Turnos Disponibles</a>
+                    <a class="nav-link" href="${contextPath}/articulos">Articulos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${contextPath}/articulos">Articulos</a>
+                    <a class="nav-link" href="${contextPath}/listado-turnos">Mis Turnos</a>
                 </li>
             </ul>
             <!-- Left links -->

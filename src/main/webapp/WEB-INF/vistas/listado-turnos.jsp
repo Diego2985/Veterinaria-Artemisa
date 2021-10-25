@@ -1,6 +1,5 @@
 <%@ taglib prefix="th" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file = "partial/header.jsp" %>
 <!DOCTYPE html>
@@ -9,8 +8,8 @@
         <title>Veterinaria</title>
     </head>
     <body>
-        <div class="row d-flex text-center mt-4 mb-4">
-            <h4><span>Turnos Disponibles</span></h4>
+        <div class="row d-flex">
+            <a href="${pageContext.request.contextPath}/reservar-turno" class="btn btn-lg btn-primary mt-4">Reservar Turno</a>
         </div>
 
         <c:if test="${empty turnos}">
@@ -20,14 +19,6 @@
                 <br>
             </div>
         </c:if>
-
-        <form:form action="listado-turnos" method="post" modelAttribute="datosTurno">
-            <div class="m-3">
-                <label class="text-dark">Seleccione fecha para un turno:</label><br>
-                <form:input type="date" id="fecha" value="${datosTurno.fechaDesde}" min="${datosTurno.fechaDesde}" max="${datosTurno.fechaHasta}" path="fecha"/>
-                <button class="btn btn-primary" type="submit">Buscar</button>
-            </div>
-        </form:form>
 
         <c:forEach var="turno" items="${turnos}">
             <div class="row container-fluid d-flex align-items-center mt-3">
@@ -40,8 +31,9 @@
                             width="200px"
                     />
                     <div class="card-body">
+                        <h5 class="card-title">Servicios: ${turno.serviciosSeleccionados}</h5>
                         <h5 class="card-title">Fecha: <fmt:formatDate value="${turno.fecha}" pattern="dd MMMM" /> ${turno.hora} hs</h5>
-<%--                        <button class="btn" style="background-color: #a4ebf3" href="#">Reservar</button>--%>
+                        <h5 class="card-title">Estado: ${turno.estado.name()}</h5>
                     </div>
                 </div>
 

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface RepositorioListadoTurno {
 
-    List<Turno> getListadoDeTurnos();
+    List<Turno> getListadoDeTurnos(Long userId);
 }

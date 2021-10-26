@@ -12,7 +12,7 @@
             <form method="post" action="articulos">
                 <div class="form-group">
                     <label for="articulo">Buscar artículo:</label>
-                    <input id="articulo" type="text" name="busqueda" placeholder="Ingrese el titulo o descripción del artículo">
+                    <input id="articulo" type="text" name="busqueda" class="form-control mb-2" placeholder="Ingrese el titulo o descripción del artículo">
                     <button type="submit" class="btn btn-success">Buscar</button>
                 </div>
             </form>

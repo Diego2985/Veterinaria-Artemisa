@@ -30,8 +30,11 @@ public class ControladorArticulo {
 
     @RequestMapping(path = "/articulos", method = RequestMethod.POST)
     public ModelAndView buscarArticulosPorNombre(@RequestParam(required = false) String busqueda) {
-        ModelMap model = new ModelMap();
-        model.put("articulos", servicioArticulo.buscarArticulosPorNombre(busqueda));
-        return new ModelAndView("articulos", model);
+        if(busqueda.trim().length()>0){
+            ModelMap model = new ModelMap();
+            model.put("articulos", servicioArticulo.buscarArticulosPorNombre(busqueda));
+            return new ModelAndView("articulos", model);
+        }
+        return new ModelAndView("redirect:articulos");
     }
 }

@@ -92,4 +92,30 @@ public class BusquedaArticulosTest {
         List<Articulo> articulosEncontrados= (List<Articulo>) mav.getModel().get("articulos");
         assertThat(articulosEncontrados).hasSize(0);
     }
+
+    @Test
+    public void noIngresoNingunaPalabraEnLaBusquedaYMeDevuelveTodosLosProductos(){
+        givenNingunaPalabra();
+        mav=whenRealizoLaBusqueda(busqueda);
+        thenRedirigeALaVistaConTodosLosArticulos(mav);
+    }
+
+    private void givenNingunaPalabra() {
+        busqueda="";
+    }
+
+    private void thenRedirigeALaVistaConTodosLosArticulos(ModelAndView mav) {
+        assertThat(mav.getViewName()).contains("redirect");
+    }
+
+    @Test
+    public void ingresoMuchosEspaciosSinLetrasYMeRedirigeAVerTodosLosArticulos(){
+        givenMuchosEspacios();
+        mav=whenRealizoLaBusqueda(busqueda);
+        thenRedirigeALaVistaConTodosLosArticulos(mav);
+    }
+
+    private void givenMuchosEspacios() {
+        busqueda="      ";
+    }
 }

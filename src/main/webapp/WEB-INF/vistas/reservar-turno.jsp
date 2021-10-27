@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="container row d-flex justify-content-center">
-            <div class="col-5">
+            <div class="col-5 border border-dark rounded mt-2 mb-2">
                 <form:form action="reservar-turno" method="POST" modelAttribute="datosTurno">
                     <br><br>
 

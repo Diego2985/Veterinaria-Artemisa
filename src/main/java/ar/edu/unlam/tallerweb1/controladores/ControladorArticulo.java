@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -13,16 +14,27 @@ public class ControladorArticulo {
 
     @Autowired
     private ServicioArticulo servicioArticulo;
+
     @Autowired
     public ControladorArticulo(ServicioArticulo servicioArticulo) {
         this.servicioArticulo = servicioArticulo;
     }
 
-    @RequestMapping(path="/articulos", method= RequestMethod.GET)
+    @RequestMapping(path = "/articulos", method = RequestMethod.GET)
     public ModelAndView irADetalleArticulo() {
         ModelMap model = new ModelMap();
         model.put("articulos", servicioArticulo.getArticulos());
 
         return new ModelAndView("articulos", model);
+    }
+
+    @RequestMapping(path = "/articulos", method = RequestMethod.POST)
+    public ModelAndView buscarArticulosPorNombre(@RequestParam(required = false) String busqueda) {
+        if(busqueda.trim().length()>0){
+            ModelMap model = new ModelMap();
+            model.put("articulos", servicioArticulo.buscarArticulosPorNombre(busqueda));
+            return new ModelAndView("articulos", model);
+        }
+        return new ModelAndView("redirect:articulos");
     }
 }

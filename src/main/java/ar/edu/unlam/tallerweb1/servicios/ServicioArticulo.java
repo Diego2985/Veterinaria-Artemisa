@@ -7,4 +7,6 @@ import java.util.List;
 public interface ServicioArticulo {
 
     List<Articulo> getArticulos();
+
+    List<Articulo> buscarArticulosPorNombre(String busqueda);
 }

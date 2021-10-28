@@ -29,7 +29,7 @@ public class Articulo {
         return precio;
     }
 
-    private void setPrecio(float precio) {
+    public void setPrecio(float precio) {
         this.precio = precio;
     }
 
@@ -37,7 +37,7 @@ public class Articulo {
         return descripcion;
     }
 
-    private void setDescripcion(String descripcion) {
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
@@ -45,7 +45,7 @@ public class Articulo {
         return titulo;
     }
 
-    private void setTituloArticulo(String tituloArticulo) {
+    public void setTituloArticulo(String tituloArticulo) {
         this.titulo = tituloArticulo;
     }
 

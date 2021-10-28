@@ -7,4 +7,6 @@ import java.util.List;
 public interface RepositorioArticulo {
 
     List<Articulo> getArticulos();
+
+    List<Articulo> buscarArticuloPorNombre(String busqueda);
 }

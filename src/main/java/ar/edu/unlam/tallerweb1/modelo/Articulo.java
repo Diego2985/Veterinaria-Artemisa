@@ -15,8 +15,7 @@ public class Articulo {
     private String descripcion;
     private float precio;
 
-    public Articulo() {
-    }
+    public Articulo() {}
 
     public Long getId() {
         return id;

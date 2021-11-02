@@ -20,10 +20,15 @@ public class ControladorPaseador {
 
     @RequestMapping(path = "/ver-paseadores", method = RequestMethod.POST)
     public ModelAndView recibirLasCoordenadasDeUbicacion(@RequestParam String coordenadas) {
-        ModelMap model=new ModelMap();
-        Coordenadas coordenadaObject=servicioPaseador.obtenerCoordenadasDentroDeUnObjeto(coordenadas);
-        model.put("coordenadas", coordenadaObject);
-        return new ModelAndView("paseador-mapa", model);
+        try {
+            ModelMap model=new ModelMap();
+            Coordenadas coordenadaObject=servicioPaseador.obtenerCoordenadasDentroDeUnObjeto(coordenadas);
+            model.put("coordenadas", coordenadaObject);
+            return new ModelAndView("paseador-mapa", model);
+        }
+        catch (Exception e) {
+            return new ModelAndView("error");
+        }
     }
 
     @RequestMapping("/paseador")

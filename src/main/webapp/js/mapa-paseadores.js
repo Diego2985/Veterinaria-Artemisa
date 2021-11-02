@@ -11,7 +11,7 @@ function mostrarPaseadores(latitud, longitud){
         }
         const mapaElement=document.getElementById("mapContainer");
         const map=new H.Map(mapaElement,maptypes.vector.normal.map,mapOptions)
-        const mapEvents = new H.mapevents.MapEvents(map);
+        var behavior = new H.mapevents.Behavior(new    H.mapevents.MapEvents(map));
         const ui = H.ui.UI.createDefault(map, maptypes, 'es-ES');
 
         var icon = new H.map.Icon('https://cdn0.iconfinder.com/data/icons/dog-4/100/dog-10-256.png');

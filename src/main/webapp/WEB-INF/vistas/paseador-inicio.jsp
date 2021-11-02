@@ -19,7 +19,7 @@
                     </button>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Continuar</button>
+            <button type="submit" id="continuar" disabled="true" class="btn btn-primary">Continuar</button>
         </form>
     </div>
     <script src="js/capturar-ubicacion.js"></script>

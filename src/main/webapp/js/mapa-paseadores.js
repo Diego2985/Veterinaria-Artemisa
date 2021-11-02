@@ -40,8 +40,15 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
             const distancia = inicio.getGeometry().distance(marker.getGeometry());
             return "<div><strong>Paseador</strong></div>" +
                 "<div>" + paseador.estrellas + " <i style='color: #FFE445' class=\"fas fa-star\"></i></div>" +
-                "<div>Se encuentra a <strong>" + Math.round(distancia) + " mts.</strong></div>"
+                "<div>Se encuentra a <strong>" + Math.round(distancia) + " mts.</strong></div>"+
+                "<div>" +
+                "<form action='contratar-paseador' method='post'>" +
+                "<input type='hidden' value='"+paseador.id+"' name='idPaseador' />" +
+                "<button type='submit' class='btn btn-success'>Contratar</button>" +
+                "</form>" +
+                "</div>"
         }
+
 
         const addBubble = (html, paseador) => {
             paseador.setData(html);
@@ -52,6 +59,8 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
             const marker = customMarker(paseador.latitud, paseador.longitud);
             const html = htmlPaseador(inicio, marker, paseador);
             addBubble(html, marker)
+            const button = document.querySelector("buttonPaseador")
+            console.log(button)
         }
 
         for (let paseador of paseadores) {

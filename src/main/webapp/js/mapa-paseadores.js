@@ -1,7 +1,7 @@
 function mostrarPaseadores(latitud, longitud){
     window.addEventListener("load",()=>{
         var platform = new H.service.Platform({
-            'apikey': '41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM'
+            'apikey': MAP_KEY
         });
         var maptypes = platform.createDefaultLayers();
 
@@ -14,7 +14,8 @@ function mostrarPaseadores(latitud, longitud){
         const mapEvents = new H.mapevents.MapEvents(map);
         const ui = H.ui.UI.createDefault(map, maptypes, 'es-ES');
 
-        var marker = new H.map.Marker({lat: latitud, lng: longitud});
+        var icon = new H.map.Icon('https://cdn0.iconfinder.com/data/icons/dog-4/100/dog-10-256.png');
+        var marker = new H.map.Marker({lat: latitud, lng: longitud}, {icon: icon});
 
         map.addObject(marker);
 

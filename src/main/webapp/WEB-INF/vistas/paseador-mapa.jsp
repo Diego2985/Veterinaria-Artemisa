@@ -5,6 +5,9 @@
     <title>Veterinaria</title>
 </head>
 <body>
+<div class="container mt-3">
     <h2>Mapa de paseadores cercanos</h2>
+    <span>${coordenadas.getCoordenadas()}</span>
+</div>
 </body>
 </html>

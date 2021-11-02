@@ -26,20 +26,20 @@ function mostrarPaseadores(latitud, longitud) {
             ui.addBubble(bubble);
         }, false);
 
-        var pointer = new H.map.Icon('images/home.png', {size: {w: 40, h: 40}});
+        var pointer = new H.map.Icon('images/home.png', {size: {w: 30, h: 30}});
         var casa = new H.map.Marker({lat: latitud, lng: longitud}, {icon: pointer});
         map.addObject(casa);
 
         const customMarker = (latitud, longitud) => {
-            const markerPaseador = new H.map.Icon('images/paseador.png', {size: {w: 40, h: 40}});
+            const markerPaseador = new H.map.Icon('images/paseador.png', {size: {w: 30, h: 30}});
             const paseador = new H.map.Marker({lat: latitud, lng: longitud}, {icon: markerPaseador});
             return paseador;
         }
 
-        const htmlPaseador = (inicio, paseador) => {
-            const distancia = inicio.getGeometry().distance(paseador.getGeometry());
+        const htmlPaseador = (inicio, marker, paseador) => {
+            const distancia = inicio.getGeometry().distance(marker.getGeometry());
             return "<div><strong>Paseador</strong></div>" +
-                "<div>5 <i style='color: #FFE445' class=\"fas fa-star\"></i></div>" +
+                "<div>" + paseador.estrellas + " <i style='color: #FFE445' class=\"fas fa-star\"></i></div>" +
                 "<div>Se encuentra a <strong>" + Math.round(distancia) + " mts.</strong></div>"
         }
 
@@ -48,15 +48,38 @@ function mostrarPaseadores(latitud, longitud) {
             group.addObject(paseador);
         }
 
-        const generarData = (inicio, latitud, longitud) => {
-            const paseador = customMarker(latitud, longitud);
-            const html = htmlPaseador(casa, paseador);
-            addBubble(html, paseador)
+        const generarData = (inicio, paseador) => {
+            const marker = customMarker(paseador.latitud, paseador.longitud);
+            const html = htmlPaseador(inicio, marker, paseador);
+            addBubble(html, marker)
         }
 
-        generarData(casa, -34.58856, -58.41066)
-        generarData(casa, -34.585991, -58.407848)
-        generarData(casa, -34.588322, -58.409309)
+        const paseador1 = {
+            id: 1,
+            estrellas: 5,
+            latitud: -34.58856,
+            longitud: -58.41066
+        }
+
+        const paseador2 = {
+            id: 2,
+            estrellas: 4.5,
+            latitud: -34.585991,
+            longitud: -58.407848
+        }
+
+        const paseador3 = {
+            id: 3,
+            estrellas: 3,
+            latitud: -34.588322,
+            longitud: -58.409309
+        }
+
+        const paseadores = [paseador1, paseador2, paseador3]
+
+        for (let paseador of paseadores) {
+            generarData(casa, paseador)
+        }
 
         var service = platform.getSearchService();
         service.reverseGeocode({

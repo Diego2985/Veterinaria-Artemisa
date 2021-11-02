@@ -1,4 +1,4 @@
-function mostrarPaseadores(latitud, longitud) {
+function mostrarPaseadores(latitud, longitud, paseadores) {
     window.addEventListener("load", () => {
         var platform = new H.service.Platform({
             'apikey': MAP_KEY
@@ -53,29 +53,6 @@ function mostrarPaseadores(latitud, longitud) {
             const html = htmlPaseador(inicio, marker, paseador);
             addBubble(html, marker)
         }
-
-        const paseador1 = {
-            id: 1,
-            estrellas: 5,
-            latitud: -34.58856,
-            longitud: -58.41066
-        }
-
-        const paseador2 = {
-            id: 2,
-            estrellas: 4.5,
-            latitud: -34.585991,
-            longitud: -58.407848
-        }
-
-        const paseador3 = {
-            id: 3,
-            estrellas: 3,
-            latitud: -34.588322,
-            longitud: -58.409309
-        }
-
-        const paseadores = [paseador1, paseador2, paseador3]
 
         for (let paseador of paseadores) {
             generarData(casa, paseador)

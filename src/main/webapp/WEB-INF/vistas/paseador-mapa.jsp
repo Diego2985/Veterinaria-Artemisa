@@ -22,6 +22,30 @@
 <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/config.js"></script>
 <script src="js/mapa-paseadores.js"></script>
-<script>mostrarPaseadores("${coordenadas.getLatitud()}", "${coordenadas.getLongitud()}")</script>
+<script>
+    const paseador1 = {
+        id: 1,
+        estrellas: 5,
+        latitud: -34.58856,
+        longitud: -58.41066
+    }
+
+    const paseador2 = {
+        id: 2,
+        estrellas: 4.5,
+        latitud: -34.585991,
+        longitud: -58.407848
+    }
+
+    const paseador3 = {
+        id: 3,
+        estrellas: 3,
+        latitud: -34.588322,
+        longitud: -58.409309
+    }
+
+    const paseadores = [paseador1, paseador2, paseador3]
+    mostrarPaseadores("${coordenadas.getLatitud()}", "${coordenadas.getLongitud()}", paseadores)
+</script>
 </body>
 </html>

@@ -60,7 +60,6 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
             const html = htmlPaseador(inicio, marker, paseador);
             addBubble(html, marker)
             const button = document.querySelector("buttonPaseador")
-            console.log(button)
         }
 
         for (let paseador of paseadores) {

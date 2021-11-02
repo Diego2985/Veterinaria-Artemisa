@@ -8,8 +8,8 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     @Override
     public Coordenadas obtenerCoordenadasDentroDeUnObjeto(String coordenadasString) {
         String[] coordenadasSplit=coordenadasString.split(",");
-        Double latitud=Double.parseDouble(coordenadasSplit[0]);
-        Double longitud=Double.parseDouble(coordenadasSplit[1]);
+        Double latitud=Double.parseDouble(coordenadasSplit[0].trim());
+        Double longitud=Double.parseDouble(coordenadasSplit[1].trim());
         return new Coordenadas(coordenadasString, latitud, longitud);
     }
 }

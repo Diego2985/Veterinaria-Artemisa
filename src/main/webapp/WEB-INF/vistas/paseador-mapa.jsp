@@ -45,7 +45,7 @@
     }
 
     const paseadores = [paseador1, paseador2, paseador3]
-    mostrarPaseadores("${coordenadas.getLatitud()}", "${coordenadas.getLongitud()}", paseadores)
+    mostrarPaseadores("${latitud}", "${longitud}", paseadores)
 </script>
 </body>
 </html>

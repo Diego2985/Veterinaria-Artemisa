@@ -22,13 +22,11 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/ver-paseadores", method = RequestMethod.POST)
-    public ModelAndView recibirLasCoordenadasDeUbicacion(@RequestParam String coordenadas) {
+    public ModelAndView recibirLasCoordenadasDeUbicacion(@RequestParam Double latitud, @RequestParam Double longitud) {
         try {
             ModelMap model=new ModelMap();
-            Coordenadas coordenadaObject=servicioPaseador.obtenerCoordenadasDentroDeUnObjeto(coordenadas);
-            List<Paseador> paseadoresCercanos=servicioPaseador.obtenerListaDePaseadoresCercanos(coordenadaObject);
-            model.put("coordenadas", coordenadaObject);
-            model.put("paseadores", paseadoresCercanos);
+            model.put("latitud", latitud);
+            model.put("longitud", longitud);
             return new ModelAndView("paseador-mapa", model);
         }
         catch (Exception e) {

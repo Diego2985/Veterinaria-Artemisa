@@ -2,14 +2,17 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 import ar.edu.unlam.tallerweb1.controladores.Coordenadas;
 
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+@Entity
 public class Paseador {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
     private Integer estrellas;
-    @OneToOne
-    private Coordenadas coordenadas;
+    private Double latitud;
+    private Double longitud;
 
     public Long getId() {
         return id;
@@ -35,11 +38,19 @@ public class Paseador {
         this.estrellas = estrellas;
     }
 
-    public Coordenadas getCoordenadas() {
-        return coordenadas;
+    public Double getLatitud() {
+        return latitud;
     }
 
-    public void setCoordenadas(Coordenadas coordenadas) {
-        this.coordenadas = coordenadas;
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
     }
 }

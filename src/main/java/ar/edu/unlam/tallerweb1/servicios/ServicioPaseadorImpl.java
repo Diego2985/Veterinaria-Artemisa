@@ -1,8 +1,8 @@
-package ar.edu.unlam.tallerweb1.controladores;
+package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.controladores.Coordenadas;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
-import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +16,6 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     @Autowired
     public ServicioPaseadorImpl(RepositorioPaseador repositorioPaseador){
         this.repositorioPaseador=repositorioPaseador;
-    }
-
-    @Override
-    public Coordenadas obtenerCoordenadasDentroDeUnObjeto(String coordenadasString) {
-        String[] coordenadasSplit=coordenadasString.split(",");
-        Double latitud=Double.parseDouble(coordenadasSplit[0].trim());
-        Double longitud=Double.parseDouble(coordenadasSplit[1].trim());
-        return new Coordenadas(coordenadasString, latitud, longitud);
     }
 
     @Override

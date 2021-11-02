@@ -6,8 +6,6 @@ import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import java.util.List;
 
 public interface ServicioPaseador {
-    Coordenadas obtenerCoordenadasDentroDeUnObjeto(String coordenadasString);
-
     Paseador obtenerPaseador(Long id);
 
     List<Paseador> obtenerListaDePaseadoresCercanos(Coordenadas coordenadasObject);

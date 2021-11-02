@@ -27,11 +27,10 @@ function mostrarPaseadores(latitud, longitud){
         }, false);
 
         var pointer = new H.map.Icon('images/home.png', {size: {w: 40, h: 40}});
-        var paseador = new H.map.Icon('images/paseador.png', {size: {w: 40, h: 40}});
-
         var casa = new H.map.Marker({lat: latitud, lng: longitud}, {icon:pointer});
         map.addObject(casa);
 
+        var paseador = new H.map.Icon('images/paseador.png', {size: {w: 40, h: 40}});
         var paseador1 = new H.map.Marker({lat:-34.58856, lng:-58.41066}, {icon: paseador});
         const distance = casa.getGeometry().distance(paseador1.getGeometry());
         const html1='<div>Paseador</div>' +

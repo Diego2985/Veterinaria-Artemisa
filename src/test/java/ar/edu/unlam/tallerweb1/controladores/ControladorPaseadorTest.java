@@ -58,4 +58,24 @@ public class ControladorPaseadorTest {
         assertThat(coordenadasObject.getLatitud()).isEqualTo(latitud);
         assertThat(coordenadasObject.getLongitud()).isEqualTo(longitud);
     }
+
+    @Test
+    public void obtenerIdDePaseador(){
+        Long id=givenDadoUnPaseador();
+        mav=whenContratoAlPaseador(id);
+        thenDeboObtenerSuId(mav, id);
+    }
+
+    private Long givenDadoUnPaseador() {
+        return 1L;
+    }
+
+    private ModelAndView whenContratoAlPaseador(Long id) {
+        return controladorPaseador.contratarAlPaseador(id);
+    }
+
+    private void thenDeboObtenerSuId(ModelAndView mav, Long id) {
+        assertThat(mav.getViewName()).isEqualTo("paseador-exitoso");
+        assertThat(mav.getModel().get("idPaseador")).isEqualTo(id);
+    }
 }

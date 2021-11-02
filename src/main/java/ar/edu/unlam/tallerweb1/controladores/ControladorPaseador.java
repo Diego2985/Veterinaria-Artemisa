@@ -35,4 +35,11 @@ public class ControladorPaseador {
     public ModelAndView verPaginaDePaseador() {
         return new ModelAndView("paseador-inicio");
     }
+
+    @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
+    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador) {
+        ModelMap model=new ModelMap();
+        model.put("idPaseador", idPaseador);
+        return new ModelAndView("paseador-exitoso", model);
+    }
 }

@@ -1,12 +1,10 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.controladores.Coordenadas;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,15 +22,17 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public List<Paseador> obtenerListaDePaseadoresCercanos(Coordenadas coordenadasObject) {
-        List<Paseador> todosLosPaseadores=repositorioPaseador.obtenerPaseadores();
-        List<Paseador> paseadoresCercanos=new ArrayList<>();
-//        for (Paseador paseador: todosLosPaseadores
-//             ) {
-//            if(Double.parseDouble(paseador.getCoordenadas())<=coordenadasObject.getLatitud()-0.01D){
-//                paseadoresCercanos.add(paseador);
-//            }
-//        }
+    public List<Paseador> obtenerListaDePaseadoresCercanos(Double latitud, Double longitud, Integer distancia) {
+        Double diferenciaLatitud=calcularPuntosDeDiferencia(latitud, distancia);
+        Double diferenciaLongitud=calcularPuntosDeDiferencia(longitud, distancia);
+        List<Paseador> paseadoresCercanos=repositorioPaseador.obtenerPaseadoresCercanos(latitud, longitud, diferenciaLatitud, diferenciaLongitud);
         return paseadoresCercanos;
+    }
+
+    public Double calcularPuntosDeDiferencia(Double puntos, Integer distancia) {
+        Integer medidaTierra=6378137;
+        Double puntosMax = puntos + ((180 / Math.PI) * ((double) distancia / medidaTierra));
+        Double diferencia = puntosMax - puntos;
+        return diferencia;
     }
 }

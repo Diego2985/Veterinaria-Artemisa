@@ -24,9 +24,9 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador{
 
     @Override
     public List<Paseador> obtenerPaseadoresCercanos(Double latitud, Double longitud, Double diferenciaLatitud, Double diferenciaLongitud) {
-        return getCurrentSession().createCriteria(Paseador.class).add(Restrictions.and()
-                .add(Restrictions.between("latitud", latitud-diferenciaLatitud, latitud+diferenciaLatitud))
-                .add(Restrictions.between("longitud", longitud-diferenciaLongitud, longitud+diferenciaLongitud)))
+        return getCurrentSession().createCriteria(Paseador.class).add(Restrictions.and(
+                Restrictions.between("latitud", latitud-diferenciaLatitud, latitud+diferenciaLatitud),
+                Restrictions.between("longitud", longitud-diferenciaLongitud, longitud+diferenciaLongitud)))
                 .list();
     }
 

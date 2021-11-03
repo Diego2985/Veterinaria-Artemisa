@@ -13,6 +13,24 @@ public class Paseador {
     private Integer estrellas;
     private Double latitud;
     private Double longitud;
+    private Integer cantidadActual;
+    private Integer cantidadMaxima;
+
+    public Integer getCantidadActual() {
+        return cantidadActual;
+    }
+
+    public void setCantidadActual(Integer cantidadActual) {
+        this.cantidadActual = cantidadActual;
+    }
+
+    public Integer getCantidadMaxima() {
+        return cantidadMaxima;
+    }
+
+    public void setCantidadMaxima(Integer cantidadMaxima) {
+        this.cantidadMaxima = cantidadMaxima;
+    }
 
     public Long getId() {
         return id;

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface RepositorioPaseador {
     List<Paseador> obtenerPaseadores();
+
+    List<Paseador> obtenerPaseadoresCercanos(Double latitud, Double longitud, Double diferenciaLatitud, Double diferenciaLongitud);
 }

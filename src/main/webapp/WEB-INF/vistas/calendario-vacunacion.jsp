@@ -16,21 +16,21 @@
             <div id='calendar'></div>
         </section>
 
+        <script src='${contextPath}/js/main.js' type="text/javascript"></script>
+        <script src='${contextPath}/js/locales.js' type="text/javascript"></script>
+        <script src="${contextPath}/js/calendar.js" type="text/javascript"></script>
         <script>
             const listaDeTurnos = [];
-            <c:forEach items="${turnos}" var="turno">
+            <c:forEach items="${vacunas}" var="vacuna">
             listaDeTurnos.push({
-                title: "Ocupado",
-                start: "2021-11-01T${turno.hora}:00"
+                title: "${vacuna.titulo}",
+                start: "${vacuna.fecha}"
             })
             </c:forEach>
             var traerEventos = function () {
                 return listaDeTurnos;
             }
         </script>
-        <script src='${contextPath}/js/main.js' type="text/javascript"></script>
-        <script src='${contextPath}/js/locales.js' type="text/javascript"></script>
-        <script src="${contextPath}/js/calendar.js" type="text/javascript"></script>
 
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

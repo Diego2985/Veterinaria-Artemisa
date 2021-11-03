@@ -1,41 +1,55 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.modelo.Turno;
+import ar.edu.unlam.tallerweb1.modelo.Vacuna;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCalendarioVacunacion;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
 public class ControladorCalendarioVacunacion {
 
+    private ServicioCalendarioVacunacion servicioCalendarioVacunacion;
+
+    @Autowired
+    public ControladorCalendarioVacunacion(ServicioCalendarioVacunacion servicioCalendarioVacunacion) {
+        this.servicioCalendarioVacunacion = servicioCalendarioVacunacion;
+    }
+
     @RequestMapping(path = "/calendario-vacunacion", method = RequestMethod.GET)
-    public ModelAndView irACalendarioVacunacion() {
+    public ModelAndView irACalendarioVacunacion(HttpServletRequest request) {
         ModelMap model = new ModelMap();
 
-        List<Turno> turnos = new ArrayList<>();
-        Turno turno = new Turno();
-        turno.setFecha(new Date());
-        turno.setHora("10");
-        turnos.add(turno);
+        Long userId = (Long) request.getSession().getAttribute("userId");
+        List<Vacuna> vacunas = servicioCalendarioVacunacion.getVacunas(userId);
 
-        Turno turno2 = new Turno();
-        turno2.setFecha(new Date());
-        turno2.setHora("12");
-        turnos.add(turno2);
-
-        Turno turno3 = new Turno();
-        turno3.setFecha(new Date());
-        turno3.setHora("14");
-        turnos.add(turno3);
-
-        model.put("turnos", turnos);
-        model.put("turno", turno);
+//        List<Vacuna> vacunas = new ArrayList<>();
+//        Vacuna vacuna = new Vacuna();
+//        vacuna.setTitulo("Vacuna Gripe - Pepe");
+//        vacuna.setFecha("2021-11-01");
+//        vacuna.setHora("10");
+//        vacunas.add(vacuna);
+//
+//        Vacuna vacuna2 = new Vacuna();
+//        vacuna2.setTitulo("Vacuna Doble - Pepe");
+//        vacuna2.setFecha("2021-11-02");
+//        vacuna2.setHora("12");
+//        vacunas.add(vacuna2);
+//
+//        Vacuna vacuna3 = new Vacuna();
+//        vacuna3.setTitulo("Vacuna Triple - Pepe");
+//        vacuna3.setFecha("2021-11-03");
+//        vacuna3.setHora("14");
+//        vacunas.add(vacuna3);
+//
+        model.put("vacunas", vacunas);
+//        model.put("vacuna", vacuna);
 
         return new ModelAndView("calendario-vacunacion", model);
     }

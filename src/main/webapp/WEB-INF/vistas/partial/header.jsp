@@ -62,7 +62,7 @@
                     <a class="nav-link" href="${contextPath}/listado-turnos">Mis Turnos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${contextPath}/calendario-vacunacion">Calendario de vacunación</a>
+                    <a class="nav-link" href="${contextPath}/calendario-vacunacion">Calendario de Vacunación</a>
                 </li>
             </ul>
             <!-- Left links -->

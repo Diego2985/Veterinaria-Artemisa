@@ -76,11 +76,11 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenContratoAlPaseador(Long id) {
-        return controladorPaseador.contratarAlPaseador(id);
+        return controladorPaseador.contratarAlPaseador(id, latitud, longitud);
     }
 
     private void thenDeboObtenerSuId(ModelAndView mav, Long id) {
-        assertThat(mav.getViewName()).isEqualTo("paseador-esperando");
+        assertThat(mav.getViewName()).isEqualTo("paseador-exitoso");
         assertThat(mav.getModel().get("idPaseador")).isEqualTo(id);
     }
 
@@ -162,7 +162,7 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(Paseador paseador) {
-        return controladorPaseador.contratarAlPaseador(paseador.getId());
+        return controladorPaseador.contratarAlPaseador(paseador.getId(), latitud, longitud);
     }
 
     private void thenNoPodriaContratarlo(ModelAndView mav) {

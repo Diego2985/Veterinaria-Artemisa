@@ -42,7 +42,7 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
-    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador) {
+    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud) {
         ModelMap model = new ModelMap();
         Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador);
         if(paseador.getCantidadActual()>=paseador.getCantidadMaxima()){
@@ -50,6 +50,8 @@ public class ControladorPaseador {
         }
         model.put("idPaseador", idPaseador);
         model.put("paseador", paseador);
-        return new ModelAndView("paseador-esperando", model);
+        model.put("latitud", latitud);
+        model.put("longitud", longitud);
+        return new ModelAndView("paseador-exitoso", model);
     }
 }

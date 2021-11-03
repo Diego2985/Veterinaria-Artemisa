@@ -38,32 +38,23 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
 
         const htmlPaseador = (inicio, marker, paseador) => {
             const distancia = inicio.getGeometry().distance(marker.getGeometry());
-            const validarCantidadMaxima=paseador.cantidadActual>=paseador.cantidadMaxima-3;
+            const validarAproxACantMax=paseador.cantidadActual>=paseador.cantidadMaxima-3;
+            const validarLlegadaACantMax=paseador.cantidadActual>=paseador.cantidadMaxima;
             return `
                 <div>
                     <div><strong>Paseador</strong></div>
                     <div>${paseador.estrellas} <i style='color: #FFE445' class='fas fa-star'></i>
-                     | <span style='color:${validarCantidadMaxima ? 'red' : 'black'}' }>${paseador.cantidadActual} <i class='fas fa-dog'></i></span>
+                     | <span style='color:${validarAproxACantMax ? 'red' : 'black'}' }>${paseador.cantidadActual} <i class='fas fa-dog'></i></span>
                      </div>
                     <div>Se encuentra a <strong>${Math.round(distancia)} mts.</strong></div>
                     <div>
                         <form action='contratar-paseador' method='post'>
                             <input type='hidden' value='" + paseador.id + "' name='idPaseador' />
-                            <button type='submit' class='btn btn-success'>Contratar</button>
+                            <button type='submit' ${validarLlegadaACantMax ? 'disabled' : ''} class='btn btn-success'>Contratar</button>
                         </form>
                     </div>
                 </div>
             `
-            return "<div><strong>Paseador</strong></div>" +
-                "<div>" + paseador.estrellas + " <i style='color: #FFE445' class=\"fas fa-star\"></i></div>" +
-                "<div>Se encuentra a <strong>" + Math.round(distancia) + " mts.</strong></div>" +
-                "<div><i class=\"fas fa-dog\"></i>"+paseador.cantidadActual+"</div>" +
-                "<div>" +
-                "<form action='contratar-paseador' method='post'>" +
-                "<input type='hidden' value='" + paseador.id + "' name='idPaseador' />" +
-                "<button type='submit' class='btn btn-success'>Contratar</button>" +
-                "</form>" +
-                "</div>"
         }
 
 

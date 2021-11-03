@@ -30,7 +30,7 @@
         estrellas: "${paseador.estrellas}",
         latitud: "${paseador.latitud}",
         longitud: "${paseador.longitud}",
-        cantidadActual: 1,
+        cantidadActual: 5,
         cantidadMaxima: 5
     })
     </c:forEach>

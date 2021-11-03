@@ -22,9 +22,12 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/ver-paseadores", method = RequestMethod.POST)
-    public ModelAndView recibirLasCoordenadasDeUbicacion(@RequestParam Double latitud, @RequestParam Double longitud) {
+    public ModelAndView obtenerPaseadoresCercanosA500mts(@RequestParam Double latitud, @RequestParam Double longitud) {
         try {
             ModelMap model=new ModelMap();
+            Integer distancia=500;
+            List<Paseador> paseadores=servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
+            model.put("paseadores", paseadores);
             model.put("latitud", latitud);
             model.put("longitud", longitud);
             return new ModelAndView("paseador-mapa", model);

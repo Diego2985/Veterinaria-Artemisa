@@ -64,4 +64,26 @@ public class RepositorioPaseadorTest extends SpringTest {
         assertThat(paseadoresCercanos).contains(paseadores.get(1));
         assertThat(paseadoresCercanos).doesNotContain(paseadores.get(2));
     }
+
+    @Test
+    @Transactional
+    public void obtenerUnPaseador(){
+        Paseador paseadorEsperado=givenUnPaseador();
+        Paseador paseadorObtenido=whenSolicitoUnPaseadorPorId(paseadorEsperado.getId());
+        thenDeberiaRetornarEsePaseadorConEseId(paseadorEsperado, paseadorObtenido);
+    }
+
+    private Paseador givenUnPaseador() {
+        Paseador paseador=paseadores.get(0);
+        session().save(paseador);
+        return paseador;
+    }
+
+    private Paseador whenSolicitoUnPaseadorPorId(Long id) {
+        return repositorioPaseador.obtenerUnPaseador(id);
+    }
+
+    private void thenDeberiaRetornarEsePaseadorConEseId(Paseador paseadorEsperado, Paseador paseadorObtenido) {
+        assertThat(paseadorObtenido).isEqualTo(paseadorEsperado);
+    }
 }

@@ -47,4 +47,27 @@ public class ServicioPaseadorTest {
         assertThat(paseadoresObtenidos).contains(listaDePaseadores.get(0));
         assertThat(paseadoresObtenidos).contains(listaDePaseadores.get(1));
     }
+
+    @Test
+    public void obtenerUnPaseador() {
+        Paseador paseadorEsperado = givenUnPaseador();
+        Paseador paseadorObtenido=whenSolicitoUnPaseador(paseadorEsperado.getId());
+        thenDebeRetornarmeElPaseadorSolicitado(paseadorEsperado, paseadorObtenido);
+    }
+
+    private Paseador givenUnPaseador() {
+        Paseador unPaseador= listaDePaseadores.get(0);
+
+        when(repositorioPaseador.obtenerUnPaseador(unPaseador.getId())).thenReturn(unPaseador);
+
+        return unPaseador;
+    }
+
+    private Paseador whenSolicitoUnPaseador(Long id) {
+        return servicioPaseador.obtenerPaseador(id);
+    }
+
+    private void thenDebeRetornarmeElPaseadorSolicitado(Paseador paseadorEsperado, Paseador paseadorObtenido) {
+        assertThat(paseadorObtenido).isEqualTo(paseadorEsperado);
+    }
 }

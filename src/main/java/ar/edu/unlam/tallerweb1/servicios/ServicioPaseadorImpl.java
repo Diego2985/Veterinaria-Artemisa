@@ -18,7 +18,7 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
 
     @Override
     public Paseador obtenerPaseador(Long id) {
-        return null;
+        return repositorioPaseador.obtenerUnPaseador(id);
     }
 
     @Override

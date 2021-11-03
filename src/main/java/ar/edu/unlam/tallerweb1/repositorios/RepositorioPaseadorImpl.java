@@ -33,6 +33,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
                 .list();
     }
 
+    @Override
+    public Paseador obtenerUnPaseador(Long id) {
+        return (Paseador) getCurrentSession().createCriteria(Paseador.class).add(Restrictions.eq("id", id)).uniqueResult();
+    }
+
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

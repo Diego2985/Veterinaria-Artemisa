@@ -45,17 +45,9 @@ public class RepositorioPaseadorTest extends SpringTest {
         paseador.setLongitud(longitud);
     }
 
-    private Double calcularLatitudMaxima(Double latitud, Integer distancia) {
-        Double distanciaDouble = (double) distancia;
-        Double lat = latitud + ((180 / Math.PI) * (distanciaDouble / 6378137));
-        Double diferencia = lat - latitud;
-        return diferencia;
-    }
-
-    private Double calcularLongitudMaxima(Double latitud, Double longitud, Integer distancia) {
-        Double lat0 = Math.cos(Math.PI / 180.0 * latitud);
-        Double x = longitud + ((180 / Math.PI) * ((double) distancia / 6378137));
-        Double diferencia = x - longitud;
+    private Double calcularDiferenciaPuntosLatLOLong(Double puntos, Integer distancia) {
+        Double puntosMax = puntos + ((180 / Math.PI) * ((double) distancia / 6378137));
+        Double diferencia = puntosMax - puntos;
         return diferencia;
     }
 
@@ -74,8 +66,8 @@ public class RepositorioPaseadorTest extends SpringTest {
         session().save(paseador2);
         session().save(paseador3);
 
-        diferenciaLatitud = calcularLatitudMaxima(LATITUD, distancia);
-        diferenciaLongitud = calcularLongitudMaxima(LATITUD, LONGITUD, distancia);
+        diferenciaLatitud = calcularDiferenciaPuntosLatLOLong(LATITUD, distancia);
+        diferenciaLongitud = calcularDiferenciaPuntosLatLOLong(LATITUD, distancia);
     }
 
     private List<Paseador> whenSolicitoLosPaseadores() {

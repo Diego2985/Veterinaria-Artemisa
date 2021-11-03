@@ -62,8 +62,10 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
             const button = document.querySelector("buttonPaseador")
         }
 
-        for (let paseador of paseadores) {
-            generarData(casa, paseador)
+        if(paseadores!="[]" && paseadores.length>0){
+            for (let paseador of paseadores) {
+                generarData(casa, paseador)
+            }
         }
 
         var service = platform.getSearchService();

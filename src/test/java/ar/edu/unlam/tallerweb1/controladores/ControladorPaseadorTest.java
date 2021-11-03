@@ -80,7 +80,7 @@ public class ControladorPaseadorTest {
     }
 
     private void thenDeboObtenerSuId(ModelAndView mav, Long id) {
-        assertThat(mav.getViewName()).isEqualTo("paseador-exitoso");
+        assertThat(mav.getViewName()).isEqualTo("paseador-esperando");
         assertThat(mav.getModel().get("idPaseador")).isEqualTo(id);
     }
 

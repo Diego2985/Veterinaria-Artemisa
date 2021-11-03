@@ -50,6 +50,6 @@ public class ControladorPaseador {
         }
         model.put("idPaseador", idPaseador);
         model.put("paseador", paseador);
-        return new ModelAndView("paseador-exitoso", model);
+        return new ModelAndView("paseador-esperando", model);
     }
 }

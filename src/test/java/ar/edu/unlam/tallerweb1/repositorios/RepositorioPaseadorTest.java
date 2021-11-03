@@ -34,8 +34,8 @@ public class RepositorioPaseadorTest extends SpringTest {
         longPaseador = -58.407848;
         crearPaseador(paseador2, latPaseador, longPaseador);
 
-        latPaseador = -34.58224;
-        longPaseador = -58.4101;
+        latPaseador = -34.58581;
+        longPaseador = -58.41485;
         crearPaseador(paseador3, latPaseador, longPaseador);
     }
 
@@ -54,7 +54,7 @@ public class RepositorioPaseadorTest extends SpringTest {
 
     private Double calcularLongitudMaxima(Double latitud, Double longitud, Integer distancia) {
         Double lat0 = Math.cos(Math.PI / 180.0 * latitud);
-        Double x = longitud + (180 / Math.PI) * ((double) distancia / 6378137) / Math.cos(lat0);
+        Double x = longitud + ((180 / Math.PI) * ((double) distancia / 6378137));
         Double diferencia = x - longitud;
         return diferencia;
     }

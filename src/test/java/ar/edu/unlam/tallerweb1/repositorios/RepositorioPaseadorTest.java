@@ -3,7 +3,6 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import ar.edu.unlam.tallerweb1.Paseadores;
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -39,12 +38,12 @@ public class RepositorioPaseadorTest extends SpringTest {
     @Rollback
     @Transactional
     public void extraerLosPaseadoresCercanosPorUnaDistanciaMaxima() {
-        givenUnaListaDePaseadores();
+        givenUnaListaDePaseadoresYCalculoDeDiferenciaDeCoordenadas();
         List<Paseador> paseadoresCercanos = whenSolicitoLosPaseadores();
         thenDeberiaRetornarmeLosQueEstenAUnaDistanciaMaxima(paseadoresCercanos);
     }
 
-    private void givenUnaListaDePaseadores() {
+    private void givenUnaListaDePaseadoresYCalculoDeDiferenciaDeCoordenadas() {
         distancia = 500;
         for (Paseador paseador: paseadores
              ) {

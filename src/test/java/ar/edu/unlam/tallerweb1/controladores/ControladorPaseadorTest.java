@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.Paseadores;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
@@ -111,17 +112,8 @@ public class ControladorPaseadorTest {
     }
 
     private List<Paseador> givenUnaListaDePaseadores() {
-        Double latPaseador = -34.58856;
-        Double longPaseador = -58.41066;
-        Paseador paseador1 = crearPaseador(latPaseador, longPaseador);
-
-        latPaseador = -34.585991;
-        longPaseador = -58.407848;
-        Paseador paseador2 = crearPaseador(latPaseador, longPaseador);
-
-        List<Paseador> paseadores=new ArrayList<>();
-        paseadores.add(paseador1);
-        paseadores.add(paseador2);
+        List<Paseador> paseadores= Paseadores.crearPaseadores();
+        paseadores.remove(2);
 
         when(servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia)).thenReturn(paseadores);
 
@@ -136,13 +128,5 @@ public class ControladorPaseadorTest {
         List<Paseador> obtenidos= (List<Paseador>) mav.getModel().get("paseadores");
         assertThat(obtenidos).hasSize(2);
         assertThat(obtenidos).isEqualTo(paseadoresEsperados);
-    }
-
-    private Paseador crearPaseador(Double latitud, Double longitud) {
-        Paseador paseador=new Paseador();
-        paseador.setEstrellas(5);
-        paseador.setLatitud(latitud);
-        paseador.setLongitud(longitud);
-        return paseador;
     }
 }

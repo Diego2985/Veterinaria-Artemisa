@@ -45,6 +45,9 @@ public class ControladorPaseador {
     public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador) {
         ModelMap model = new ModelMap();
         Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador);
+        if(paseador.getCantidadActual()>=paseador.getCantidadMaxima()){
+            return new ModelAndView("paseador-no-disponible");
+        }
         model.put("idPaseador", idPaseador);
         model.put("paseador", paseador);
         return new ModelAndView("paseador-exitoso", model);

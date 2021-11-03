@@ -67,6 +67,11 @@ public class ControladorPaseadorTest {
     }
 
     private Long givenDadoUnPaseador() {
+        Paseador paseador=crearPaseador(1L);
+        paseador.setCantidadMaxima(10);
+        paseador.setCantidadActual(5);
+
+        when(servicioPaseador.obtenerPaseador(paseador.getId())).thenReturn(paseador);
         return 1L;
     }
 
@@ -88,6 +93,16 @@ public class ControladorPaseadorTest {
 
     private Paseador givenUnIdYUnPaseador() {
         Long id = 1L;
+        Paseador paseador=crearPaseador(id);
+        paseador.setCantidadActual(5);
+        paseador.setCantidadMaxima(10);
+
+        when(servicioPaseador.obtenerPaseador(id)).thenReturn(paseador);
+
+        return paseador;
+    }
+
+    private Paseador crearPaseador(Long id) {
         Paseador paseador = new Paseador();
         paseador.setId(id);
         paseador.setNombre("Matias");
@@ -95,10 +110,9 @@ public class ControladorPaseadorTest {
         paseador.setLatitud(latitud);
         paseador.setLongitud(longitud);
 
-        when(servicioPaseador.obtenerPaseador(id)).thenReturn(paseador);
-
         return paseador;
     }
+
 
     private void thenDeboObtenerUnPaseador(ModelAndView mav, Paseador paseador) {
         assertThat(mav.getModel().get("paseador")).isEqualTo(paseador);
@@ -128,5 +142,30 @@ public class ControladorPaseadorTest {
         List<Paseador> obtenidos = (List<Paseador>) mav.getModel().get("paseadores");
         assertThat(obtenidos).hasSize(2);
         assertThat(obtenidos).isEqualTo(paseadoresEsperados);
+    }
+
+    @Test
+    public void siElPaseadorLlegoALaCantidadMaximaNoSeLoDebeContratar(){
+        Paseador paseador=givenUnPaseadorConCantidadesMaxYActual();
+        mav=whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(paseador);
+        thenNoPodriaContratarlo(mav);
+    }
+
+    private Paseador givenUnPaseadorConCantidadesMaxYActual() {
+        Paseador paseador=crearPaseador(1L);
+        paseador.setCantidadActual(10);
+        paseador.setCantidadMaxima(10);
+
+        when(servicioPaseador.obtenerPaseador(1L)).thenReturn(paseador);
+
+        return paseador;
+    }
+
+    private ModelAndView whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(Paseador paseador) {
+        return controladorPaseador.contratarAlPaseador(paseador.getId());
+    }
+
+    private void thenNoPodriaContratarlo(ModelAndView mav) {
+        assertThat(mav.getViewName()).isEqualTo("paseador-no-disponible");
     }
 }

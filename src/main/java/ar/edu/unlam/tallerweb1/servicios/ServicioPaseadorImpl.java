@@ -12,8 +12,8 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     private RepositorioPaseador repositorioPaseador;
 
     @Autowired
-    public ServicioPaseadorImpl(RepositorioPaseador repositorioPaseador){
-        this.repositorioPaseador=repositorioPaseador;
+    public ServicioPaseadorImpl(RepositorioPaseador repositorioPaseador) {
+        this.repositorioPaseador = repositorioPaseador;
     }
 
     @Override
@@ -23,14 +23,14 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
 
     @Override
     public List<Paseador> obtenerListaDePaseadoresCercanos(Double latitud, Double longitud, Integer distancia) {
-        Double diferenciaLatitud=calcularPuntosDeDiferencia(latitud, distancia);
-        Double diferenciaLongitud=calcularPuntosDeDiferencia(longitud, distancia);
-        List<Paseador> paseadoresCercanos=repositorioPaseador.obtenerPaseadoresCercanos(latitud, longitud, diferenciaLatitud, diferenciaLongitud);
+        Double diferenciaLatitud = calcularPuntosDeDiferencia(latitud, distancia);
+        Double diferenciaLongitud = calcularPuntosDeDiferencia(longitud, distancia);
+        List<Paseador> paseadoresCercanos = repositorioPaseador.obtenerPaseadoresCercanos(latitud, longitud, diferenciaLatitud, diferenciaLongitud);
         return paseadoresCercanos;
     }
 
     public Double calcularPuntosDeDiferencia(Double puntos, Integer distancia) {
-        Integer medidaTierra=6378137;
+        Integer medidaTierra = 6378137;
         Double puntosMax = puntos + ((180 / Math.PI) * ((double) distancia / medidaTierra));
         Double diferencia = puntosMax - puntos;
         return diferencia;

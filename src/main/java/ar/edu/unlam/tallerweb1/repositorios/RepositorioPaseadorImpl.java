@@ -12,8 +12,9 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class RepositorioPaseadorImpl implements RepositorioPaseador{
+public class RepositorioPaseadorImpl implements RepositorioPaseador {
     private SessionFactory sessionFactory;
+
     @Autowired
     public RepositorioPaseadorImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -27,12 +28,12 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador{
     @Override
     public List<Paseador> obtenerPaseadoresCercanos(Double latitud, Double longitud, Double diferenciaLatitud, Double diferenciaLongitud) {
         return getCurrentSession().createCriteria(Paseador.class).add(Restrictions.and(
-                Restrictions.between("latitud", latitud-diferenciaLatitud, latitud+diferenciaLatitud),
-                Restrictions.between("longitud", longitud-diferenciaLongitud, longitud+diferenciaLongitud)))
+                        Restrictions.between("latitud", latitud - diferenciaLatitud, latitud + diferenciaLatitud),
+                        Restrictions.between("longitud", longitud - diferenciaLongitud, longitud + diferenciaLongitud)))
                 .list();
     }
 
-    public Session getCurrentSession(){
+    public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }
 }

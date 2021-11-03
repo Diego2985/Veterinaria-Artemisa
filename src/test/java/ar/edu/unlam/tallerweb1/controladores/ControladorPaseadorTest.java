@@ -17,15 +17,15 @@ public class ControladorPaseadorTest {
 
     private Double latitud = -34.588902;
     private Double longitud = -58.409851;
-    private Integer distancia=500;
+    private Integer distancia = 500;
     private ModelAndView mav;
-    private Usuario usuario=new Usuario();
-    private ServicioPaseador servicioPaseador=mock(ServicioPaseador.class);
-    private ControladorPaseador controladorPaseador=new ControladorPaseador(servicioPaseador);
+    private Usuario usuario = new Usuario();
+    private ServicioPaseador servicioPaseador = mock(ServicioPaseador.class);
+    private ControladorPaseador controladorPaseador = new ControladorPaseador(servicioPaseador);
 
     @Test
-    public void verificarQueSeRecibeLaVistaDondeSeCaptaLaUbicacion(){
-        mav=whenElUsuarioQuiereElegirLaOpcionParaPasearAlPerro();
+    public void verificarQueSeRecibeLaVistaDondeSeCaptaLaUbicacion() {
+        mav = whenElUsuarioQuiereElegirLaOpcionParaPasearAlPerro();
         thenTieneQueVerLaVistaInicialDondeSeCaptaLaUbicacion(mav);
     }
 
@@ -38,9 +38,9 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void recibirLasCoordenadasDeUbicacionDelUsuario(){
+    public void recibirLasCoordenadasDeUbicacionDelUsuario() {
         givenUnUsuarioYSuUbicacion();
-        mav=whenEnviaLasCoordenadas();
+        mav = whenEnviaLasCoordenadas();
         thenDeberiaRecibirlasEnElController(mav);
     }
 
@@ -60,9 +60,9 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void obtenerIdDePaseador(){
-        Long id=givenDadoUnPaseador();
-        mav=whenContratoAlPaseador(id);
+    public void obtenerIdDePaseador() {
+        Long id = givenDadoUnPaseador();
+        mav = whenContratoAlPaseador(id);
         thenDeboObtenerSuId(mav, id);
     }
 
@@ -80,15 +80,15 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void obtenerPaseador(){
-        Paseador paseador=givenUnIdYUnPaseador();
-        mav=whenContratoAlPaseador(paseador.getId());
+    public void obtenerPaseador() {
+        Paseador paseador = givenUnIdYUnPaseador();
+        mav = whenContratoAlPaseador(paseador.getId());
         thenDeboObtenerUnPaseador(mav, paseador);
     }
 
     private Paseador givenUnIdYUnPaseador() {
-        Long id=1L;
-        Paseador paseador=new Paseador();
+        Long id = 1L;
+        Paseador paseador = new Paseador();
         paseador.setId(id);
         paseador.setNombre("Matias");
         paseador.setEstrellas(4);
@@ -105,14 +105,14 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void obtenerPaseadoresCercanos(){
-        List<Paseador> paseadoresEsperados=givenUnaListaDePaseadores();
-        mav=whenSolicitoLosPaseadores();
+    public void obtenerPaseadoresCercanos() {
+        List<Paseador> paseadoresEsperados = givenUnaListaDePaseadores();
+        mav = whenSolicitoLosPaseadores();
         thenDeboObtenerLosPaseadoresCercanos(paseadoresEsperados, mav);
     }
 
     private List<Paseador> givenUnaListaDePaseadores() {
-        List<Paseador> paseadores= Paseadores.crearPaseadores();
+        List<Paseador> paseadores = Paseadores.crearPaseadores();
         paseadores.remove(2);
 
         when(servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia)).thenReturn(paseadores);
@@ -125,7 +125,7 @@ public class ControladorPaseadorTest {
     }
 
     private void thenDeboObtenerLosPaseadoresCercanos(List<Paseador> paseadoresEsperados, ModelAndView mav) {
-        List<Paseador> obtenidos= (List<Paseador>) mav.getModel().get("paseadores");
+        List<Paseador> obtenidos = (List<Paseador>) mav.getModel().get("paseadores");
         assertThat(obtenidos).hasSize(2);
         assertThat(obtenidos).isEqualTo(paseadoresEsperados);
     }

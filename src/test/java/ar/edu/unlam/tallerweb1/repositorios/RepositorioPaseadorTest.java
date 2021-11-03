@@ -20,7 +20,7 @@ public class RepositorioPaseadorTest extends SpringTest {
     private Integer distancia;
     private Double diferenciaLatitud;
     private Double diferenciaLongitud;
-    private List<Paseador> paseadores= Paseadores.crearPaseadores();
+    private List<Paseador> paseadores = Paseadores.crearPaseadores();
 
     private void crearPaseador(Paseador paseador, Double latitud, Double longitud) {
         paseador.setEstrellas(5);
@@ -45,8 +45,8 @@ public class RepositorioPaseadorTest extends SpringTest {
 
     private void givenUnaListaDePaseadoresYCalculoDeDiferenciaDeCoordenadas() {
         distancia = 500;
-        for (Paseador paseador: paseadores
-             ) {
+        for (Paseador paseador : paseadores
+        ) {
             session().save(paseador);
         }
 

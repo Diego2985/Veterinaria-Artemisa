@@ -40,10 +40,10 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
             const distancia = inicio.getGeometry().distance(marker.getGeometry());
             return "<div><strong>Paseador</strong></div>" +
                 "<div>" + paseador.estrellas + " <i style='color: #FFE445' class=\"fas fa-star\"></i></div>" +
-                "<div>Se encuentra a <strong>" + Math.round(distancia) + " mts.</strong></div>"+
+                "<div>Se encuentra a <strong>" + Math.round(distancia) + " mts.</strong></div>" +
                 "<div>" +
                 "<form action='contratar-paseador' method='post'>" +
-                "<input type='hidden' value='"+paseador.id+"' name='idPaseador' />" +
+                "<input type='hidden' value='" + paseador.id + "' name='idPaseador' />" +
                 "<button type='submit' class='btn btn-success'>Contratar</button>" +
                 "</form>" +
                 "</div>"
@@ -62,7 +62,7 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
             const button = document.querySelector("buttonPaseador")
         }
 
-        if(paseadores!="[]" && paseadores.length>0){
+        if (paseadores != "[]" && paseadores.length > 0) {
             for (let paseador of paseadores) {
                 generarData(casa, paseador)
             }

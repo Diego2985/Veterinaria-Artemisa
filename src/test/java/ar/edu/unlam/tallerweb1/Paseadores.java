@@ -11,7 +11,7 @@ public class Paseadores {
         Paseador paseador2 = crearPaseador(-34.585991, -58.407848);
         Paseador paseador3 = crearPaseador(-34.58581, -58.41485);
 
-        List<Paseador> paseadores=new ArrayList<>();
+        List<Paseador> paseadores = new ArrayList<>();
         paseadores.add(paseador1);
         paseadores.add(paseador2);
         paseadores.add(paseador3);

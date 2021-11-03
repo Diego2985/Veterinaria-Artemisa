@@ -15,12 +15,12 @@ import static org.mockito.Mockito.*;
 public class ServicioPaseadorTest {
     private static final Double LATITUD = -34.588902;
     private static final Double LONGITUD = -58.409851;
-    private RepositorioPaseador repositorioPaseador=mock(RepositorioPaseador.class);
-    private ServicioPaseador servicioPaseador=new ServicioPaseadorImpl(repositorioPaseador);
-    private Integer distancia=500;
+    private RepositorioPaseador repositorioPaseador = mock(RepositorioPaseador.class);
+    private ServicioPaseador servicioPaseador = new ServicioPaseadorImpl(repositorioPaseador);
+    private Integer distancia = 500;
     private Double diferenciaLatitud;
     private Double diferenciaLongitud;
-    private List<Paseador> listaDePaseadores= Paseadores.crearPaseadores();
+    private List<Paseador> listaDePaseadores = Paseadores.crearPaseadores();
 
     @Test
     public void solicitarUnaListaDePaseadoresCercanos() {
@@ -30,8 +30,8 @@ public class ServicioPaseadorTest {
     }
 
     private void givenUnaListaDePaseadoresYDiferenciasDePuntosCalculadas() {
-        diferenciaLatitud=servicioPaseador.calcularPuntosDeDiferencia(LATITUD, distancia);
-        diferenciaLongitud=servicioPaseador.calcularPuntosDeDiferencia(LONGITUD, distancia);
+        diferenciaLatitud = servicioPaseador.calcularPuntosDeDiferencia(LATITUD, distancia);
+        diferenciaLongitud = servicioPaseador.calcularPuntosDeDiferencia(LONGITUD, distancia);
 
         listaDePaseadores.remove(2);
 

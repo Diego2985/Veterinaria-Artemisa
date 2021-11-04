@@ -42,6 +42,8 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         String result = restTemplate.getForObject(uri, String.class);
         ObjectMapper mapper=new ObjectMapper();
         DatosTiempo datosTiempo=mapper.readValue(result,DatosTiempo.class);
+        datosTiempo.setCoordenadasPaseador(paseador);
+        datosTiempo.setCoordenadasUsuario(usuario);
         return datosTiempo;
     }
 

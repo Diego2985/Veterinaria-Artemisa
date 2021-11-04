@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void obtenerIdDePaseador() {
+    public void obtenerIdDePaseador() throws IOException {
         Long id = givenDadoUnPaseador();
         mav = whenContratoAlPaseador(id);
         thenDeboObtenerSuId(mav, id);
@@ -75,7 +76,7 @@ public class ControladorPaseadorTest {
         return 1L;
     }
 
-    private ModelAndView whenContratoAlPaseador(Long id) {
+    private ModelAndView whenContratoAlPaseador(Long id) throws IOException {
         return controladorPaseador.contratarAlPaseador(id, latitud, longitud);
     }
 
@@ -85,7 +86,7 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void obtenerPaseador() {
+    public void obtenerPaseador() throws IOException {
         Paseador paseador = givenUnIdYUnPaseador();
         mav = whenContratoAlPaseador(paseador.getId());
         thenDeboObtenerUnPaseador(mav, paseador);
@@ -145,7 +146,7 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void siElPaseadorLlegoALaCantidadMaximaNoSeLoDebeContratar(){
+    public void siElPaseadorLlegoALaCantidadMaximaNoSeLoDebeContratar() throws IOException {
         Paseador paseador=givenUnPaseadorConCantidadesMaxYActual();
         mav=whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(paseador);
         thenNoPodriaContratarlo(mav);
@@ -161,7 +162,7 @@ public class ControladorPaseadorTest {
         return paseador;
     }
 
-    private ModelAndView whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(Paseador paseador) {
+    private ModelAndView whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(Paseador paseador) throws IOException {
         return controladorPaseador.contratarAlPaseador(paseador.getId(), latitud, longitud);
     }
 

@@ -1,4 +1,4 @@
-function mostrarMapa(latitud, longitud, callback){
+function mostrarMapa(latitud, longitud, callback=null){
     var platform = new H.service.Platform({
         'apikey': MAP_KEY
     });
@@ -26,5 +26,5 @@ function mostrarMapa(latitud, longitud, callback){
         locacion.innerHTML = datos
     });
 
-    callback(map, casa, ui);
+    if(callback) callback(map, casa, ui);
 }

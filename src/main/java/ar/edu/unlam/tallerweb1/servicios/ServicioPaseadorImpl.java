@@ -34,16 +34,14 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public void obtenerDistanciaYTiempo(Double latitudInicio, Double longitudInicio, Double latitudPaseador, Double longitudPaseador) throws IOException {
+    public DatosTiempo obtenerDistanciaYTiempo(Double latitudInicio, Double longitudInicio, Double latitudPaseador, Double longitudPaseador) throws IOException {
         final String uri = "https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&waypoint0=geo!"+latitudPaseador+","+longitudPaseador+"&waypoint1=geo!"+latitudInicio+","+longitudInicio+"&mode=fastest;pedestrian";
 
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(uri, String.class);
         ObjectMapper mapper=new ObjectMapper();
         DatosTiempo datosTiempo=mapper.readValue(result,DatosTiempo.class);
-        System.out.println(result);
-        System.out.println(datosTiempo.getTiempo());
-        System.out.println(datosTiempo.getDistancia());
+        return datosTiempo;
     }
 
     public Double calcularPuntosDeDiferencia(Double puntos, Integer distancia) {

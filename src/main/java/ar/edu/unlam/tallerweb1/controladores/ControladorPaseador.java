@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
-import ar.edu.unlam.tallerweb1.servicios.DatosTiempo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

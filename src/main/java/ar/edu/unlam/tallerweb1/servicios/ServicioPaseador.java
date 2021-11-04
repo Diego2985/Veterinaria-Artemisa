@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 
@@ -13,5 +14,5 @@ public interface ServicioPaseador {
 
     List<Paseador> obtenerListaDePaseadoresCercanos(Double latitud, Double longitud, Integer distancia);
 
-    DatosTiempo obtenerDistanciaYTiempo(Double latitudInicio, Double longitudInicio, Double latitudPaseador, Double longitudPaseador) throws IOException;
+    DatosTiempo obtenerDistanciaYTiempo(Coordenadas usuario, Coordenadas paseador) throws IOException;
 }

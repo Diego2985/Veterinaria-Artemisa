@@ -1,7 +1,5 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import ar.edu.unlam.tallerweb1.controladores.Coordenadas;
-
 import javax.persistence.*;
 
 @Entity

@@ -8,9 +8,32 @@ import java.util.Map;
 public class DatosTiempo {
     private Integer tiempo;
     private Integer distancia;
+    private Coordenadas coordenadasUsuario;
+    private Coordenadas coordenadasPaseador;
+    private Integer unidadSegundosAMinutos;
+
+    public DatosTiempo() {
+        this.unidadSegundosAMinutos=60;
+    }
+
+    public Coordenadas getCoordenadasUsuario() {
+        return coordenadasUsuario;
+    }
+
+    public void setCoordenadasUsuario(Coordenadas coordenadasUsuario) {
+        this.coordenadasUsuario = coordenadasUsuario;
+    }
+
+    public Coordenadas getCoordenadasPaseador() {
+        return coordenadasPaseador;
+    }
+
+    public void setCoordenadasPaseador(Coordenadas coordenadasPaseador) {
+        this.coordenadasPaseador = coordenadasPaseador;
+    }
 
     public Integer getTiempo() {
-        return tiempo;
+        return Math.round(tiempo / this.unidadSegundosAMinutos);
     }
 
     public void setTiempo(Integer tiempo) {

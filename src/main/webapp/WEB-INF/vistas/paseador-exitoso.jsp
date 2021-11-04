@@ -7,7 +7,7 @@
 <body>
     <div class="container mt-3">
         <h2>El paseador se encuentra en camino</h2>
-        <span>${idPaseador}</span>
+        <h4>Va a llegar en aproximadamente ${distanciaYTiempo.tiempo} minutos ya que se encuentra a ${distanciaYTiempo.distancia} metros</h4>
     </div>
 </body>
 </html>

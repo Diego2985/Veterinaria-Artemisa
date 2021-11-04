@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.Paseadores;
+import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
@@ -8,7 +9,6 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -146,23 +146,23 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void siElPaseadorLlegoALaCantidadMaximaNoSeLoDebeContratar() throws IOException {
+    public void siElPaseadorLlegoALaCantidadMaximaNoSeLoDebeContratar() throws PaseadorConCantMaxDeMascotasException {
         Paseador paseador=givenUnPaseadorConCantidadesMaxYActual();
         mav=whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(paseador);
         thenNoPodriaContratarlo(mav);
     }
 
-    private Paseador givenUnPaseadorConCantidadesMaxYActual() {
+    private Paseador givenUnPaseadorConCantidadesMaxYActual() throws PaseadorConCantMaxDeMascotasException {
         Paseador paseador=crearPaseador(1L);
         paseador.setCantidadActual(10);
         paseador.setCantidadMaxima(10);
 
-        when(servicioPaseador.obtenerPaseador(1L)).thenReturn(paseador);
+        when(servicioPaseador.obtenerPaseador(1L, true)).thenThrow(PaseadorConCantMaxDeMascotasException.class);
 
         return paseador;
     }
 
-    private ModelAndView whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(Paseador paseador) throws IOException {
+    private ModelAndView whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(Paseador paseador) {
         return controladorPaseador.contratarAlPaseador(paseador.getId(), latitud, longitud);
     }
 

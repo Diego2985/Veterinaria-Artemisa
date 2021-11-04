@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,6 +43,14 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         ObjectMapper mapper=new ObjectMapper();
         DatosTiempo datosTiempo=mapper.readValue(result,DatosTiempo.class);
         return datosTiempo;
+    }
+
+    @Override
+    public Paseador obtenerPaseador(Long id, Boolean chequeoCantidadMaxima) throws PaseadorConCantMaxDeMascotasException {
+        Paseador paseador=repositorioPaseador.obtenerUnPaseador(id);
+        if(chequeoCantidadMaxima && paseador.getCantidadActual()>=paseador.getCantidadMaxima())
+            throw new PaseadorConCantMaxDeMascotasException();
+        return paseador;
     }
 
     public Double calcularPuntosDeDiferencia(Double puntos, Integer distancia) {

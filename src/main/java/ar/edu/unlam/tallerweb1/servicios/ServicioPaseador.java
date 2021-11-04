@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 
 import java.io.IOException;
@@ -15,4 +16,6 @@ public interface ServicioPaseador {
     List<Paseador> obtenerListaDePaseadoresCercanos(Double latitud, Double longitud, Integer distancia);
 
     DatosTiempo obtenerDistanciaYTiempo(Coordenadas usuario, Coordenadas paseador) throws IOException;
+
+    Paseador obtenerPaseador(Long idPaseador, Boolean chequeoCantidadMaxima) throws PaseadorConCantMaxDeMascotasException;
 }

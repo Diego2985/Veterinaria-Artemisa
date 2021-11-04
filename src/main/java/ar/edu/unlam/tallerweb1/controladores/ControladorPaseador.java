@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,18 +46,24 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
-    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud) throws IOException {
-        ModelMap model = new ModelMap();
-        Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador);
-        if(paseador.getCantidadActual()>=paseador.getCantidadMaxima()){
+    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud) {
+        try {
+            ModelMap model = new ModelMap();
+            Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
+            Coordenadas coordenadasPaseador=new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
+            Coordenadas coordenadasUsuario=new Coordenadas(latitud, longitud);
+            DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadasUsuario, coordenadasPaseador);
+            model.put("idPaseador", idPaseador);
+            model.put("paseador", paseador);
+            model.put("distanciaYTiempo", distanciaYTiempo);
+            return new ModelAndView("paseador-exitoso", model);
+        }
+        catch (PaseadorConCantMaxDeMascotasException e){
             return new ModelAndView("paseador-no-disponible");
         }
-        Coordenadas coordenadasPaseador=new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
-        Coordenadas coordenadasUsuario=new Coordenadas(latitud, longitud);
-        DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadasUsuario, coordenadasPaseador);
-        model.put("idPaseador", idPaseador);
-        model.put("paseador", paseador);
-        model.put("distanciaYTiempo", distanciaYTiempo);
-        return new ModelAndView("paseador-exitoso", model);
+        catch (IOException e){
+            return new ModelAndView("paseador-inicio");
+        }
+
     }
 }

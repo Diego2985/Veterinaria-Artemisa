@@ -50,6 +50,8 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
                     <div>
                         <form action='contratar-paseador' method='post'>
                             <input type='hidden' value='${paseador.id}' name='idPaseador' />
+                            <input type='hidden' value='${latitud}' name='latitud' />
+                            <input type='hidden' value='${longitud}' name='longitud' />
                             <button type='submit' ${validarLlegadaACantMax ? 'disabled' : ''} class='btn btn-success'>Contratar</button>
                         </form>
                     </div>

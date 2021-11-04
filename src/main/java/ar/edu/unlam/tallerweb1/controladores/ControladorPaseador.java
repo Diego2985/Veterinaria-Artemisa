@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.servicios.DatosTiempo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -42,12 +44,13 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
-    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud) {
+    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud) throws IOException {
         ModelMap model = new ModelMap();
         Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador);
         if(paseador.getCantidadActual()>=paseador.getCantidadMaxima()){
             return new ModelAndView("paseador-no-disponible");
         }
+        servicioPaseador.obtenerDistanciaYTiempo(latitud, longitud, paseador.getLatitud(), paseador.getLongitud());
         model.put("idPaseador", idPaseador);
         model.put("paseador", paseador);
         model.put("latitud", latitud);

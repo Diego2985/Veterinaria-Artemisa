@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.converter.Coordenadas;
+import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +51,12 @@ public class ControladorPaseador {
         if(paseador.getCantidadActual()>=paseador.getCantidadMaxima()){
             return new ModelAndView("paseador-no-disponible");
         }
-        servicioPaseador.obtenerDistanciaYTiempo(latitud, longitud, paseador.getLatitud(), paseador.getLongitud());
+        Coordenadas coordenadasPaseador=new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
+        Coordenadas coordenadasUsuario=new Coordenadas(latitud, longitud);
+        DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadasUsuario, coordenadasPaseador);
         model.put("idPaseador", idPaseador);
         model.put("paseador", paseador);
-        model.put("latitud", latitud);
-        model.put("longitud", longitud);
+        model.put("distanciaYTiempo", distanciaYTiempo);
         return new ModelAndView("paseador-exitoso", model);
     }
 }

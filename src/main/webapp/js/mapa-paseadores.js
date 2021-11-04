@@ -52,7 +52,11 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
                             <input type='hidden' value='${paseador.id}' name='idPaseador' />
                             <input type='hidden' value='${latitud}' name='latitud' />
                             <input type='hidden' value='${longitud}' name='longitud' />
-                            <button type='submit' ${validarLlegadaACantMax ? 'disabled' : ''} class='btn btn-success'>Contratar</button>
+                            ${
+                                !validarLlegadaACantMax ?
+                                    '<button type="submit" class="btn btn-success">Contratar</button>' :
+                                    '<button type="button" disabled class="btn btn-danger">No Disponible</button>'
+                            }
                         </form>
                     </div>
                 </div>

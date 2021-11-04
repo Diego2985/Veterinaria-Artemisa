@@ -1,12 +1,10 @@
-package ar.edu.unlam.tallerweb1.controladores;
+package ar.edu.unlam.tallerweb1.converter;
 
 public class Coordenadas {
     private Double latitud;
     private Double longitud;
-    private String coordenadas;
 
-    public Coordenadas(String coordenadas, Double latitud, Double longitud) {
-        this.coordenadas = coordenadas;
+    public Coordenadas(Double latitud, Double longitud) {
         this.latitud = latitud;
         this.longitud = longitud;
     }
@@ -25,13 +23,5 @@ public class Coordenadas {
 
     public void setLongitud(Double longitud) {
         this.longitud = longitud;
-    }
-
-    public String getCoordenadas() {
-        return coordenadas;
-    }
-
-    public void setCoordenadas(String coordenadas) {
-        this.coordenadas = coordenadas;
     }
 }

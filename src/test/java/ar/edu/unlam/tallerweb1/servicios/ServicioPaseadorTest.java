@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.Paseadores;
+import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import org.junit.Before;
@@ -69,5 +70,25 @@ public class ServicioPaseadorTest {
 
     private void thenDebeRetornarmeElPaseadorSolicitado(Paseador paseadorEsperado, Paseador paseadorObtenido) {
         assertThat(paseadorObtenido).isEqualTo(paseadorEsperado);
+    }
+
+    @Test(expected = PaseadorConCantMaxDeMascotasException.class)
+    public void siELPaseadorLlegoALaCantMaxDebeSaltarLaExcepcion() throws PaseadorConCantMaxDeMascotasException {
+        Paseador esperado=givenUnPaseadorConCantidadesActualYMax();
+        whenSolicitoUnPaseadorChequeandoQueNoHayaLlegadoALaCantMax(esperado.getId());
+    }
+
+    private Paseador givenUnPaseadorConCantidadesActualYMax() {
+        Paseador paseador=listaDePaseadores.get(0);
+        paseador.setCantidadMaxima(10);
+        paseador.setCantidadActual(10);
+
+        when(repositorioPaseador.obtenerUnPaseador(paseador.getId())).thenReturn(paseador);
+
+        return paseador;
+    }
+
+    private Paseador whenSolicitoUnPaseadorChequeandoQueNoHayaLlegadoALaCantMax(Long id) throws PaseadorConCantMaxDeMascotasException {
+        return servicioPaseador.obtenerPaseador(id, true);
     }
 }

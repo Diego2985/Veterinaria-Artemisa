@@ -2,16 +2,19 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
@@ -70,6 +73,22 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         if(chequeoCantidadMaxima && paseador.getCantidadActual()>=paseador.getCantidadMaxima())
             throw new PaseadorConCantMaxDeMascotasException();
         return paseador;
+    }
+
+    @Override
+    public Ubicacion obtenerDireccionDeUbicacionActual(Double latitud, Double longitud) throws IOException {
+        final String uri = "https://revgeocode.search.hereapi.com/v1/revgeocode?at="+latitud+","+longitud+"&apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM";
+        String result = obtenerJson(uri);
+        ObjectMapper mapper=new ObjectMapper();
+        Ubicacion ubicacion=mapper.readValue(result,Ubicacion.class);
+        return ubicacion;
+    }
+
+    private String obtenerJson(String uri) {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        String result = restTemplate.getForObject(uri, String.class);
+        return result;
     }
 
     public Double calcularPuntosDeDiferencia(Double puntos, Integer distancia) {

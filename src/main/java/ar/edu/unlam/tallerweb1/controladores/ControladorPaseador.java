@@ -6,7 +6,6 @@ import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,13 +67,14 @@ public class ControladorPaseador {
             model.put("registro", registro);
             return new ModelAndView("paseador-exitoso", model);
         } catch (PaseadorConCantMaxDeMascotasException e) {
-            return new ModelAndView("paseador-no-disponible");
+            model.put("mensaje", "El paseador indicado no se encuentra disponible");
+            return new ModelAndView("paseador-error");
         } catch (UnsupportedEncodingException e) {
             model.put("mensaje", "No se pudo obtener la imagen de la ruta");
-            return new ModelAndView("paseador-exitoso", model);
+            return new ModelAndView("paseador-error", model);
         } catch (IOException e) {
             model.put("mensaje", "No se pudo obtener el tiempo de llegada ni la distancia");
-            return new ModelAndView("paseador-exitoso", model);
+            return new ModelAndView("paseador-error", model);
         }
     }
 

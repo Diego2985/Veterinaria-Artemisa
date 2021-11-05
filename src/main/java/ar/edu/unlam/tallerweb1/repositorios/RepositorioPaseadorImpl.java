@@ -44,6 +44,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
         return (Long) getCurrentSession().save(registro);
     }
 
+    @Override
+    public void actualizarEstadoDePaseo(RegistroPaseo registro) {
+        getCurrentSession().update(registro);
+    }
+
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

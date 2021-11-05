@@ -13,4 +13,6 @@ public interface RepositorioPaseador {
     Paseador obtenerUnPaseador(Long id);
 
     Long crearRegistroDePaseo(RegistroPaseo registro);
+
+    void actualizarEstadoDePaseo(RegistroPaseo registro);
 }

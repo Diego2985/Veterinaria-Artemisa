@@ -92,16 +92,14 @@ public class RepositorioPaseadorTest extends SpringTest {
     @Test
     @Transactional
     public void crearUnRegistroDePaseo() {
-        RegistroPaseo registro = givenUnRegistroDePaseo();
+        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistro();
         Long id = whenQuieroCrearElRegistro(registro);
         thenDeberiaGuardarlo(id);
     }
 
-    private RegistroPaseo givenUnRegistroDePaseo() {
+    private RegistroPaseo givenUnPaseadorUnUsuarioYUnRegistro() {
         Paseador paseador = new Paseador();
-        paseador.setId(1L);
         Usuario usuario = new Usuario();
-        usuario.setId(1L);
         RegistroPaseo registro = new RegistroPaseo();
         registro.setPaseador(paseador);
         registro.setUsuario(usuario);
@@ -117,5 +115,28 @@ public class RepositorioPaseadorTest extends SpringTest {
 
     private void thenDeberiaGuardarlo(Long id) {
         assertThat(id).isNotNull();
+    }
+
+    @Test
+    @Transactional
+    public void actualizarElEstadoDeUnRegistroDePaseo() {
+        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistroGuardado();
+        whenQuieroActualizarlo(registro);
+        thenDeberiaActualizarse(registro);
+    }
+
+    private void thenDeberiaActualizarse(RegistroPaseo resultado) {
+        assertThat(resultado.getEstado()).isEqualTo(1);
+    }
+
+    private void whenQuieroActualizarlo(RegistroPaseo registro) {
+        repositorioPaseador.actualizarEstadoDePaseo(registro);
+    }
+
+    private RegistroPaseo givenUnPaseadorUnUsuarioYUnRegistroGuardado() {
+        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistro();
+        session().save(registro);
+        registro.setEstado(1);
+        return registro;
     }
 }

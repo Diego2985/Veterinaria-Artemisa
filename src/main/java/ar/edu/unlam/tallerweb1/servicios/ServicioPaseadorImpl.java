@@ -37,7 +37,7 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
 
     @Override
     public DatosTiempo obtenerDistanciaYTiempo(Coordenadas usuario, Coordenadas paseador) throws IOException {
-        final String uri = "https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&waypoint0=geo!"+paseador.getLatitud()+","+paseador.getLongitud()+"&waypoint1=geo!"+usuario.getLatitud()+","+usuario.getLongitud()+"&mode=fastest;pedestrian";
+        final String uri = "https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&waypoint0=geo!"+paseador.toString()+"&waypoint1=geo!"+usuario.toString()+"&mode=shortest;pedestrian";
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(uri, String.class);
         ObjectMapper mapper=new ObjectMapper();

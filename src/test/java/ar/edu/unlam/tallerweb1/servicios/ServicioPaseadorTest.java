@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.Paseadores;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +18,8 @@ public class ServicioPaseadorTest {
     private static final Double LATITUD = -34.588902;
     private static final Double LONGITUD = -58.409851;
     private RepositorioPaseador repositorioPaseador = mock(RepositorioPaseador.class);
-    private ServicioPaseador servicioPaseador = new ServicioPaseadorImpl(repositorioPaseador);
+    private RepositorioUsuario repositorioUsuario = mock(RepositorioUsuario.class);
+    private ServicioPaseador servicioPaseador = new ServicioPaseadorImpl(repositorioPaseador, repositorioUsuario);
     private Integer distancia = 500;
     private Double diferenciaLatitud;
     private Double diferenciaLongitud;

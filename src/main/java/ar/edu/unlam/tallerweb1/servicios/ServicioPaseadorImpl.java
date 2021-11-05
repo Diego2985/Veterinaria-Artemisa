@@ -6,7 +6,9 @@ import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -22,10 +24,12 @@ import java.util.List;
 @Service
 public class ServicioPaseadorImpl implements ServicioPaseador {
     private RepositorioPaseador repositorioPaseador;
+    private RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public ServicioPaseadorImpl(RepositorioPaseador repositorioPaseador) {
+    public ServicioPaseadorImpl(RepositorioPaseador repositorioPaseador, RepositorioUsuario repositorioUsuario) {
         this.repositorioPaseador = repositorioPaseador;
+        this.repositorioUsuario = repositorioUsuario;
     }
 
     @Override
@@ -86,8 +90,13 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long usuario) {
-        return null;
+    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario) {
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
+        RegistroPaseo registro=new RegistroPaseo();
+        registro.setPaseador(paseador);
+        registro.setUsuario(usuario);
+        repositorioPaseador.crearRegistroDePaseo(registro);
+        return registro;
     }
 
     private String obtenerJson(String uri) {

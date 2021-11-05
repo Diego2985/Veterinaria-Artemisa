@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
@@ -31,9 +32,9 @@ public class ControladorPaseador {
             ModelMap model = new ModelMap();
             Integer distancia = 500;
             List<Paseador> paseadores = servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
+            Ubicacion ubicacion = servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud);
             model.put("paseadores", paseadores);
-            model.put("latitud", latitud);
-            model.put("longitud", longitud);
+            model.put("ubicacion", ubicacion);
             return new ModelAndView("paseador-mapa", model);
         } catch (Exception e) {
             return new ModelAndView("error");

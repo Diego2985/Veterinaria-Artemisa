@@ -5,6 +5,8 @@ import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,4 +25,6 @@ public interface ServicioPaseador {
     Paseador obtenerPaseador(Long idPaseador, Boolean chequeoCantidadMaxima) throws PaseadorConCantMaxDeMascotasException;
 
     Ubicacion obtenerDireccionDeUbicacionActual(Double latitud, Double longitud) throws IOException;
+
+    RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario);
 }

@@ -5,6 +5,7 @@ import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,11 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         ObjectMapper mapper=new ObjectMapper();
         Ubicacion ubicacion=mapper.readValue(result,Ubicacion.class);
         return ubicacion;
+    }
+
+    @Override
+    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long usuario) {
+        return null;
     }
 
     private String obtenerJson(String uri) {

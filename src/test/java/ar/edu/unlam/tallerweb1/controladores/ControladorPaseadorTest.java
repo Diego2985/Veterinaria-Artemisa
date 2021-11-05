@@ -5,12 +5,18 @@ import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -26,6 +32,17 @@ public class ControladorPaseadorTest {
     private Usuario usuario = new Usuario();
     private ServicioPaseador servicioPaseador = mock(ServicioPaseador.class);
     private ControladorPaseador controladorPaseador = new ControladorPaseador(servicioPaseador);
+    private HttpServletRequest request;
+    private HttpSession sessionMock = Mockito.mock(HttpSession.class);
+
+    @Before
+    public void init() {
+        request = mock(HttpServletRequest.class);
+        HttpSession sessionMock = mock(HttpSession.class);
+
+        when(request.getSession()).thenReturn(sessionMock);
+        when(request.getSession().getAttribute("userId")).thenReturn(1L);
+    }
 
     @Test
     public void verificarQueSeRecibeLaVistaDondeSeCaptaLaUbicacion() {
@@ -78,7 +95,7 @@ public class ControladorPaseadorTest {
     }
 
     private Long givenDadoUnPaseador() throws PaseadorConCantMaxDeMascotasException {
-        Paseador paseador=crearPaseador(1L);
+        Paseador paseador = crearPaseador(1L);
         paseador.setCantidadMaxima(10);
         paseador.setCantidadActual(5);
 
@@ -87,7 +104,7 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenContratoAlPaseador(Long id) {
-        return controladorPaseador.contratarAlPaseador(id, latitud, longitud);
+        return controladorPaseador.contratarAlPaseador(id, latitud, longitud, request);
     }
 
     private void thenDeboObtenerSuId(ModelAndView mav, Long id) {
@@ -104,7 +121,7 @@ public class ControladorPaseadorTest {
 
     private Paseador givenUnIdYUnPaseador() throws PaseadorConCantMaxDeMascotasException {
         Long id = 1L;
-        Paseador paseador=crearPaseador(id);
+        Paseador paseador = crearPaseador(id);
         paseador.setCantidadActual(5);
         paseador.setCantidadMaxima(10);
 
@@ -156,13 +173,13 @@ public class ControladorPaseadorTest {
 
     @Test
     public void siElPaseadorLlegoALaCantidadMaximaNoSeLoDebeContratar() throws PaseadorConCantMaxDeMascotasException {
-        Paseador paseador=givenUnPaseadorConCantidadesMaxYActual();
-        mav=whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(paseador);
+        Paseador paseador = givenUnPaseadorConCantidadesMaxYActualIguales();
+        mav = whenContratoAlPaseador(paseador.getId());
         thenNoPodriaContratarlo(mav);
     }
 
-    private Paseador givenUnPaseadorConCantidadesMaxYActual() throws PaseadorConCantMaxDeMascotasException {
-        Paseador paseador=crearPaseador(1L);
+    private Paseador givenUnPaseadorConCantidadesMaxYActualIguales() throws PaseadorConCantMaxDeMascotasException {
+        Paseador paseador = crearPaseador(1L);
         paseador.setCantidadActual(10);
         paseador.setCantidadMaxima(10);
 
@@ -171,11 +188,39 @@ public class ControladorPaseadorTest {
         return paseador;
     }
 
-    private ModelAndView whenContratoAUnPaseadorQueYaTieneLaCantMaxDeMascotas(Paseador paseador) {
-        return controladorPaseador.contratarAlPaseador(paseador.getId(), latitud, longitud);
-    }
-
     private void thenNoPodriaContratarlo(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("paseador-no-disponible");
+    }
+
+    @Test
+    public void seCreaUnRegistroDelPaseo() throws PaseadorConCantMaxDeMascotasException {
+        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistroDePaseo();
+        mav = whenContratoAlPaseador(registro.getPaseador().getId());
+        thenReciboUnRegistroDelPaseo(mav, registro);
+    }
+
+    private RegistroPaseo givenUnPaseadorUnUsuarioYUnRegistroDePaseo() throws PaseadorConCantMaxDeMascotasException {
+        Paseador paseador = crearPaseador(1L);
+        paseador.setId(1L);
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        Date horaInicio = new Date();
+        Date horaFinal = new Date(horaInicio.getTime() + (3600 + 1000));
+
+        RegistroPaseo registro = new RegistroPaseo();
+        registro.setPaseador(paseador);
+        registro.setUsuario(usuario);
+        registro.setHoraInicio(horaInicio);
+        registro.setHoraFinal(horaFinal);
+
+        when(servicioPaseador.obtenerPaseador(paseador.getId(), true)).thenReturn(paseador);
+        when(servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"))).thenReturn(registro);
+        return registro;
+    }
+
+    private void thenReciboUnRegistroDelPaseo(ModelAndView mav, RegistroPaseo registro) {
+        assertThat(mav.getModel().get("registro")).isEqualTo(registro);
     }
 }

@@ -5,6 +5,8 @@ import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ControladorPaseador {
@@ -48,18 +53,19 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
-    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud) {
+    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         try {
             Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
-            Coordenadas coordenadasPaseador = new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
-            Coordenadas coordenadasUsuario = new Coordenadas(latitud, longitud);
-            DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadasUsuario, coordenadasPaseador);
-            String obtenerImagen = servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadasUsuario, coordenadasPaseador);
+            Map<String, Coordenadas> coordenadas = obtenerCoordenadas(latitud, longitud, paseador);
+            DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadas.get("usuario"), coordenadas.get("paseador"));
+            String obtenerImagen = servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadas.get("usuario"), coordenadas.get("paseador"));
+            RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"));
             model.put("idPaseador", idPaseador);
             model.put("paseador", paseador);
             model.put("imagen", obtenerImagen);
             model.put("distanciaYTiempo", distanciaYTiempo);
+            model.put("registro", registro);
             return new ModelAndView("paseador-exitoso", model);
         } catch (PaseadorConCantMaxDeMascotasException e) {
             return new ModelAndView("paseador-no-disponible");
@@ -70,5 +76,19 @@ public class ControladorPaseador {
             model.put("mensaje", "No se pudo obtener el tiempo de llegada ni la distancia");
             return new ModelAndView("paseador-exitoso", model);
         }
+    }
+
+    private Map<String, Coordenadas> obtenerCoordenadas(Double latitudUsuario, Double longitudUsuario, Paseador paseador){
+        Map<String, Coordenadas> coordenadas = new HashMap<>();
+        coordenadas.put("usuario", new Coordenadas(latitudUsuario, longitudUsuario));
+        coordenadas.put("paseador", new Coordenadas(paseador.getLatitud(), paseador.getLongitud()));
+        return coordenadas;
+    }
+
+    @RequestMapping(path = "/comenzar-seguimiento", method = RequestMethod.POST)
+    public ModelAndView realizarSeguimientoDePaseo(@RequestParam DatosTiempo datosTiempo){
+        ModelMap model = new ModelMap();
+        model.put("datos", datosTiempo);
+        return new ModelAndView("seguimiento-paseo", model);
     }
 }

@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 
 import java.util.List;
 
@@ -10,4 +11,6 @@ public interface RepositorioPaseador {
     List<Paseador> obtenerPaseadoresCercanos(Double latitud, Double longitud, Double diferenciaLatitud, Double diferenciaLongitud);
 
     Paseador obtenerUnPaseador(Long id);
+
+    Long crearRegistroDePaseo(RegistroPaseo registro);
 }

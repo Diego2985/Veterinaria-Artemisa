@@ -3,6 +3,8 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import ar.edu.unlam.tallerweb1.Paseadores;
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -67,14 +69,14 @@ public class RepositorioPaseadorTest extends SpringTest {
 
     @Test
     @Transactional
-    public void obtenerUnPaseador(){
-        Paseador paseadorEsperado=givenUnPaseador();
-        Paseador paseadorObtenido=whenSolicitoUnPaseadorPorId(paseadorEsperado.getId());
+    public void obtenerUnPaseador() {
+        Paseador paseadorEsperado = givenUnPaseador();
+        Paseador paseadorObtenido = whenSolicitoUnPaseadorPorId(paseadorEsperado.getId());
         thenDeberiaRetornarEsePaseadorConEseId(paseadorEsperado, paseadorObtenido);
     }
 
     private Paseador givenUnPaseador() {
-        Paseador paseador=paseadores.get(0);
+        Paseador paseador = paseadores.get(0);
         session().save(paseador);
         return paseador;
     }
@@ -85,5 +87,35 @@ public class RepositorioPaseadorTest extends SpringTest {
 
     private void thenDeberiaRetornarEsePaseadorConEseId(Paseador paseadorEsperado, Paseador paseadorObtenido) {
         assertThat(paseadorObtenido).isEqualTo(paseadorEsperado);
+    }
+
+    @Test
+    @Transactional
+    public void crearUnRegistroDePaseo() {
+        RegistroPaseo registro = givenUnRegistroDePaseo();
+        Long id = whenQuieroCrearElRegistro(registro);
+        thenDeberiaGuardarlo(id);
+    }
+
+    private RegistroPaseo givenUnRegistroDePaseo() {
+        Paseador paseador = new Paseador();
+        paseador.setId(1L);
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        RegistroPaseo registro = new RegistroPaseo();
+        registro.setPaseador(paseador);
+        registro.setUsuario(usuario);
+        session().save(usuario);
+        session().save(paseador);
+
+        return registro;
+    }
+
+    private Long whenQuieroCrearElRegistro(RegistroPaseo registro) {
+        return repositorioPaseador.crearRegistroDePaseo(registro);
+    }
+
+    private void thenDeberiaGuardarlo(Long id) {
+        assertThat(id).isNotNull();
     }
 }

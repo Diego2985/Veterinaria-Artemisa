@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -36,6 +37,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
     @Override
     public Paseador obtenerUnPaseador(Long id) {
         return (Paseador) getCurrentSession().createCriteria(Paseador.class).add(Restrictions.eq("id", id)).uniqueResult();
+    }
+
+    @Override
+    public Long crearRegistroDePaseo(RegistroPaseo registro) {
+        return (Long) getCurrentSession().save(registro);
     }
 
     public Session getCurrentSession() {

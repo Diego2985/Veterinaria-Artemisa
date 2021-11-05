@@ -12,8 +12,9 @@ public class RegistroPaseo {
     private Paseador paseador;
     @OneToOne
     private Usuario usuario;
-    private Date horaInicio;
-    private Date horaFinal;
+    private Date horaInicio=new Date();
+    private Date horaFinal=new Date(horaInicio.getTime() + (3600*1000));
+    private Integer estado=0;
 
     public Long getId() {
         return id;
@@ -62,6 +63,4 @@ public class RegistroPaseo {
     public void setEstado(Integer estado) {
         this.estado = estado;
     }
-
-    private Integer estado=0;
 }

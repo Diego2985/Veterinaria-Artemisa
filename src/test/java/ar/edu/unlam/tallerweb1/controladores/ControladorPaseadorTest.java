@@ -1,6 +1,8 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.Paseadores;
+import ar.edu.unlam.tallerweb1.converter.Coordenadas;
+import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -18,6 +20,7 @@ public class ControladorPaseadorTest {
 
     private Double latitud = -34.588902;
     private Double longitud = -58.409851;
+    private Coordenadas coordenadas = new Coordenadas(latitud, longitud);
     private Integer distancia = 500;
     private ModelAndView mav;
     private Usuario usuario = new Usuario();
@@ -39,15 +42,21 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void recibirLasCoordenadasDeUbicacionDelUsuario() {
+    public void recibirLasCoordenadasDeUbicacionDelUsuario() throws IOException {
         givenUnUsuarioYSuUbicacion();
         mav = whenEnviaLasCoordenadas();
         thenDeberiaRecibirlasEnElController(mav);
     }
 
-    private void givenUnUsuarioYSuUbicacion() {
+    private void givenUnUsuarioYSuUbicacion() throws IOException {
         usuario.setEmail("usuario@correo.com");
         usuario.setPassword("12345");
+
+        Ubicacion ubicacion = new Ubicacion();
+        Coordenadas coordenadas = new Coordenadas(latitud, longitud);
+        ubicacion.setCoordenadas(coordenadas);
+
+        when(servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud)).thenReturn(ubicacion);
     }
 
     private ModelAndView whenEnviaLasCoordenadas() {
@@ -56,27 +65,28 @@ public class ControladorPaseadorTest {
 
     private void thenDeberiaRecibirlasEnElController(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("paseador-mapa");
-        assertThat(mav.getModel().get("latitud")).isEqualTo(latitud);
-        assertThat(mav.getModel().get("longitud")).isEqualTo(longitud);
+        Ubicacion ubicacion = (Ubicacion) mav.getModel().get("ubicacion");
+        assertThat(ubicacion.getCoordenadas().getLatitud()).isEqualTo(latitud);
+        assertThat(ubicacion.getCoordenadas().getLongitud()).isEqualTo(longitud);
     }
 
     @Test
-    public void obtenerIdDePaseador() throws IOException {
+    public void obtenerIdDePaseador() throws PaseadorConCantMaxDeMascotasException {
         Long id = givenDadoUnPaseador();
         mav = whenContratoAlPaseador(id);
         thenDeboObtenerSuId(mav, id);
     }
 
-    private Long givenDadoUnPaseador() {
+    private Long givenDadoUnPaseador() throws PaseadorConCantMaxDeMascotasException {
         Paseador paseador=crearPaseador(1L);
         paseador.setCantidadMaxima(10);
         paseador.setCantidadActual(5);
 
-        when(servicioPaseador.obtenerPaseador(paseador.getId())).thenReturn(paseador);
+        when(servicioPaseador.obtenerPaseador(paseador.getId(), true)).thenReturn(paseador);
         return 1L;
     }
 
-    private ModelAndView whenContratoAlPaseador(Long id) throws IOException {
+    private ModelAndView whenContratoAlPaseador(Long id) {
         return controladorPaseador.contratarAlPaseador(id, latitud, longitud);
     }
 
@@ -86,19 +96,19 @@ public class ControladorPaseadorTest {
     }
 
     @Test
-    public void obtenerPaseador() throws IOException {
+    public void obtenerPaseador() throws PaseadorConCantMaxDeMascotasException {
         Paseador paseador = givenUnIdYUnPaseador();
         mav = whenContratoAlPaseador(paseador.getId());
         thenDeboObtenerUnPaseador(mav, paseador);
     }
 
-    private Paseador givenUnIdYUnPaseador() {
+    private Paseador givenUnIdYUnPaseador() throws PaseadorConCantMaxDeMascotasException {
         Long id = 1L;
         Paseador paseador=crearPaseador(id);
         paseador.setCantidadActual(5);
         paseador.setCantidadMaxima(10);
 
-        when(servicioPaseador.obtenerPaseador(id)).thenReturn(paseador);
+        when(servicioPaseador.obtenerPaseador(id, true)).thenReturn(paseador);
 
         return paseador;
     }
@@ -110,7 +120,6 @@ public class ControladorPaseadorTest {
         paseador.setEstrellas(4);
         paseador.setLatitud(latitud);
         paseador.setLongitud(longitud);
-
         return paseador;
     }
 

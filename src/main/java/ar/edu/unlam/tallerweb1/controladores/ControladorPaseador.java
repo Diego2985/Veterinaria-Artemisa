@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Controller
@@ -48,25 +49,26 @@ public class ControladorPaseador {
 
     @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
     public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud) {
+        ModelMap model = new ModelMap();
         try {
-            ModelMap model = new ModelMap();
             Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
-            Coordenadas coordenadasPaseador=new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
-            Coordenadas coordenadasUsuario=new Coordenadas(latitud, longitud);
+            Coordenadas coordenadasPaseador = new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
+            Coordenadas coordenadasUsuario = new Coordenadas(latitud, longitud);
             DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadasUsuario, coordenadasPaseador);
-            String obtenerImagen= servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadasUsuario, coordenadasPaseador);
+            String obtenerImagen = servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadasUsuario, coordenadasPaseador);
             model.put("idPaseador", idPaseador);
             model.put("paseador", paseador);
             model.put("imagen", obtenerImagen);
             model.put("distanciaYTiempo", distanciaYTiempo);
             return new ModelAndView("paseador-exitoso", model);
-        }
-        catch (PaseadorConCantMaxDeMascotasException e){
+        } catch (PaseadorConCantMaxDeMascotasException e) {
             return new ModelAndView("paseador-no-disponible");
+        } catch (UnsupportedEncodingException e) {
+            model.put("mensaje", "No se pudo obtener la imagen de la ruta");
+            return new ModelAndView("paseador-exitoso", model);
+        } catch (IOException e) {
+            model.put("mensaje", "No se pudo obtener el tiempo de llegada ni la distancia");
+            return new ModelAndView("paseador-exitoso", model);
         }
-        catch (IOException e){
-            return new ModelAndView("paseador-inicio");
-        }
-
     }
 }

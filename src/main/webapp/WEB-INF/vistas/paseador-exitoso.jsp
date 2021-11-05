@@ -13,6 +13,7 @@
     <div>
         <img alt="img" src="data:image/jpeg;base64,${imagen}"/>
     </div>
+    <p class="text-danger">${mensaje}</p>
 </div>
 </body>
 </html>

@@ -40,8 +40,8 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
     }
 
     @Override
-    public Long crearRegistroDePaseo(RegistroPaseo registro) {
-        return (Long) getCurrentSession().save(registro);
+    public void crearRegistroDePaseo(RegistroPaseo registro) {
+        getCurrentSession().save(registro);
     }
 
     @Override

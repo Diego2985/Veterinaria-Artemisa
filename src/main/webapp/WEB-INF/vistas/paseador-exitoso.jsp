@@ -20,7 +20,9 @@
         <div class="col">
             <p>Haga click en Comenzar Seguimiento una vez que haya entregado a la mascota</p>
             <form action="comenzar-seguimiento" method="post">
-                <input type="hidden" name="datosTiempo" value="${distanciaYTiempo}"/>
+                <input type="hidden" name="idRegistro" value="${registro.id}"/>
+                <input type="hidden" name="idPaseador" value="${registro.paseador.id}"/>
+                <input type="hidden" name="idUsuario" value="${registro.usuario.id}"/>
                 <button type="submit" class="btn btn-success">Comenzar seguimiento</button>
             </form>
         </div>

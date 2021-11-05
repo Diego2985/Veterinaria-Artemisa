@@ -7,13 +7,24 @@
 </head>
 <body>
 <div class="container mt-3">
-    <h2>El paseador se encuentra en camino</h2>
-    <h4>Va a llegar en aproximadamente ${distanciaYTiempo.tiempo} minutos ya que se encuentra
-        a ${distanciaYTiempo.distancia} metros</h4>
-    <div>
-        <img alt="img" src="data:image/jpeg;base64,${imagen}"/>
+    <div class="row">
+        <h2>El paseador se encuentra en camino</h2>
+        <h4>Va a llegar en aproximadamente ${distanciaYTiempo.tiempo} minutos ya que se encuentra
+            a ${distanciaYTiempo.distancia} metros</h4>
+        <div class="col">
+            <div>
+                <img alt="img" src="data:image/jpeg;base64,${imagen}"/>
+            </div>
+            <p class="text-danger">${mensaje}</p>
+        </div>
+        <div class="col">
+            <p>Haga click en Comenzar Seguimiento una vez que haya entregado a la mascota</p>
+            <form action="comenzar-seguimiento" method="post">
+                <input type="hidden" name="datosTiempo" value="${distanciaYTiempo}"/>
+                <button type="submit" class="btn btn-success">Comenzar seguimiento</button>
+            </form>
+        </div>
     </div>
-    <p class="text-danger">${mensaje}</p>
 </div>
 </body>
 </html>

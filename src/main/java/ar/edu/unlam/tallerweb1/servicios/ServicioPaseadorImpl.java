@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.List;
 
@@ -49,10 +50,15 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public String obtenerImagenDeRutaDePaseadorAUsuario(Coordenadas usuario, Coordenadas paseador) throws IOException {
-        final String image="https://image.maps.ls.hereapi.com/mia/1.6/routing?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&waypoint0="+paseador.toString()+"&waypoint1="+usuario.toString()+"&poix0="+paseador.toString()+";00a3f2;00a3f2;11;.&poix1="+usuario.toString()+";white;white;11;.&lc=1652B4&lw=6";
+    public String obtenerImagenDeRutaDePaseadorAUsuario(Coordenadas usuario, Coordenadas paseador) throws UnsupportedEncodingException {
+        final String uriImagen="https://image.maps.ls.hereapi.com/mia/1.6/routing?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&waypoint0="+paseador.toString()+"&waypoint1="+usuario.toString()+"&poix0="+paseador.toString()+";00a3f2;00a3f2;11;.&poix1="+usuario.toString()+";white;white;11;.&lc=1652B4&lw=6";
+        String imagenBase64 = getImageFromAPI(uriImagen);
+        return imagenBase64;
+    }
+
+    private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
-        byte[] imageGet=restTemplate.getForObject(image, byte[].class);
+        byte[] imageGet=restTemplate.getForObject(uriImagen, byte[].class);
         byte[] encodeBase64 = Base64.getEncoder().encode(imageGet);
         String base64Encoded = new String(encodeBase64, "UTF-8");
         return base64Encoded;

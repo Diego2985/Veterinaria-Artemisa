@@ -93,8 +93,8 @@ public class RepositorioPaseadorTest extends SpringTest {
     @Transactional
     public void crearUnRegistroDePaseo() {
         RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistro();
-        Long id = whenQuieroCrearElRegistro(registro);
-        thenDeberiaGuardarlo(id);
+        whenQuieroCrearElRegistro(registro);
+        thenDeberiaGuardarlo(registro);
     }
 
     private RegistroPaseo givenUnPaseadorUnUsuarioYUnRegistro() {
@@ -109,12 +109,13 @@ public class RepositorioPaseadorTest extends SpringTest {
         return registro;
     }
 
-    private Long whenQuieroCrearElRegistro(RegistroPaseo registro) {
-        return repositorioPaseador.crearRegistroDePaseo(registro);
+    private void whenQuieroCrearElRegistro(RegistroPaseo registro) {
+        repositorioPaseador.crearRegistroDePaseo(registro);
     }
 
-    private void thenDeberiaGuardarlo(Long id) {
-        assertThat(id).isNotNull();
+    private void thenDeberiaGuardarlo(RegistroPaseo registro) {
+        assertThat(registro.getId()).isNotNull();
+        assertThat(registro.getId()).isEqualTo(1L);
     }
 
     @Test

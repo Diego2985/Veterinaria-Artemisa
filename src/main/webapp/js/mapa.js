@@ -17,14 +17,5 @@ function mostrarMapa(latitud, longitud, callback=null){
     var casa = new H.map.Marker({lat: latitud, lng: longitud}, {icon: pointer});
     map.addObject(casa);
 
-    var service = platform.getSearchService();
-    service.reverseGeocode({
-        at: `${mapOptions.center.lat},${mapOptions.center.lng}`
-    }, (result) => {
-        const locacion = document.getElementById("locacion")
-        const datos = result.items[0].address.label
-        locacion.innerHTML = datos
-    });
-
     if(callback) callback(map, casa, ui);
 }

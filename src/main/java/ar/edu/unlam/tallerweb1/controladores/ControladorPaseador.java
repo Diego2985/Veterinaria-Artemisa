@@ -53,8 +53,10 @@ public class ControladorPaseador {
             Coordenadas coordenadasPaseador=new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
             Coordenadas coordenadasUsuario=new Coordenadas(latitud, longitud);
             DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadasUsuario, coordenadasPaseador);
+            String obtenerImagen= servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadasUsuario, coordenadasPaseador);
             model.put("idPaseador", idPaseador);
             model.put("paseador", paseador);
+            model.put("imagen", obtenerImagen);
             model.put("distanciaYTiempo", distanciaYTiempo);
             return new ModelAndView("paseador-exitoso", model);
         }

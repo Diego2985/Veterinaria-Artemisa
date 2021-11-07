@@ -9,6 +9,7 @@ import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface ServicioPaseador {
@@ -29,4 +30,6 @@ public interface ServicioPaseador {
     RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario);
 
     RegistroPaseo actualizarRegistroDePaseo(Long idRegistro, Long idPaseador, Long idUsuario, Integer estado) throws DatosCambiadosException;
+
+    String obtenerImagenDePosicionDelPaseador(Long idPaseador) throws DatosCambiadosException, UnsupportedEncodingException;
 }

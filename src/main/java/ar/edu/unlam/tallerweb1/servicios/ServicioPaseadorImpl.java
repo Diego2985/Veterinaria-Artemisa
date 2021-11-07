@@ -110,6 +110,16 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         return registro;
     }
 
+    @Override
+    public String obtenerImagenDePosicionDelPaseador(Long idPaseador) throws DatosCambiadosException, UnsupportedEncodingException {
+        Paseador paseador = repositorioPaseador.obtenerUnPaseador(idPaseador);
+        if(paseador == null)
+            throw new DatosCambiadosException();
+        Coordenadas coordenadas = new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
+        String uri = "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&i&c="+coordenadas.toString()+"&h=300&w=400&r=10";
+        return getImageFromAPI(uri);
+    }
+
     private String obtenerJson(String uri) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));

@@ -79,7 +79,7 @@ public class ControladorPaseador {
         }
     }
 
-    private Map<String, Coordenadas> obtenerCoordenadas(Double latitudUsuario, Double longitudUsuario, Paseador paseador){
+    private Map<String, Coordenadas> obtenerCoordenadas(Double latitudUsuario, Double longitudUsuario, Paseador paseador) {
         Map<String, Coordenadas> coordenadas = new HashMap<>();
         coordenadas.put("usuario", new Coordenadas(latitudUsuario, longitudUsuario));
         coordenadas.put("paseador", new Coordenadas(paseador.getLatitud(), paseador.getLongitud()));
@@ -87,17 +87,34 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/comenzar-seguimiento", method = RequestMethod.POST)
-    public ModelAndView realizarSeguimientoDePaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario){
+    public ModelAndView realizarSeguimientoDePaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario) {
         ModelMap model = new ModelMap();
         try {
             RegistroPaseo registro = servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 1);
+            String imagenPosicionDelPaseador = servicioPaseador.obtenerImagenDePosicionDelPaseador(idPaseador);
             model.put("registro", registro);
+            model.put("imagen", imagenPosicionDelPaseador);
             return new ModelAndView("seguimiento-paseo", model);
+        } catch (DatosCambiadosException e) {
+            model.put("mensaje", e.getMessage());
+            return new ModelAndView("paseador-error", model);
+        } catch (UnsupportedEncodingException e) {
+            model.put("mensaje", "Error en la obtención de la imagen. Intente más tarde");
+            return new ModelAndView("paseador-error", model);
+        }
+    }
+
+    @RequestMapping(path = "/finalizar-paseo", method = RequestMethod.POST)
+    public ModelAndView finalizarPaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario){
+        ModelMap model = new ModelMap();
+        try {
+            RegistroPaseo registro = servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 2);
+            model.put("registro", registro);
+            return new ModelAndView("paseo-finalizado", model);
         }
         catch (DatosCambiadosException e){
             model.put("mensaje", e.getMessage());
             return new ModelAndView("paseador-error", model);
         }
-
     }
 }

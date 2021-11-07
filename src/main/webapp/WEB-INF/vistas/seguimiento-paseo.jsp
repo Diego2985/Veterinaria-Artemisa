@@ -1,0 +1,33 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="partial/header.jsp" %>
+<jsp:useBean id="now" class="java.util.Date"/>
+
+<html>
+<head>
+    <title>Veterinaria</title>
+</head>
+<body>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col">
+            <h2>Seguimiento del paseo</h2>
+            <div>
+                <img alt="img" src="data:image/jpeg;base64,${imagen}"/>
+            </div>
+        </div>
+        <div class="col">
+            <c:if test="${registro.horaFinal.hours == now.hours && registro.horaFinal.minutes >= now.minutes - 10}">
+                <h3>Falta poco para que finalice el paseo. El mismo debería finalizar en ${now.minutes - registro.horaFinal.minutes} minutos.</h3>
+                <h3>Cuando su mascota haya sido devuelta, haga click en Finalizar Paseo.</h3>
+                <form method="post" action="finalizar-paseo">
+                    <input type="hidden" name="idRegistro" value="${registro.id}" />
+                    <input type="hidden" name="idPaseador" value="${registro.paseador.id}" />
+                    <input type="hidden" name="idUsuario" value="${registro.usuario.id}" />
+                    <button class="btn btn-success" type="submit">Finalizar Paseo</button>
+                </form>
+            </c:if>
+        </div>
+    </div>
+</div>
+</body>
+</html>

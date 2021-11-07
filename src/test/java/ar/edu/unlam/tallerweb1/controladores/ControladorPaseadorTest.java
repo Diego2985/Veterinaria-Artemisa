@@ -251,5 +251,27 @@ public class ControladorPaseadorTest {
         assertThat(obtenido.getEstado()).isEqualTo(1);
     }
 
+    @Test
+    public void siSeAlteroAlgunDatoDebeSaltarLaExcepcion() throws DatosCambiadosException {
+        RegistroPaseo registro = givenUnRegistroDePaseoConLosDatosAlterados();
+        mav = whenEnvioElRegistroConLosDatosAlterados(registro);
+        thenDebeCapturarLaExcepcion(mav);
+    }
 
+    private void thenDebeCapturarLaExcepcion(ModelAndView mav) {
+        assertThat(mav.getViewName()).isEqualTo("paseador-error");
+    }
+
+    private ModelAndView whenEnvioElRegistroConLosDatosAlterados(RegistroPaseo registro) {
+        return controladorPaseador.realizarSeguimientoDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId());
+    }
+
+    private RegistroPaseo givenUnRegistroDePaseoConLosDatosAlterados() throws DatosCambiadosException {
+        RegistroPaseo registro = crearRegistro();
+        registro.getUsuario().setId(254L);
+
+        when(servicioPaseador.actualizarRegistroDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId(), 1)).thenThrow(DatosCambiadosException.class);
+
+        return registro;
+    }
 }

@@ -49,6 +49,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
         getCurrentSession().update(registro);
     }
 
+    @Override
+    public RegistroPaseo buscarUnRegistroDePaseo(Long idRegistro) {
+        return (RegistroPaseo) getCurrentSession().createCriteria(RegistroPaseo.class).add(Restrictions.eq("id", idRegistro)).uniqueResult();
+    }
+
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

@@ -15,4 +15,6 @@ public interface RepositorioPaseador {
     void crearRegistroDePaseo(RegistroPaseo registro);
 
     void actualizarEstadoDePaseo(RegistroPaseo registro);
+
+    RegistroPaseo buscarUnRegistroDePaseo(Long idRegistro);
 }

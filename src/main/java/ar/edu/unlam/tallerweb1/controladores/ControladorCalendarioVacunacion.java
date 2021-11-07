@@ -29,27 +29,7 @@ public class ControladorCalendarioVacunacion {
         Long userId = (Long) request.getSession().getAttribute("userId");
         List<Vacuna> vacunas = servicioCalendarioVacunacion.getVacunas(userId);
 
-//        List<Vacuna> vacunas = new ArrayList<>();
-//        Vacuna vacuna = new Vacuna();
-//        vacuna.setTitulo("Vacuna Gripe - Pepe");
-//        vacuna.setFecha("2021-11-01");
-//        vacuna.setHora("10");
-//        vacunas.add(vacuna);
-//
-//        Vacuna vacuna2 = new Vacuna();
-//        vacuna2.setTitulo("Vacuna Doble - Pepe");
-//        vacuna2.setFecha("2021-11-02");
-//        vacuna2.setHora("12");
-//        vacunas.add(vacuna2);
-//
-//        Vacuna vacuna3 = new Vacuna();
-//        vacuna3.setTitulo("Vacuna Triple - Pepe");
-//        vacuna3.setFecha("2021-11-03");
-//        vacuna3.setHora("14");
-//        vacunas.add(vacuna3);
-//
         model.put("vacunas", vacunas);
-//        model.put("vacuna", vacuna);
 
         return new ModelAndView("calendario-vacunacion", model);
     }

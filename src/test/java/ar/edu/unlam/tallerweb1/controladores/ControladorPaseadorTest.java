@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.Paseadores;
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
+import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
@@ -189,7 +190,7 @@ public class ControladorPaseadorTest {
     }
 
     private void thenNoPodriaContratarlo(ModelAndView mav) {
-        assertThat(mav.getViewName()).isEqualTo("paseador-no-disponible");
+        assertThat(mav.getViewName()).isEqualTo("paseador-error");
     }
 
     @Test
@@ -200,27 +201,55 @@ public class ControladorPaseadorTest {
     }
 
     private RegistroPaseo givenUnPaseadorUnUsuarioYUnRegistroDePaseo() throws PaseadorConCantMaxDeMascotasException {
+        RegistroPaseo registro = crearRegistro();
+
+        when(servicioPaseador.obtenerPaseador(registro.getPaseador().getId(), true)).thenReturn(registro.getPaseador());
+        when(servicioPaseador.crearRegistroDePaseo(registro.getPaseador(), (Long) request.getSession().getAttribute("userId"))).thenReturn(registro);
+        return registro;
+    }
+
+    private RegistroPaseo crearRegistro() {
         Paseador paseador = crearPaseador(1L);
         paseador.setId(1L);
 
         Usuario usuario = new Usuario();
         usuario.setId(1L);
 
-        Date horaInicio = new Date();
-        Date horaFinal = new Date(horaInicio.getTime() + (3600 + 1000));
-
         RegistroPaseo registro = new RegistroPaseo();
         registro.setPaseador(paseador);
         registro.setUsuario(usuario);
-        registro.setHoraInicio(horaInicio);
-        registro.setHoraFinal(horaFinal);
 
-        when(servicioPaseador.obtenerPaseador(paseador.getId(), true)).thenReturn(paseador);
-        when(servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"))).thenReturn(registro);
         return registro;
     }
 
     private void thenReciboUnRegistroDelPaseo(ModelAndView mav, RegistroPaseo registro) {
         assertThat(mav.getModel().get("registro")).isEqualTo(registro);
     }
+
+    @Test
+    public void verificarQueSeCambioElEstado() throws DatosCambiadosException {
+        RegistroPaseo registro = givenUnPaseadorUnUsuarioYOtroRegistro();
+        mav = whenQuieroCambiarElEstado(registro);
+        thenDEberiaHaberloCambiado(registro);
+    }
+
+    private RegistroPaseo givenUnPaseadorUnUsuarioYOtroRegistro() throws DatosCambiadosException {
+        RegistroPaseo registro = crearRegistro();
+
+        registro.setEstado(1);
+        when(servicioPaseador.actualizarRegistroDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId(), 1)).thenReturn(registro);
+
+        return registro;
+    }
+
+    private ModelAndView whenQuieroCambiarElEstado(RegistroPaseo registro) {
+        return controladorPaseador.realizarSeguimientoDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId());
+    }
+
+    private void thenDEberiaHaberloCambiado(RegistroPaseo registro) {
+        RegistroPaseo obtenido = (RegistroPaseo) mav.getModel().get("registro");
+        assertThat(obtenido.getEstado()).isEqualTo(1);
+    }
+
+
 }

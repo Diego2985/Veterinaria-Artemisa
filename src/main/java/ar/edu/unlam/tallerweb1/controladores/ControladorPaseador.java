@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
+import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
@@ -86,9 +87,17 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/comenzar-seguimiento", method = RequestMethod.POST)
-    public ModelAndView realizarSeguimientoDePaseo(@RequestParam DatosTiempo datosTiempo){
+    public ModelAndView realizarSeguimientoDePaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario){
         ModelMap model = new ModelMap();
-        model.put("datos", datosTiempo);
-        return new ModelAndView("seguimiento-paseo", model);
+        try {
+            RegistroPaseo registro = servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 1);
+            model.put("registro", registro);
+            return new ModelAndView("seguimiento-paseo", model);
+        }
+        catch (DatosCambiadosException e){
+            model.put("mensaje", e.getMessage());
+            return new ModelAndView("paseador-error", model);
+        }
+
     }
 }

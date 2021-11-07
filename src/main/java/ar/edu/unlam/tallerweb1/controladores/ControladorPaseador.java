@@ -61,6 +61,7 @@ public class ControladorPaseador {
             DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadas.get("usuario"), coordenadas.get("paseador"));
             String obtenerImagen = servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadas.get("usuario"), coordenadas.get("paseador"));
             RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"));
+            request.getSession().setAttribute("idRegistroPaseo", registro.getId());
             model.put("idPaseador", idPaseador);
             model.put("paseador", paseador);
             model.put("imagen", obtenerImagen);

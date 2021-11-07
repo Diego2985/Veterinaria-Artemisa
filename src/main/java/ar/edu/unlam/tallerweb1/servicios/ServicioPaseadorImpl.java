@@ -111,13 +111,16 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public String obtenerImagenDePosicionDelPaseador(Long idPaseador) throws DatosCambiadosException, UnsupportedEncodingException {
+    public String obtenerImagenDePosicionDelPaseador(Long idPaseador) throws UnsupportedEncodingException {
         Paseador paseador = repositorioPaseador.obtenerUnPaseador(idPaseador);
-        if(paseador == null)
-            throw new DatosCambiadosException();
         Coordenadas coordenadas = new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
         String uri = "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&i&c="+coordenadas.toString()+"&h=300&w=400&r=10";
         return getImageFromAPI(uri);
+    }
+
+    @Override
+    public RegistroPaseo obtenerRegistroDePaseo(Long idRegistroPaseo) {
+        return repositorioPaseador.buscarUnRegistroDePaseo(idRegistroPaseo);
     }
 
     private String obtenerJson(String uri) {

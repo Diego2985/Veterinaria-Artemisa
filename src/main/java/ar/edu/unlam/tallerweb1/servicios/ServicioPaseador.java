@@ -31,5 +31,7 @@ public interface ServicioPaseador {
 
     RegistroPaseo actualizarRegistroDePaseo(Long idRegistro, Long idPaseador, Long idUsuario, Integer estado) throws DatosCambiadosException;
 
-    String obtenerImagenDePosicionDelPaseador(Long idPaseador) throws DatosCambiadosException, UnsupportedEncodingException;
+    String obtenerImagenDePosicionDelPaseador(Long idPaseador) throws UnsupportedEncodingException;
+
+    RegistroPaseo obtenerRegistroDePaseo(Long idRegistroPaseo);
 }

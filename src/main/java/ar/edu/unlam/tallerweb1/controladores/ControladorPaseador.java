@@ -8,6 +8,7 @@ import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,7 +49,9 @@ public class ControladorPaseador {
     }
 
     @RequestMapping("/paseador")
-    public ModelAndView verPaginaDePaseador() {
+    public ModelAndView verPaginaDePaseador(HttpServletRequest request) {
+        if(request.getSession().getAttribute("idRegistroPaseo")!= null)
+            return new ModelAndView("redirect:/paseador/seguimiento");
         return new ModelAndView("paseador-inicio");
     }
 
@@ -87,20 +90,33 @@ public class ControladorPaseador {
         return coordenadas;
     }
 
+    @RequestMapping("/paseador/seguimiento")
+    public ModelAndView consultarSeguimiento(HttpServletRequest request){
+        ModelMap model = new ModelMap();
+        try {
+            if(request.getSession().getAttribute("idRegistroPaseo") == null)
+                return new ModelAndView("redirect:/paseador");
+            Long idRegistroPaseo = (Long) request.getSession().getAttribute("idRegistroPaseo");
+            RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistroPaseo);
+            String imagenPosicionDelPaseador = servicioPaseador.obtenerImagenDePosicionDelPaseador(registro.getPaseador().getId());
+            model.put("registro", registro);
+            model.put("imagen", imagenPosicionDelPaseador);
+            return new ModelAndView("seguimiento-paseo", model);
+        }
+        catch (UnsupportedEncodingException e){
+            model.put("mensaje", "Error en la obtención de la imagen. Intente más tarde");
+            return new ModelAndView("paseador-error", model);
+        }
+    }
+
     @RequestMapping(path = "/comenzar-seguimiento", method = RequestMethod.POST)
     public ModelAndView realizarSeguimientoDePaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario) {
         ModelMap model = new ModelMap();
         try {
-            RegistroPaseo registro = servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 1);
-            String imagenPosicionDelPaseador = servicioPaseador.obtenerImagenDePosicionDelPaseador(idPaseador);
-            model.put("registro", registro);
-            model.put("imagen", imagenPosicionDelPaseador);
-            return new ModelAndView("seguimiento-paseo", model);
+            servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 1);
+            return new ModelAndView("redirect:/paseador/seguimiento");
         } catch (DatosCambiadosException e) {
             model.put("mensaje", e.getMessage());
-            return new ModelAndView("paseador-error", model);
-        } catch (UnsupportedEncodingException e) {
-            model.put("mensaje", "Error en la obtención de la imagen. Intente más tarde");
             return new ModelAndView("paseador-error", model);
         }
     }

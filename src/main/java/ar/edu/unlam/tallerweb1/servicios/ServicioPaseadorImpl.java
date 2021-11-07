@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
+import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
@@ -96,6 +97,16 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         registro.setPaseador(paseador);
         registro.setUsuario(usuario);
         repositorioPaseador.crearRegistroDePaseo(registro);
+        return registro;
+    }
+
+    @Override
+    public RegistroPaseo actualizarRegistroDePaseo(Long idRegistro, Long idPaseador, Long idUsuario, Integer estado) throws DatosCambiadosException {
+        RegistroPaseo registro = repositorioPaseador.buscarUnRegistroDePaseo(idRegistro);
+        if(registro.getPaseador().getId()!=idPaseador || registro.getUsuario().getId()!=idUsuario)
+            throw new DatosCambiadosException();
+        registro.setEstado(estado);
+        repositorioPaseador.actualizarEstadoDePaseo(registro);
         return registro;
     }
 

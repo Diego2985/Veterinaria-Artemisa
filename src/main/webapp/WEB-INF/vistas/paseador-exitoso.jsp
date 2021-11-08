@@ -13,7 +13,7 @@
             a ${distanciaYTiempo.distancia} metros</h4>
         <div class="col">
             <div>
-                <img alt="img" src="data:image/jpeg;base64,${imagen}"/>
+                <img alt="routing" src="images/mock-routing.jpg"/>
             </div>
             <p class="text-danger">${mensaje}</p>
         </div>

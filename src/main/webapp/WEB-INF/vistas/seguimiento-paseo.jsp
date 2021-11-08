@@ -12,7 +12,7 @@
         <div class="col">
             <h2>Seguimiento del paseo</h2>
             <div>
-                <img alt="img" src="data:image/jpeg;base64,${imagen}"/>
+                <img alt="seguimiento" src="images/mock-posicion.jpg"/>
             </div>
         </div>
         <div class="col">

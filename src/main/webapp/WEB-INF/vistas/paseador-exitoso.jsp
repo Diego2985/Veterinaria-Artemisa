@@ -9,13 +9,12 @@
 <div class="container mt-3">
     <div class="row">
         <h2>El paseador se encuentra en camino</h2>
-        <h4>Va a llegar en aproximadamente ${distanciaYTiempo.tiempo} minutos ya que se encuentra
-            a ${distanciaYTiempo.distancia} metros</h4>
+        <h4>Va a llegar en aproximadamente 2 minutos ya que se encuentra
+            a 100 metros</h4>
         <div class="col">
             <div>
                 <img alt="routing" src="images/mock-routing.jpg"/>
             </div>
-            <p class="text-danger">${mensaje}</p>
         </div>
         <div class="col">
             <p>Haga click en Comenzar Seguimiento una vez que haya entregado a la mascota</p>

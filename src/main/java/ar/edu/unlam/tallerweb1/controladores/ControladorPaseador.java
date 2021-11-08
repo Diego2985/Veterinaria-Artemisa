@@ -1,14 +1,11 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
-import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
-import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,18 +34,17 @@ public class ControladorPaseador {
             ModelMap model = new ModelMap();
             Integer distancia = 500;
             List<Paseador> paseadores = servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
-            Ubicacion ubicacion = servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud);
             model.put("paseadores", paseadores);
-            model.put("ubicacion", ubicacion);
             return new ModelAndView("paseador-mapa", model);
         } catch (Exception e) {
             return new ModelAndView("error");
         }
     }
 
+    // TODO: Chequear con la BD si el usuario tiene un registro activo, porque si cierra sesion se pierde la variable
     @RequestMapping("/paseador")
     public ModelAndView verPaginaDePaseador(HttpServletRequest request) {
-        if(request.getSession().getAttribute("idRegistroPaseo")!= null)
+        if (request.getSession().getAttribute("idRegistroPaseo") != null)
             return new ModelAndView("redirect:/paseador/seguimiento");
         return new ModelAndView("paseador-inicio");
     }
@@ -61,25 +55,15 @@ public class ControladorPaseador {
         try {
             Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
             Map<String, Coordenadas> coordenadas = obtenerCoordenadas(latitud, longitud, paseador);
-            DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadas.get("usuario"), coordenadas.get("paseador"));
-            String obtenerImagen = servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadas.get("usuario"), coordenadas.get("paseador"));
             RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"));
             request.getSession().setAttribute("idRegistroPaseo", registro.getId());
             model.put("idPaseador", idPaseador);
             model.put("paseador", paseador);
-            model.put("imagen", obtenerImagen);
-            model.put("distanciaYTiempo", distanciaYTiempo);
             model.put("registro", registro);
             return new ModelAndView("paseador-exitoso", model);
         } catch (PaseadorConCantMaxDeMascotasException e) {
             model.put("mensaje", "El paseador indicado no se encuentra disponible");
             return new ModelAndView("paseador-error");
-        } catch (UnsupportedEncodingException e) {
-            model.put("mensaje", "No se pudo obtener la imagen de la ruta");
-            return new ModelAndView("paseador-error", model);
-        } catch (IOException e) {
-            model.put("mensaje", "No se pudo obtener el tiempo de llegada ni la distancia");
-            return new ModelAndView("paseador-error", model);
         }
     }
 
@@ -91,24 +75,19 @@ public class ControladorPaseador {
     }
 
     @RequestMapping("/paseador/seguimiento")
-    public ModelAndView consultarSeguimiento(HttpServletRequest request){
+    public ModelAndView consultarSeguimiento(HttpServletRequest request) {
         ModelMap model = new ModelMap();
-        try {
-            if(request.getSession().getAttribute("idRegistroPaseo") == null)
-                return new ModelAndView("redirect:/paseador");
-            Long idRegistroPaseo = (Long) request.getSession().getAttribute("idRegistroPaseo");
-            RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistroPaseo);
-            String imagenPosicionDelPaseador = servicioPaseador.obtenerImagenDePosicionDelPaseador(registro.getPaseador().getId());
-            model.put("registro", registro);
-            model.put("imagen", imagenPosicionDelPaseador);
-            return new ModelAndView("seguimiento-paseo", model);
-        }
-        catch (UnsupportedEncodingException e){
-            model.put("mensaje", "Error en la obtención de la imagen. Intente más tarde");
-            return new ModelAndView("paseador-error", model);
-        }
+        if (request.getSession().getAttribute("idRegistroPaseo") == null)
+            return new ModelAndView("redirect:/paseador");
+        Long idRegistroPaseo = (Long) request.getSession().getAttribute("idRegistroPaseo");
+        RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistroPaseo);
+        model.put("registro", registro);
+        return new ModelAndView("seguimiento-paseo", model);
     }
 
+    // TODO: El comienzo de paseo ahora está por default cuando se crea el registro. Debería tener el valor del comienzo del seguimiento
+    // Opcion: crear nuevos campos de Hora de inicio real y hora de fin real
+    // Opcion: Al actualizar el estado puede setear los Date now de comienzo real y del fin que se haga auto o seteado en Servicio
     @RequestMapping(path = "/comenzar-seguimiento", method = RequestMethod.POST)
     public ModelAndView realizarSeguimientoDePaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario) {
         ModelMap model = new ModelMap();
@@ -122,14 +101,13 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/finalizar-paseo", method = RequestMethod.POST)
-    public ModelAndView finalizarPaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario){
+    public ModelAndView finalizarPaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario) {
         ModelMap model = new ModelMap();
         try {
             RegistroPaseo registro = servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 2);
             model.put("registro", registro);
             return new ModelAndView("paseo-finalizado", model);
-        }
-        catch (DatosCambiadosException e){
+        } catch (DatosCambiadosException e) {
             model.put("mensaje", e.getMessage());
             return new ModelAndView("paseador-error", model);
         }

@@ -2,7 +2,6 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.Paseadores;
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
-import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
@@ -16,8 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -52,83 +49,15 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenElUsuarioQuiereElegirLaOpcionParaPasearAlPerro() {
-        return controladorPaseador.verPaginaDePaseador();
+        return controladorPaseador.verPaginaDePaseador(request);
     }
 
     private void thenTieneQueVerLaVistaInicialDondeSeCaptaLaUbicacion(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("paseador-inicio");
     }
 
-    @Test
-    public void recibirLasCoordenadasDeUbicacionDelUsuario() throws IOException {
-        givenUnUsuarioYSuUbicacion();
-        mav = whenEnviaLasCoordenadas();
-        thenDeberiaRecibirlasEnElController(mav);
-    }
-
-    private void givenUnUsuarioYSuUbicacion() throws IOException {
-        usuario.setEmail("usuario@correo.com");
-        usuario.setPassword("12345");
-
-        Ubicacion ubicacion = new Ubicacion();
-        Coordenadas coordenadas = new Coordenadas(latitud, longitud);
-        ubicacion.setCoordenadas(coordenadas);
-
-        when(servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud)).thenReturn(ubicacion);
-    }
-
-    private ModelAndView whenEnviaLasCoordenadas() {
-        return controladorPaseador.obtenerPaseadoresCercanosA500mts(latitud, longitud);
-    }
-
-    private void thenDeberiaRecibirlasEnElController(ModelAndView mav) {
-        assertThat(mav.getViewName()).isEqualTo("paseador-mapa");
-        Ubicacion ubicacion = (Ubicacion) mav.getModel().get("ubicacion");
-        assertThat(ubicacion.getCoordenadas().getLatitud()).isEqualTo(latitud);
-        assertThat(ubicacion.getCoordenadas().getLongitud()).isEqualTo(longitud);
-    }
-
-    @Test
-    public void obtenerIdDePaseador() throws PaseadorConCantMaxDeMascotasException {
-        Long id = givenDadoUnPaseador();
-        mav = whenContratoAlPaseador(id);
-        thenDeboObtenerSuId(mav, id);
-    }
-
-    private Long givenDadoUnPaseador() throws PaseadorConCantMaxDeMascotasException {
-        Paseador paseador = crearPaseador(1L);
-        paseador.setCantidadMaxima(10);
-        paseador.setCantidadActual(5);
-
-        when(servicioPaseador.obtenerPaseador(paseador.getId(), true)).thenReturn(paseador);
-        return 1L;
-    }
-
     private ModelAndView whenContratoAlPaseador(Long id) {
         return controladorPaseador.contratarAlPaseador(id, latitud, longitud, request);
-    }
-
-    private void thenDeboObtenerSuId(ModelAndView mav, Long id) {
-        assertThat(mav.getViewName()).isEqualTo("paseador-exitoso");
-        assertThat(mav.getModel().get("idPaseador")).isEqualTo(id);
-    }
-
-    @Test
-    public void obtenerPaseador() throws PaseadorConCantMaxDeMascotasException {
-        Paseador paseador = givenUnIdYUnPaseador();
-        mav = whenContratoAlPaseador(paseador.getId());
-        thenDeboObtenerUnPaseador(mav, paseador);
-    }
-
-    private Paseador givenUnIdYUnPaseador() throws PaseadorConCantMaxDeMascotasException {
-        Long id = 1L;
-        Paseador paseador = crearPaseador(id);
-        paseador.setCantidadActual(5);
-        paseador.setCantidadMaxima(10);
-
-        when(servicioPaseador.obtenerPaseador(id, true)).thenReturn(paseador);
-
-        return paseador;
     }
 
     private Paseador crearPaseador(Long id) {
@@ -139,11 +68,6 @@ public class ControladorPaseadorTest {
         paseador.setLatitud(latitud);
         paseador.setLongitud(longitud);
         return paseador;
-    }
-
-
-    private void thenDeboObtenerUnPaseador(ModelAndView mav, Paseador paseador) {
-        assertThat(mav.getModel().get("paseador")).isEqualTo(paseador);
     }
 
     @Test
@@ -230,23 +154,23 @@ public class ControladorPaseadorTest {
     public void verificarQueSeCambioElEstado() throws DatosCambiadosException {
         RegistroPaseo registro = givenUnPaseadorUnUsuarioYOtroRegistro();
         mav = whenQuieroCambiarElEstado(registro);
-        thenDEberiaHaberloCambiado(registro);
+        thenDeberiaHaberloCambiado(registro);
     }
 
     private RegistroPaseo givenUnPaseadorUnUsuarioYOtroRegistro() throws DatosCambiadosException {
         RegistroPaseo registro = crearRegistro();
-
+        registro.setId(1L);
         registro.setEstado(1);
-        when(servicioPaseador.actualizarRegistroDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId(), 1)).thenReturn(registro);
+        when(servicioPaseador.actualizarRegistroDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId(), 2)).thenReturn(registro);
 
         return registro;
     }
 
     private ModelAndView whenQuieroCambiarElEstado(RegistroPaseo registro) {
-        return controladorPaseador.realizarSeguimientoDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId());
+        return controladorPaseador.finalizarPaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId());
     }
 
-    private void thenDEberiaHaberloCambiado(RegistroPaseo registro) {
+    private void thenDeberiaHaberloCambiado(RegistroPaseo registro) {
         RegistroPaseo obtenido = (RegistroPaseo) mav.getModel().get("registro");
         assertThat(obtenido.getEstado()).isEqualTo(1);
     }

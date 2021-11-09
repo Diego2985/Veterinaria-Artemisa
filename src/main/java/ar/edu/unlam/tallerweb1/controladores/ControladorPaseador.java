@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +84,9 @@ public class ControladorPaseador {
             return new ModelAndView("redirect:/paseador");
         Long idRegistroPaseo = (Long) request.getSession().getAttribute("idRegistroPaseo");
         RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistroPaseo);
+        Long minutosRestantes = ((registro.getHoraFinal().getTime() - new Date().getTime()) / 1000) / 60;
         model.put("registro", registro);
+        model.put("tiempo", minutosRestantes);
         return new ModelAndView("seguimiento-paseo", model);
     }
 
@@ -102,11 +105,12 @@ public class ControladorPaseador {
         }
     }
 
-    @RequestMapping(path = "/finalizar-paseo", method = RequestMethod.POST)
-    public ModelAndView finalizarPaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario) {
+    @RequestMapping(path = "/paseador/finalizar-paseo", method = RequestMethod.POST)
+    public ModelAndView finalizarPaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         try {
             RegistroPaseo registro = servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 2);
+            request.getSession().removeAttribute("idRegistroPaseo");
             model.put("registro", registro);
             return new ModelAndView("paseo-finalizado", model);
         } catch (DatosCambiadosException e) {

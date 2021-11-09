@@ -167,7 +167,7 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenQuieroCambiarElEstado(RegistroPaseo registro) {
-        return controladorPaseador.finalizarPaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId());
+        return controladorPaseador.finalizarPaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId(), request);
     }
 
     private void thenDeberiaHaberloCambiado(RegistroPaseo registro) {

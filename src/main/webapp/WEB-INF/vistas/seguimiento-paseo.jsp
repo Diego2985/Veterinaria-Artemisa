@@ -16,8 +16,8 @@
             </div>
         </div>
         <div class="col">
-            <c:if test="${registro.horaFinal.hours == now.hours && registro.horaFinal.minutes >= now.minutes - 10}">
-                <p>Falta poco para que finalice el paseo. El mismo debería finalizar en <span class="text-danger">${now.minutes - registro.horaFinal.minutes}</span> minutos.</p>
+            <c:if test="${tiempo < 10}">
+                <p>Falta poco para que finalice el paseo. El mismo debería finalizar en <span class="text-danger">${tiempo} minutos.</span></p>
                 <p>Cuando su mascota haya sido devuelta, haga click en Finalizar Paseo.</p>
                 <form method="post" action="finalizar-paseo">
                     <input type="hidden" name="idRegistro" value="${registro.id}" />

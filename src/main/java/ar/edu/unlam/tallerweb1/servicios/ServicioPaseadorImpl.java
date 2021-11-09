@@ -2,6 +2,8 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
+import ar.edu.unlam.tallerweb1.excepciones.PaseoIniciadoException;
+import ar.edu.unlam.tallerweb1.excepciones.PaseoNoExistenteException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -66,6 +68,16 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     @Override
     public RegistroPaseo obtenerRegistroDePaseo(Long idRegistroPaseo) {
         return repositorioPaseador.buscarUnRegistroDePaseo(idRegistroPaseo);
+    }
+
+    @Override
+    public RegistroPaseo verificarSiUnUsuarioTieneUnPaseoActivo(Long userId) throws PaseoIniciadoException, PaseoNoExistenteException {
+        RegistroPaseo registroPaseo = repositorioPaseador.buscarPaseoEnProcesoOActivoDeUnUsuario(userId);
+        if(registroPaseo == null)
+            throw new PaseoNoExistenteException();
+        else if(registroPaseo.getEstado() == 1)
+            throw new PaseoIniciadoException();
+        return registroPaseo;
     }
 
     public Double calcularPuntosDeDiferencia(Double puntos, Integer distancia) {

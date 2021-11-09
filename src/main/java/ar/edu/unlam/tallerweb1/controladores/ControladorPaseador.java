@@ -3,6 +3,8 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
+import ar.edu.unlam.tallerweb1.excepciones.PaseoIniciadoException;
+import ar.edu.unlam.tallerweb1.excepciones.PaseoNoExistenteException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
@@ -44,12 +46,26 @@ public class ControladorPaseador {
         }
     }
 
-    // TODO: Chequear con la BD si el usuario tiene un registro activo, porque si cierra sesion se pierde la variable
     @RequestMapping("/paseador")
     public ModelAndView verPaginaDePaseador(HttpServletRequest request) {
-        if (request.getSession().getAttribute("idRegistroPaseo") != null)
+        ModelMap model = new ModelMap();
+        try {
+            if (request.getSession().getAttribute("idRegistroPaseo") != null)
+                return new ModelAndView("redirect:/paseador/seguimiento");
+            RegistroPaseo registro = servicioPaseador.verificarSiUnUsuarioTieneUnPaseoActivo((Long) request.getSession().getAttribute("userId"));
+            request.getSession().setAttribute("idRegistroPaseo", registro.getId());
+            model.put("idPaseador", registro.getPaseador().getId());
+            model.put("paseador", registro.getPaseador());
+            model.put("registro", registro);
+            return new ModelAndView("paseador-exitoso", model);
+
+        }
+        catch (PaseoNoExistenteException e){
+            return new ModelAndView("paseador-inicio");
+        }
+        catch (PaseoIniciadoException e){
             return new ModelAndView("redirect:/paseador/seguimiento");
-        return new ModelAndView("paseador-inicio");
+        }
     }
 
     @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)

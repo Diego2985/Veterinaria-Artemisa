@@ -54,6 +54,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
         return (RegistroPaseo) getCurrentSession().createCriteria(RegistroPaseo.class).add(Restrictions.eq("id", idRegistro)).uniqueResult();
     }
 
+    @Override
+    public RegistroPaseo buscarPaseoEnProcesoOActivoDeUnUsuario(Long userId) {
+        return (RegistroPaseo) getCurrentSession().createCriteria(RegistroPaseo.class).add(Restrictions.and(Restrictions.eq("usuario.id", userId), Restrictions.or(Restrictions.eq("estado", 0), Restrictions.eq("estado", 1)))).uniqueResult();
+    }
+
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

@@ -17,4 +17,6 @@ public interface RepositorioPaseador {
     void actualizarEstadoDePaseo(RegistroPaseo registro);
 
     RegistroPaseo buscarUnRegistroDePaseo(Long idRegistro);
+
+    RegistroPaseo buscarPaseoEnProcesoOActivoDeUnUsuario(Long userId);
 }

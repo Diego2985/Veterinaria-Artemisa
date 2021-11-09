@@ -1,6 +1,8 @@
 package ar.edu.unlam.tallerweb1.servicios;
 import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
+import ar.edu.unlam.tallerweb1.excepciones.PaseoIniciadoException;
+import ar.edu.unlam.tallerweb1.excepciones.PaseoNoExistenteException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import java.util.List;
@@ -19,4 +21,6 @@ public interface ServicioPaseador {
     RegistroPaseo actualizarRegistroDePaseo(Long idRegistro, Long idPaseador, Long idUsuario, Integer estado) throws DatosCambiadosException;
 
     RegistroPaseo obtenerRegistroDePaseo(Long idRegistroPaseo);
+
+    RegistroPaseo verificarSiUnUsuarioTieneUnPaseoActivo(Long userId) throws PaseoIniciadoException, PaseoNoExistenteException;
 }

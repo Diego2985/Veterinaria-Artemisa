@@ -35,6 +35,8 @@ public class ControladorPaseador {
             Integer distancia = 500;
             List<Paseador> paseadores = servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
             model.put("paseadores", paseadores);
+            model.put("latitud", latitud);
+            model.put("longitud", longitud);
             return new ModelAndView("paseador-mapa", model);
         } catch (Exception e) {
             return new ModelAndView("error");

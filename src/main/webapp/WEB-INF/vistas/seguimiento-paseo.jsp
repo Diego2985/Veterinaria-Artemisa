@@ -12,7 +12,7 @@
         <div class="col">
             <h2>Seguimiento del paseo</h2>
             <div>
-                <img alt="seguimiento" src="images/mock-posicion.jpg"/>
+                <img alt="seguimiento" src="../images/mock-routing.jpg"/>
             </div>
         </div>
         <div class="col">

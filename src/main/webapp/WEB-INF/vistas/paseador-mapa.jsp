@@ -8,7 +8,7 @@
 <body>
 <div class="container mt-3">
     <h2>Mapa de paseadores cercanos</h2>
-    <p>Paseadores cerca de: Coronel Diaz y Santa Fe</span></p>
+    <p>Paseadores cerca de: <span id="locacion">${ubicacion.toString()}</span></p>
     <div class="row">
         <div class="col-6">
             <div id="mapContainer" style="width: 600px; height: 600px"></div>
@@ -30,7 +30,7 @@
     })
     </c:forEach>
 
-    mostrarPaseadores("${ubicacion.coordenadas.latitud}", "${ubicacion.coordenadas.longitud}", listaDePaseadores)
+    mostrarPaseadores("${latitud}", "${longitud}", listaDePaseadores)
 </script>
 </body>
 </html>

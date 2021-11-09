@@ -11,6 +11,8 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,6 +62,8 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         RegistroPaseo registro = repositorioPaseador.buscarUnRegistroDePaseo(idRegistro);
         if(registro.getPaseador().getId()!=idPaseador || registro.getUsuario().getId()!=idUsuario)
             throw new DatosCambiadosException();
+        registro.setHoraInicio(new Date());
+        registro.setHoraFinal(new Date(registro.getHoraInicio().getTime() + (3600*1000)));
         registro.setEstado(estado);
         repositorioPaseador.actualizarEstadoDePaseo(registro);
         return registro;

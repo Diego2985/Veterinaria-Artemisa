@@ -106,9 +106,6 @@ public class ControladorPaseador {
         return new ModelAndView("seguimiento-paseo", model);
     }
 
-    // TODO: El comienzo de paseo ahora está por default cuando se crea el registro. Debería tener el valor del comienzo del seguimiento
-    // Opcion: crear nuevos campos de Hora de inicio real y hora de fin real
-    // Opcion: Al actualizar el estado puede setear los Date now de comienzo real y del fin que se haga auto o seteado en Servicio
     @RequestMapping(path = "/comenzar-seguimiento", method = RequestMethod.POST)
     public ModelAndView realizarSeguimientoDePaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario) {
         ModelMap model = new ModelMap();

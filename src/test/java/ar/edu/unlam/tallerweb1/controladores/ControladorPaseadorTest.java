@@ -24,17 +24,20 @@ public class ControladorPaseadorTest {
 
     private Double latitud = -34.588902;
     private Double longitud = -58.409851;
-    private Coordenadas coordenadas = new Coordenadas(latitud, longitud);
     private Integer distancia = 500;
     private ModelAndView mav;
-    private Usuario usuario = new Usuario();
     private ServicioPaseador servicioPaseador = mock(ServicioPaseador.class);
     private ControladorPaseador controladorPaseador = new ControladorPaseador(servicioPaseador);
     private HttpServletRequest request;
-    private HttpSession sessionMock = Mockito.mock(HttpSession.class);
+    private Paseador paseador = new Paseador();
 
     @Before
     public void init() {
+        mockRequest();
+        crearPaseador();
+    }
+
+    private void mockRequest() {
         request = mock(HttpServletRequest.class);
         HttpSession sessionMock = mock(HttpSession.class);
 
@@ -42,27 +45,8 @@ public class ControladorPaseadorTest {
         when(request.getSession().getAttribute("userId")).thenReturn(1L);
     }
 
-    @Test
-    public void verificarQueSeRecibeLaVistaDondeSeCaptaLaUbicacion() {
-        mav = whenElUsuarioQuiereElegirLaOpcionParaPasearAlPerro();
-        thenTieneQueVerLaVistaInicialDondeSeCaptaLaUbicacion(mav);
-    }
-
-    private ModelAndView whenElUsuarioQuiereElegirLaOpcionParaPasearAlPerro() {
-        return controladorPaseador.verPaginaDePaseador(request);
-    }
-
-    private void thenTieneQueVerLaVistaInicialDondeSeCaptaLaUbicacion(ModelAndView mav) {
-        assertThat(mav.getViewName()).isEqualTo("paseador-inicio");
-    }
-
-    private ModelAndView whenContratoAlPaseador(Long id) {
-        return controladorPaseador.contratarAlPaseador(id, latitud, longitud, request);
-    }
-
-    private Paseador crearPaseador(Long id) {
-        Paseador paseador = new Paseador();
-        paseador.setId(id);
+    private Paseador crearPaseador() {
+        paseador.setId(1L);
         paseador.setNombre("Matias");
         paseador.setEstrellas(4);
         paseador.setLatitud(latitud);
@@ -70,6 +54,7 @@ public class ControladorPaseadorTest {
         return paseador;
     }
 
+    // Caso de obtener solo los paseadores a 500m
     @Test
     public void obtenerPaseadoresCercanos() {
         List<Paseador> paseadoresEsperados = givenUnaListaDePaseadores();
@@ -96,6 +81,7 @@ public class ControladorPaseadorTest {
         assertThat(obtenidos).isEqualTo(paseadoresEsperados);
     }
 
+    // No se puede llamar a un paseador que haya alcanzado la cant max de mascotas a pasear
     @Test
     public void siElPaseadorLlegoALaCantidadMaximaNoSeLoDebeContratar() throws PaseadorConCantMaxDeMascotasException {
         Paseador paseador = givenUnPaseadorConCantidadesMaxYActualIguales();
@@ -104,7 +90,6 @@ public class ControladorPaseadorTest {
     }
 
     private Paseador givenUnPaseadorConCantidadesMaxYActualIguales() throws PaseadorConCantMaxDeMascotasException {
-        Paseador paseador = crearPaseador(1L);
         paseador.setCantidadActual(10);
         paseador.setCantidadMaxima(10);
 
@@ -113,10 +98,15 @@ public class ControladorPaseadorTest {
         return paseador;
     }
 
+    private ModelAndView whenContratoAlPaseador(Long id) {
+        return controladorPaseador.contratarAlPaseador(id, latitud, longitud, request);
+    }
+
     private void thenNoPodriaContratarlo(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("paseador-error");
     }
 
+    // Creacion de registro de paseo
     @Test
     public void seCreaUnRegistroDelPaseo() throws PaseadorConCantMaxDeMascotasException {
         RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistroDePaseo();
@@ -133,9 +123,6 @@ public class ControladorPaseadorTest {
     }
 
     private RegistroPaseo crearRegistro() {
-        Paseador paseador = crearPaseador(1L);
-        paseador.setId(1L);
-
         Usuario usuario = new Usuario();
         usuario.setId(1L);
 
@@ -150,6 +137,7 @@ public class ControladorPaseadorTest {
         assertThat(mav.getModel().get("registro")).isEqualTo(registro);
     }
 
+    // Verificacion de cambio de estado a través del proceso de finalizacion de paseo
     @Test
     public void verificarQueSeCambioElEstado() throws DatosCambiadosException {
         RegistroPaseo registro = givenUnPaseadorUnUsuarioYOtroRegistro();
@@ -175,19 +163,12 @@ public class ControladorPaseadorTest {
         assertThat(obtenido.getEstado()).isEqualTo(1);
     }
 
+    // Si por algun motivo intencional se alteraron algún id
     @Test
     public void siSeAlteroAlgunDatoDebeSaltarLaExcepcion() throws DatosCambiadosException {
         RegistroPaseo registro = givenUnRegistroDePaseoConLosDatosAlterados();
         mav = whenEnvioElRegistroConLosDatosAlterados(registro);
         thenDebeCapturarLaExcepcion(mav);
-    }
-
-    private void thenDebeCapturarLaExcepcion(ModelAndView mav) {
-        assertThat(mav.getViewName()).isEqualTo("paseador-error");
-    }
-
-    private ModelAndView whenEnvioElRegistroConLosDatosAlterados(RegistroPaseo registro) {
-        return controladorPaseador.realizarSeguimientoDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId());
     }
 
     private RegistroPaseo givenUnRegistroDePaseoConLosDatosAlterados() throws DatosCambiadosException {
@@ -197,5 +178,13 @@ public class ControladorPaseadorTest {
         when(servicioPaseador.actualizarRegistroDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId(), 1)).thenThrow(DatosCambiadosException.class);
 
         return registro;
+    }
+
+    private ModelAndView whenEnvioElRegistroConLosDatosAlterados(RegistroPaseo registro) {
+        return controladorPaseador.realizarSeguimientoDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId());
+    }
+
+    private void thenDebeCapturarLaExcepcion(ModelAndView mav) {
+        assertThat(mav.getViewName()).isEqualTo("paseador-error");
     }
 }

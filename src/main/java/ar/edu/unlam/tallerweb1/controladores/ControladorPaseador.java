@@ -82,7 +82,7 @@ public class ControladorPaseador {
             return new ModelAndView("paseador-exitoso", model);
         } catch (PaseadorConCantMaxDeMascotasException e) {
             model.put("mensaje", "El paseador indicado no se encuentra disponible");
-            return new ModelAndView("paseador-error");
+            return new ModelAndView("paseador-error", model);
         }
     }
 

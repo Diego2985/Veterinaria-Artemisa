@@ -1,3 +1,5 @@
 # Project exclude paths
 /target/
 .idea
+src/main/webapp/js/config.js
+out/

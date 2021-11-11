@@ -13,7 +13,7 @@
             a 100 metros</h4>
         <div class="col">
             <div>
-                <img alt="routing" src="images/mock-routing.jpg"/>
+                <img alt="routing" src="../images/mock-routing.jpg"/>
             </div>
         </div>
         <div class="col">

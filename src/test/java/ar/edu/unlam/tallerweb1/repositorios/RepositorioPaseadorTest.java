@@ -5,6 +5,7 @@ import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -23,11 +24,22 @@ public class RepositorioPaseadorTest extends SpringTest {
     private Double diferenciaLatitud;
     private Double diferenciaLongitud;
     private List<Paseador> paseadores = Paseadores.crearPaseadores();
+    private Paseador paseador = new Paseador();
+    private Usuario usuario = new Usuario();
+    private RegistroPaseo registro = new RegistroPaseo();
 
     private Double calcularDiferenciaPuntosLatLOLong(Double puntos, Integer distancia) {
         Double puntosMax = puntos + ((180 / Math.PI) * ((double) distancia / 6378137));
         Double diferencia = puntosMax - puntos;
         return diferencia;
+    }
+
+    @Before
+    public void init() {
+        registro.setPaseador(paseador);
+        registro.setUsuario(usuario);
+        session().save(usuario);
+        session().save(paseador);
     }
 
     @Test
@@ -86,21 +98,12 @@ public class RepositorioPaseadorTest extends SpringTest {
     @Test
     @Transactional
     public void crearUnRegistroDePaseo() {
-        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistro();
+        givenUnPaseadorUnUsuarioYUnRegistro();
         whenQuieroCrearElRegistro(registro);
         thenDeberiaGuardarlo(registro);
     }
 
-    private RegistroPaseo givenUnPaseadorUnUsuarioYUnRegistro() {
-        Paseador paseador = new Paseador();
-        Usuario usuario = new Usuario();
-        RegistroPaseo registro = new RegistroPaseo();
-        registro.setPaseador(paseador);
-        registro.setUsuario(usuario);
-        session().save(usuario);
-        session().save(paseador);
-
-        return registro;
+    private void givenUnPaseadorUnUsuarioYUnRegistro() {
     }
 
     private void whenQuieroCrearElRegistro(RegistroPaseo registro) {
@@ -129,7 +132,7 @@ public class RepositorioPaseadorTest extends SpringTest {
     }
 
     private RegistroPaseo givenUnPaseadorUnUsuarioYUnRegistroGuardado() {
-        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistro();
+        givenUnPaseadorUnUsuarioYUnRegistro();
         session().save(registro);
         registro.setEstado(1);
         return registro;
@@ -162,27 +165,26 @@ public class RepositorioPaseadorTest extends SpringTest {
         assertThat(registro).isNull();
     }
 
-    @Test
-    @Transactional
-    public void elUsuarioTieneUnPaseoActivo() {
-        givenUnRegistroConPaseoActivoGuardado();
-        RegistroPaseo obtenido = whenChequeoSiTieneUnRegistroActivoOEnProceso();
-        thenDeberiaObtenerUnResultado(obtenido);
-    }
-
-    private void givenUnRegistroConPaseoActivoGuardado() {
-        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistro();
-        session().save(registro);
-    }
-
+//    @Test
+//    @Transactional
+//    public void elUsuarioTieneUnPaseoActivo() {
+//        givenUnRegistroConPaseoActivoGuardado();
+//        RegistroPaseo obtenido = whenChequeoSiTieneUnRegistroActivoOEnProceso();
+//        thenDeberiaObtenerUnResultado(obtenido);
+//    }
+//
+//    private void givenUnRegistroConPaseoActivoGuardado() {
+//        session().save(registro);
+//    }
+//
     private RegistroPaseo whenChequeoSiTieneUnRegistroActivoOEnProceso() {
         return repositorioPaseador.buscarPaseoEnProcesoOActivoDeUnUsuario(1L);
     }
-
-    private void thenDeberiaObtenerUnResultado(RegistroPaseo obtenido) {
-        assertThat(obtenido).isNotNull();
-        assertThat(obtenido).isInstanceOf(RegistroPaseo.class);
-    }
+//
+//    private void thenDeberiaObtenerUnResultado(RegistroPaseo obtenido) {
+//        assertThat(obtenido).isInstanceOf(RegistroPaseo.class);
+//        assertThat(obtenido).isNotNull();
+//    }
 
     @Test
     @Transactional

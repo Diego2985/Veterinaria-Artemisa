@@ -9,6 +9,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +54,70 @@ public class RepositorioCalendarioVacunacionTest  extends SpringTest {
         givenMascotaConVacunasDeGato();
         List<Vacuna> vacunas = whenTraerVacunasDeGato();
         thenMascotaTieneVacunasDeGato(vacunas);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testTraerVacunasDeGatoYDePerro() {
+        givenMascotaConVacunasDeGatoYPerro();
+        List<Vacuna> vacunas = whenTraerVacunasDeGatoYPerro();
+        thenMascotaTieneVacunasDeGatoYPerro(vacunas);
+    }
+
+    private void thenMascotaTieneVacunasDeGatoYPerro(List<Vacuna> vacunas) {
+        assertThat(vacunas).isNotNull();
+        assertThat(vacunas).hasSize(5);
+        assertThat(vacunas.get(0).getTipo()).isEqualTo("gato");
+        assertThat(vacunas.get(2).getTipo()).isEqualTo("perro");
+    }
+
+    private List<Vacuna> whenTraerVacunasDeGatoYPerro() {
+        List<Vacuna> vacunas = new ArrayList<>();
+        List<Vacuna> vacunasGato = repositorioCalendarioVacunacion.getVacunas("gato");
+        List<Vacuna> vacunasPerro = repositorioCalendarioVacunacion.getVacunas("perro");
+        vacunas.addAll(vacunasGato);
+        vacunas.addAll(vacunasPerro);
+
+        return vacunas;
+    }
+
+    private void givenMascotaConVacunasDeGatoYPerro() {
+        Vacuna vacuna1 = new Vacuna()
+                .setTipo("gato")
+                .setMeses(2)
+                .setTitulo("Doble")
+                .setId(1L);
+
+        Vacuna vacuna2 = new Vacuna()
+                .setTipo("gato")
+                .setMeses(3)
+                .setTitulo("Triple Virica")
+                .setId(1L);
+
+        Vacuna vacuna3 = new Vacuna()
+                .setTipo("perro")
+                .setMeses(1)
+                .setTitulo("Moquillo")
+                .setId(1L);
+
+        Vacuna vacuna4 = new Vacuna()
+                .setTipo("perro")
+                .setMeses(2)
+                .setTitulo("Polivalente Canina")
+                .setId(1L);
+
+        Vacuna vacuna5 = new Vacuna()
+                .setTipo("perro")
+                .setMeses(3)
+                .setTitulo("Traqueobronquitis")
+                .setId(1L);
+
+        session().save(vacuna1);
+        session().save(vacuna2);
+        session().save(vacuna3);
+        session().save(vacuna4);
+        session().save(vacuna5);
     }
 
     private void thenMascotaTieneVacunasDeGato(List<Vacuna> vacunas) {

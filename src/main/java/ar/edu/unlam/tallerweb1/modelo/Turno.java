@@ -93,6 +93,11 @@ public class Turno {
         this.estado = estado;
     }
 
+    public Turno setHora(String hora) {
+        this.hora = hora;
+        return this;
+    }
+
     public String getHora() {
         return hora;
     }

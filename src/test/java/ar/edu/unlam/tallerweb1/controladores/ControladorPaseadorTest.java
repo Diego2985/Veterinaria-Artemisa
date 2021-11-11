@@ -54,6 +54,17 @@ public class ControladorPaseadorTest {
         return paseador;
     }
 
+    private RegistroPaseo crearRegistro() {
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        RegistroPaseo registro = new RegistroPaseo();
+        registro.setPaseador(paseador);
+        registro.setUsuario(usuario);
+
+        return registro;
+    }
+
     // Caso de obtener solo los paseadores a 500m
     @Test
     public void obtenerPaseadoresCercanos() {
@@ -106,37 +117,6 @@ public class ControladorPaseadorTest {
         assertThat(mav.getViewName()).isEqualTo("paseador-error");
     }
 
-    // Creacion de registro de paseo
-    @Test
-    public void seCreaUnRegistroDelPaseo() throws PaseadorConCantMaxDeMascotasException {
-        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistroDePaseo();
-        mav = whenContratoAlPaseador(registro.getPaseador().getId());
-        thenReciboUnRegistroDelPaseo(mav, registro);
-    }
-
-    private RegistroPaseo givenUnPaseadorUnUsuarioYUnRegistroDePaseo() throws PaseadorConCantMaxDeMascotasException {
-        RegistroPaseo registro = crearRegistro();
-
-        when(servicioPaseador.obtenerPaseador(registro.getPaseador().getId(), true)).thenReturn(registro.getPaseador());
-        when(servicioPaseador.crearRegistroDePaseo(registro.getPaseador(), (Long) request.getSession().getAttribute("userId"))).thenReturn(registro);
-        return registro;
-    }
-
-    private RegistroPaseo crearRegistro() {
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-
-        RegistroPaseo registro = new RegistroPaseo();
-        registro.setPaseador(paseador);
-        registro.setUsuario(usuario);
-
-        return registro;
-    }
-
-    private void thenReciboUnRegistroDelPaseo(ModelAndView mav, RegistroPaseo registro) {
-        assertThat(mav.getModel().get("registro")).isEqualTo(registro);
-    }
-
     // Verificacion de cambio de estado a través del proceso de finalizacion de paseo
     @Test
     public void verificarQueSeCambioElEstado() throws DatosCambiadosException {
@@ -163,7 +143,7 @@ public class ControladorPaseadorTest {
         assertThat(obtenido.getEstado()).isEqualTo(1);
     }
 
-    // Si por algun motivo intencional se alteraron algún id
+    // Si por algun motivo intencional se alteró algún id
     @Test
     public void siSeAlteroAlgunDatoDebeSaltarLaExcepcion() throws DatosCambiadosException {
         RegistroPaseo registro = givenUnRegistroDePaseoConLosDatosAlterados();
@@ -186,5 +166,36 @@ public class ControladorPaseadorTest {
 
     private void thenDebeCapturarLaExcepcion(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("paseador-error");
+    }
+    
+    // Tests donde se quiere acceder a sitios no permitidos dentro de Paseador
+    @Test
+    public void impedirAccesoASeguimientoSiNoTieneUnPaseoCreado() {
+        givenUnUsuarioSinPaseo();
+        mav=whenQuiereAccederASeguimientoDePaseo();
+        thenDeberiaRedirigirloAlInicioDePaseador(mav);
+    }
+
+    private void givenUnUsuarioSinPaseo() {
+        when(servicioPaseador.chequearAccesoCorrecto(request, 1)).thenReturn(true);
+    }
+
+    private ModelAndView whenQuiereAccederASeguimientoDePaseo() {
+        return controladorPaseador.consultarSeguimiento(request);
+    }
+
+    private void thenDeberiaRedirigirloAlInicioDePaseador(ModelAndView mav) {
+        assertThat(mav.getViewName()).isEqualTo("redirect:/paseador");
+    }
+
+    @Test
+    public void impedirAccesoAlPaseoEnProcesoSiNoTieneUnPaseoCreado() {
+        givenUnUsuarioSinPaseo();
+        mav=whenQuieroAccederAlPaseoEnProceso();
+        thenDeberiaRedirigirloAlInicioDePaseador(mav);
+    }
+
+    private ModelAndView whenQuieroAccederAlPaseoEnProceso() {
+        return controladorPaseador.consultarSeguimiento(request);
     }
 }

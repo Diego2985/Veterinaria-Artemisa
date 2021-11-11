@@ -1,14 +1,18 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.Paseadores;
+import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
+import ar.edu.unlam.tallerweb1.excepciones.PaseoIniciadoException;
+import ar.edu.unlam.tallerweb1.excepciones.PaseoNoIniciadoException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -24,6 +28,20 @@ public class ServicioPaseadorTest {
     private Double diferenciaLatitud;
     private Double diferenciaLongitud;
     private List<Paseador> listaDePaseadores = Paseadores.crearPaseadores();
+    private RegistroPaseo registro = new RegistroPaseo();
+
+    // Test de lista de paseadores cercanos
+    @Before
+    public void init(){
+        Paseador paseador = listaDePaseadores.get(0);
+        paseador.setId(1L);
+        registro.setId(1L);
+        registro.setEstado(1);
+        registro.setPaseador(paseador);
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        registro.setUsuario(usuario);
+    }
 
     @Test
     public void solicitarUnaListaDePaseadoresCercanos() {
@@ -51,6 +69,7 @@ public class ServicioPaseadorTest {
         assertThat(paseadoresObtenidos).contains(listaDePaseadores.get(1));
     }
 
+    // Test donde se obtiene un paseador
     @Test
     public void obtenerUnPaseador() {
         Paseador paseadorEsperado = givenUnPaseador();
@@ -60,9 +79,7 @@ public class ServicioPaseadorTest {
 
     private Paseador givenUnPaseador() {
         Paseador unPaseador= listaDePaseadores.get(0);
-
         when(repositorioPaseador.obtenerUnPaseador(unPaseador.getId())).thenReturn(unPaseador);
-
         return unPaseador;
     }
 
@@ -74,6 +91,7 @@ public class ServicioPaseadorTest {
         assertThat(paseadorObtenido).isEqualTo(paseadorEsperado);
     }
 
+    // Test donde se intenta contratar a un paseador con cant max de mascotas
     @Test(expected = PaseadorConCantMaxDeMascotasException.class)
     public void siELPaseadorLlegoALaCantMaxDebeSaltarLaExcepcion() throws PaseadorConCantMaxDeMascotasException {
         Paseador esperado=givenUnPaseadorConCantidadesActualYMax();
@@ -84,13 +102,65 @@ public class ServicioPaseadorTest {
         Paseador paseador=listaDePaseadores.get(0);
         paseador.setCantidadMaxima(10);
         paseador.setCantidadActual(10);
-
         when(repositorioPaseador.obtenerUnPaseador(paseador.getId())).thenReturn(paseador);
-
         return paseador;
     }
 
     private Paseador whenSolicitoUnPaseadorChequeandoQueNoHayaLlegadoALaCantMax(Long id) throws PaseadorConCantMaxDeMascotasException {
         return servicioPaseador.obtenerPaseador(id, true);
+    }
+
+    // Test donde se actualiza el registro de paseo
+    @Test
+    public void actualizaRegistroDePaseoCuandoInicia() throws DatosCambiadosException {
+        givenUnRegistroDePaseo();
+        RegistroPaseo obtenido = whenQuieroActualizarElRegistroCuandoElPaseoInicia();
+        thenDebeActualizarlo(obtenido);
+    }
+
+    private void givenUnRegistroDePaseo() {
+        when(repositorioPaseador.buscarUnRegistroDePaseo(1L)).thenReturn(registro);
+    }
+
+    private RegistroPaseo whenQuieroActualizarElRegistroCuandoElPaseoInicia() throws DatosCambiadosException {
+        return servicioPaseador.actualizarRegistroDePaseo(1L, 1L, 1L, 2);
+    }
+
+    private void thenDebeActualizarlo(RegistroPaseo obtenido) {
+        assertThat(obtenido.getEstado()).isEqualTo(2);
+    }
+
+    @Test(expected = DatosCambiadosException.class)
+    public void cuandoAlteroElRegistroDePaseoDebeInvocarLaExcepcion() throws DatosCambiadosException {
+        givenUnRegistroDePaseo();
+        whenRealizoLaValidacionDelRegistro();
+    }
+
+    private RegistroPaseo whenRealizoLaValidacionDelRegistro() throws DatosCambiadosException {
+        return servicioPaseador.actualizarRegistroDePaseo(1L, 5L,1L,1);
+    }
+
+    @Test
+    public void siElUsuarioNoTieneUnPaseoActivoNoDebeHacerNada() throws PaseoNoIniciadoException, PaseoIniciadoException {
+        givenUnUsuarioSinPaseosPendientes();
+        whenRealizoLaVerificacion();
+    }
+
+    private void givenUnUsuarioSinPaseosPendientes() {
+        when(repositorioPaseador.buscarPaseoEnProcesoOActivoDeUnUsuario(1l)).thenReturn(null);
+    }
+
+    private void whenRealizoLaVerificacion() throws PaseoNoIniciadoException, PaseoIniciadoException {
+        servicioPaseador.verificarSiUnUsuarioTieneUnPaseoActivo(1L);
+    }
+
+    @Test(expected = PaseoIniciadoException.class)
+    public void siElUsuarioTieneUnPaseoActivoDebeInvocarLaExcepcion() throws PaseoNoIniciadoException, PaseoIniciadoException {
+        givenUnRegistroDePaseoActivo();
+        whenRealizoLaVerificacion();
+    }
+
+    private void givenUnRegistroDePaseoActivo() {
+        when(repositorioPaseador.buscarPaseoEnProcesoOActivoDeUnUsuario(1L)).thenReturn(registro);
     }
 }

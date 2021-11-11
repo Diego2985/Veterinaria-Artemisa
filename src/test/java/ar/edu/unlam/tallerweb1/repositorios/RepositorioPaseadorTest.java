@@ -24,12 +24,6 @@ public class RepositorioPaseadorTest extends SpringTest {
     private Double diferenciaLongitud;
     private List<Paseador> paseadores = Paseadores.crearPaseadores();
 
-    private void crearPaseador(Paseador paseador, Double latitud, Double longitud) {
-        paseador.setEstrellas(5);
-        paseador.setLatitud(latitud);
-        paseador.setLongitud(longitud);
-    }
-
     private Double calcularDiferenciaPuntosLatLOLong(Double puntos, Integer distancia) {
         Double puntosMax = puntos + ((180 / Math.PI) * ((double) distancia / 6378137));
         Double diferencia = puntosMax - puntos;
@@ -139,5 +133,72 @@ public class RepositorioPaseadorTest extends SpringTest {
         session().save(registro);
         registro.setEstado(1);
         return registro;
+    }
+
+    @Test
+    @Transactional
+    public void buscarUnRegistroDePaseo() {
+        RegistroPaseo esperado = givenUnPaseadorUnUsuarioYUnRegistroGuardado();
+        RegistroPaseo obtenido = whenQuieroBuscarloPorId(esperado.getId());
+        thenDeboEncontrarEsePaseo(esperado, obtenido);
+    }
+
+    private RegistroPaseo whenQuieroBuscarloPorId(Long id) {
+        return repositorioPaseador.buscarUnRegistroDePaseo(id);
+    }
+
+    private void thenDeboEncontrarEsePaseo(RegistroPaseo esperado, RegistroPaseo obtenido) {
+        assertThat(esperado).isEqualTo(obtenido);
+    }
+
+    @Test
+    @Transactional
+    public void noSeEncuentraUnPaseoConEseId(){
+        RegistroPaseo registro = whenQuieroBuscarloPorId(2L);
+        thenDeberiaRetornarNull(registro);
+    }
+
+    private void thenDeberiaRetornarNull(RegistroPaseo registro) {
+        assertThat(registro).isNull();
+    }
+
+    @Test
+    @Transactional
+    public void elUsuarioTieneUnPaseoActivo() {
+        givenUnRegistroConPaseoActivoGuardado();
+        RegistroPaseo obtenido = whenChequeoSiTieneUnRegistroActivoOEnProceso();
+        thenDeberiaObtenerUnResultado(obtenido);
+    }
+
+    private void givenUnRegistroConPaseoActivoGuardado() {
+        RegistroPaseo registro = givenUnPaseadorUnUsuarioYUnRegistro();
+        session().save(registro);
+    }
+
+    private RegistroPaseo whenChequeoSiTieneUnRegistroActivoOEnProceso() {
+        return repositorioPaseador.buscarPaseoEnProcesoOActivoDeUnUsuario(1L);
+    }
+
+    private void thenDeberiaObtenerUnResultado(RegistroPaseo obtenido) {
+        assertThat(obtenido).isNotNull();
+        assertThat(obtenido).isInstanceOf(RegistroPaseo.class);
+    }
+
+    @Test
+    @Transactional
+    public void elUsuarioNoTieneUnPaseoEnProcesoOActivo() {
+        givenUnUsuario();
+        RegistroPaseo registro = whenChequeoSiTieneUnRegistroActivoOEnProceso();
+        thenNoSeEncuentranPaseosPendientes(registro);
+    }
+
+    private void givenUnUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        session().save(usuario);
+    }
+
+    private void thenNoSeEncuentranPaseosPendientes(RegistroPaseo registro) {
+        assertThat(registro).isNull();
     }
 }

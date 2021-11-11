@@ -1,9 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
-import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
-import ar.edu.unlam.tallerweb1.excepciones.PaseoIniciadoException;
-import ar.edu.unlam.tallerweb1.excepciones.PaseoNoExistenteException;
+import ar.edu.unlam.tallerweb1.converter.Coordenadas;
+import ar.edu.unlam.tallerweb1.excepciones.*;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -12,8 +10,11 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ServicioPaseadorImpl implements ServicioPaseador {
@@ -75,13 +76,44 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public RegistroPaseo verificarSiUnUsuarioTieneUnPaseoActivo(Long userId) throws PaseoIniciadoException, PaseoNoExistenteException {
+    public void verificarSiUnUsuarioTieneUnPaseoActivo(Long userId) throws PaseoIniciadoException, PaseoNoIniciadoException {
         RegistroPaseo registroPaseo = repositorioPaseador.buscarPaseoEnProcesoOActivoDeUnUsuario(userId);
-        if(registroPaseo == null)
-            throw new PaseoNoExistenteException();
-        else if(registroPaseo.getEstado() == 1)
-            throw new PaseoIniciadoException();
-        return registroPaseo;
+        if(registroPaseo != null){
+            if(registroPaseo.getEstado() == 0)
+                throw new PaseoNoIniciadoException();
+            else if(registroPaseo.getEstado() == 1)
+                throw new PaseoIniciadoException();
+        }
+
+    }
+
+    @Override
+    public void validarEstadoEnSesion(Integer estado) throws PaseoIniciadoException, PaseoNoIniciadoException {
+        if(estado != null){
+            if(estado == 0)
+                throw new PaseoNoIniciadoException();
+            else if(estado == 1)
+                throw new PaseoIniciadoException();
+        }
+    }
+
+    @Override
+    public RegistroPaseo obtenerRegistroDePaseoActivoOEnProceso(Long userId) {
+        return repositorioPaseador.buscarPaseoEnProcesoOActivoDeUnUsuario(userId);
+    }
+
+    @Override
+    public Boolean chequearAccesoCorrecto(HttpServletRequest request, Integer numeroEstado) {
+        Integer estadoPaseo = (Integer) request.getSession().getAttribute("estadoPaseo");
+        return estadoPaseo == null || estadoPaseo != numeroEstado;
+    }
+
+    @Override
+    public Map<String, Coordenadas> obtenerCoordenadas(Double latitudUsuario, Double longitudUsuario, Paseador paseador) {
+        Map<String, Coordenadas> coordenadas = new HashMap<>();
+        coordenadas.put("usuario", new Coordenadas(latitudUsuario, longitudUsuario));
+        coordenadas.put("paseador", new Coordenadas(paseador.getLatitud(), paseador.getLongitud()));
+        return coordenadas;
     }
 
     public Double calcularPuntosDeDiferencia(Double puntos, Integer distancia) {

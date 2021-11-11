@@ -72,7 +72,7 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenSolicitoLosPaseadores() {
-        return controladorPaseador.obtenerPaseadoresCercanosA500mts(latitud, longitud);
+        return controladorPaseador.obtenerPaseadoresCercanosA500mts(latitud, longitud, request);
     }
 
     private void thenDeboObtenerLosPaseadoresCercanos(List<Paseador> paseadoresEsperados, ModelAndView mav) {
@@ -181,7 +181,7 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenEnvioElRegistroConLosDatosAlterados(RegistroPaseo registro) {
-        return controladorPaseador.realizarSeguimientoDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId());
+        return controladorPaseador.realizarSeguimientoDePaseo(registro.getId(), registro.getPaseador().getId(), registro.getUsuario().getId(), request);
     }
 
     private void thenDebeCapturarLaExcepcion(ModelAndView mav) {

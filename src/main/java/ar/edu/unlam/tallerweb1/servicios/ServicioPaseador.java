@@ -1,11 +1,12 @@
 package ar.edu.unlam.tallerweb1.servicios;
-import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
-import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
-import ar.edu.unlam.tallerweb1.excepciones.PaseoIniciadoException;
-import ar.edu.unlam.tallerweb1.excepciones.PaseoNoExistenteException;
+import ar.edu.unlam.tallerweb1.converter.Coordenadas;
+import ar.edu.unlam.tallerweb1.excepciones.*;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 public interface ServicioPaseador {
     Paseador obtenerPaseador(Long id);
@@ -22,5 +23,13 @@ public interface ServicioPaseador {
 
     RegistroPaseo obtenerRegistroDePaseo(Long idRegistroPaseo);
 
-    RegistroPaseo verificarSiUnUsuarioTieneUnPaseoActivo(Long userId) throws PaseoIniciadoException, PaseoNoExistenteException;
+    void verificarSiUnUsuarioTieneUnPaseoActivo(Long userId) throws PaseoIniciadoException, PaseoNoIniciadoException;
+
+    void validarEstadoEnSesion(Integer idRegistroPaseo) throws PaseoIniciadoException, PaseoNoIniciadoException;
+
+    RegistroPaseo obtenerRegistroDePaseoActivoOEnProceso(Long userId);
+
+    Boolean chequearAccesoCorrecto(HttpServletRequest request, Integer numeroEstado);
+
+    Map<String, Coordenadas> obtenerCoordenadas(Double latitud, Double longitud, Paseador paseador);
 }

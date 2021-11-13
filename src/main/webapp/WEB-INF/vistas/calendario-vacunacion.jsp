@@ -27,6 +27,12 @@
                 start: "${vacuna.fecha}"
             })
             </c:forEach>
+            <c:forEach items="${turnos}" var="turno">
+            listaDeTurnos.push({
+                title: "${turno.serviciosSeleccionados}",
+                start: "${turno.fecha.toString()}",
+            })
+            </c:forEach>
             var traerEventos = function () {
                 return listaDeTurnos;
             }

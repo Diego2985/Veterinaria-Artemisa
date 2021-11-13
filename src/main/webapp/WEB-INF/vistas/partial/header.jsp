@@ -65,7 +65,7 @@
                     <a class="nav-link" href="${contextPath}/paseador">Paseadores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${contextPath}/calendario-vacunacion">Calendario de Vacunación</a>
+                    <a class="nav-link" href="${contextPath}/calendario-vacunacion">Calendario</a>
                 </li>
             </ul>
             <!-- Left links -->

@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Vacuna;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCalendarioVacunacion;
+import ar.edu.unlam.tallerweb1.servicios.ServicioListadoTurno;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 public class ControladorCalendarioVacunacionTest {
 
+    private ServicioListadoTurno servicioListadoTurno;
     private ServicioCalendarioVacunacion servicioCalendarioVacunacion;
     private ControladorCalendarioVacunacion controladorCalendarioVacunacion;
     private HttpServletRequest mockHttpServletRequest;
@@ -26,7 +28,8 @@ public class ControladorCalendarioVacunacionTest {
     @Before
     public void init() {
         servicioCalendarioVacunacion = mock(ServicioCalendarioVacunacion.class);
-        controladorCalendarioVacunacion = new ControladorCalendarioVacunacion(servicioCalendarioVacunacion);
+        servicioListadoTurno = mock(ServicioListadoTurno.class);
+        controladorCalendarioVacunacion = new ControladorCalendarioVacunacion(servicioCalendarioVacunacion, servicioListadoTurno);
         mockHttpServletRequest = mock(HttpServletRequest.class);
         HttpSession sessionMock = mock(HttpSession.class);
 

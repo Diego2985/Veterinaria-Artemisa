@@ -1,7 +1,9 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.modelo.Turno;
 import ar.edu.unlam.tallerweb1.modelo.Vacuna;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCalendarioVacunacion;
+import ar.edu.unlam.tallerweb1.servicios.ServicioListadoTurno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,10 +18,12 @@ import java.util.List;
 public class ControladorCalendarioVacunacion {
 
     private ServicioCalendarioVacunacion servicioCalendarioVacunacion;
+    private ServicioListadoTurno servicioListadoTurno;
 
     @Autowired
-    public ControladorCalendarioVacunacion(ServicioCalendarioVacunacion servicioCalendarioVacunacion) {
+    public ControladorCalendarioVacunacion(ServicioCalendarioVacunacion servicioCalendarioVacunacion, ServicioListadoTurno servicioListadoTurno) {
         this.servicioCalendarioVacunacion = servicioCalendarioVacunacion;
+        this.servicioListadoTurno = servicioListadoTurno;
     }
 
     @RequestMapping(path = "/calendario-vacunacion", method = RequestMethod.GET)
@@ -28,8 +32,10 @@ public class ControladorCalendarioVacunacion {
 
         Long userId = (Long) request.getSession().getAttribute("userId");
         List<Vacuna> vacunas = servicioCalendarioVacunacion.getVacunas(userId);
+        List<Turno> turnos = servicioListadoTurno.getListadoDeTurnos(userId);
 
         model.put("vacunas", vacunas);
+        model.put("turnos", turnos);
 
         return new ModelAndView("calendario-vacunacion", model);
     }

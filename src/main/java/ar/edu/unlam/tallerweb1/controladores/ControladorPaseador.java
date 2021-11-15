@@ -1,5 +1,8 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.converter.Coordenadas;
+import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.*;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
@@ -13,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ControladorPaseador {
@@ -36,9 +42,9 @@ public class ControladorPaseador {
             ModelMap model = new ModelMap();
             Integer distancia = 500;
             List<Paseador> paseadores = servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
+            Ubicacion ubicacion = servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud);
             model.put("paseadores", paseadores);
-            model.put("latitud", latitud);
-            model.put("longitud", longitud);
+            model.put("ubicacion", ubicacion);
             return new ModelAndView("paseador-mapa", model);
         } catch (Exception e) {
             return new ModelAndView("error");
@@ -47,7 +53,6 @@ public class ControladorPaseador {
 
     @RequestMapping("/paseador")
     public ModelAndView verPaginaDePaseador(HttpServletRequest request) {
-        ModelMap model = new ModelMap();
         Long userId = null;
         try {
             userId = (Long) request.getSession().getAttribute("userId");
@@ -74,16 +79,33 @@ public class ControladorPaseador {
 
     @RequestMapping("/paseador/en-proceso")
     public ModelAndView paseadorEnProcesoDeLlegada(HttpServletRequest request){
-        if(servicioPaseador.chequearAccesoCorrecto(request, 0)) {
-            return new ModelAndView("redirect:/paseador");
-        }
         ModelMap model = new ModelMap();
-        Long idRegistro = (Long) request.getSession().getAttribute("idRegistroPaseo");
-        RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistro);
-        model.put("idPaseador", registro.getPaseador().getId());
-        model.put("paseador", registro.getPaseador());
-        model.put("registro", registro);
-        return new ModelAndView("paseador-exitoso", model);
+        try {
+            if(servicioPaseador.chequearAccesoCorrecto(request, 0)) {
+                return new ModelAndView("redirect:/paseador");
+            }
+            Long idRegistro = (Long) request.getSession().getAttribute("idRegistroPaseo");
+            RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistro);
+            Double latitud = (Double) request.getSession().getAttribute("latitud");
+            Double longitud = (Double) request.getSession().getAttribute("longitud");
+            Map<String, Coordenadas> coordenadas = servicioPaseador.obtenerCoordenadas(latitud, longitud, registro.getPaseador());
+            request.getSession().removeAttribute("latitud");
+            request.getSession().removeAttribute("longitud");
+            DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadas.get("usuario"), coordenadas.get("paseador"));
+            String obtenerImagen = servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadas.get("usuario"), coordenadas.get("paseador"));
+            model.put("idPaseador", registro.getPaseador().getId());
+            model.put("paseador", registro.getPaseador());
+            model.put("registro", registro);
+            model.put("distanciaYTiempo", distanciaYTiempo);
+            model.put("imagen", obtenerImagen);
+            return new ModelAndView("paseador-exitoso", model);
+        } catch (UnsupportedEncodingException e) {
+            model.put("mensaje", "No se pudo obtener la imagen de la ruta");
+            return new ModelAndView("paseador-error", model);
+        } catch (IOException e) {
+            model.put("mensaje", "No se pudo obtener el tiempo de llegada ni la distancia");
+            return new ModelAndView("paseador-error", model);
+        }
     }
 
     @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
@@ -94,6 +116,8 @@ public class ControladorPaseador {
             RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"));
             request.getSession().setAttribute("idRegistroPaseo", registro.getId());
             request.getSession().setAttribute("estadoPaseo", registro.getEstado());
+            request.getSession().setAttribute("latitud", latitud);
+            request.getSession().setAttribute("longitud", longitud);
             return new ModelAndView("redirect:paseador/en-proceso");
         } catch (PaseadorConCantMaxDeMascotasException e) {
             model.put("mensaje", "El paseador indicado no se encuentra disponible");
@@ -103,16 +127,23 @@ public class ControladorPaseador {
 
     @RequestMapping("/paseador/seguimiento")
     public ModelAndView consultarSeguimiento(HttpServletRequest request) {
-        if(servicioPaseador.chequearAccesoCorrecto(request, 1)) {
-            return new ModelAndView("redirect:/paseador");
-        }
         ModelMap model = new ModelMap();
-        Long idRegistroPaseo = (Long) request.getSession().getAttribute("idRegistroPaseo");
-        RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistroPaseo);
-        Long minutosRestantes = ((registro.getHoraFinal().getTime() - new Date().getTime()) / 1000) / 60;
-        model.put("registro", registro);
-        model.put("tiempo", minutosRestantes);
-        return new ModelAndView("seguimiento-paseo", model);
+        try {
+            if(servicioPaseador.chequearAccesoCorrecto(request, 1)) {
+                return new ModelAndView("redirect:/paseador");
+            }
+            Long idRegistroPaseo = (Long) request.getSession().getAttribute("idRegistroPaseo");
+            RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistroPaseo);
+            Long minutosRestantes = ((registro.getHoraFinal().getTime() - new Date().getTime()) / 1000) / 60;
+            String imagenPosicionDelPaseador = servicioPaseador.obtenerImagenDePosicionDelPaseador(registro.getPaseador().getId());
+            model.put("registro", registro);
+            model.put("tiempo", minutosRestantes);
+            model.put("imagen", imagenPosicionDelPaseador);
+            return new ModelAndView("seguimiento-paseo", model);
+        } catch (UnsupportedEncodingException e) {
+            model.put("mensaje", "Error en la obtención de la imagen. Intente más tarde");
+            return new ModelAndView("paseador-error", model);
+        }
     }
 
     @RequestMapping(path = "/paseador/comenzar-seguimiento", method = RequestMethod.POST)

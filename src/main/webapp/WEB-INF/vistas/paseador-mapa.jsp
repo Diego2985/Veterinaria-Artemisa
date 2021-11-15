@@ -30,7 +30,7 @@
     })
     </c:forEach>
 
-    mostrarPaseadores("${latitud}", "${longitud}", listaDePaseadores)
+    mostrarPaseadores("${ubicacion.coordenadas.latitud}", "${ubicacion.coordenadas.longitud}", listaDePaseadores)
 </script>
 </body>
 </html>

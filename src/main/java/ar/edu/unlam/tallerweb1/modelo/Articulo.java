@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import jdk.jfr.Name;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,12 +10,14 @@ import javax.persistence.Id;
 @Entity
 public class Articulo {
 
-    @Id
+    @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
     private String descripcion;
     private float precio;
+
+
 
     public Articulo() {}
 
@@ -49,4 +53,7 @@ public class Articulo {
         this.titulo = tituloArticulo;
     }
 
+    //public String getImages() {
+      //  return images;
+    //}
 }

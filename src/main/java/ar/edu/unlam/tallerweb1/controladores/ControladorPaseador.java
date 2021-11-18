@@ -37,10 +37,9 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/ver-paseadores", method = RequestMethod.POST)
-    public ModelAndView obtenerPaseadoresCercanosA500mts(@RequestParam Double latitud, @RequestParam Double longitud, HttpServletRequest request) {
+    public ModelAndView obtenerPaseadoresCercanos(@RequestParam Double latitud, @RequestParam Double longitud, @RequestParam Integer distancia, HttpServletRequest request) {
         try {
             ModelMap model = new ModelMap();
-            Integer distancia = 500;
             List<Paseador> paseadores = servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
             Ubicacion ubicacion = servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud);
             model.put("paseadores", paseadores);

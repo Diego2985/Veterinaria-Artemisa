@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.Paseadores;
-import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
@@ -10,7 +9,6 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -83,7 +81,7 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenSolicitoLosPaseadores() {
-        return controladorPaseador.obtenerPaseadoresCercanosA500mts(latitud, longitud, request);
+        return controladorPaseador.obtenerPaseadoresCercanos(latitud, longitud, distancia, request);
     }
 
     private void thenDeboObtenerLosPaseadoresCercanos(List<Paseador> paseadoresEsperados, ModelAndView mav) {

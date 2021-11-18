@@ -22,6 +22,14 @@
                         <i class="fas fa-map-marker-alt"></i>
                     </button>
                 </div>
+                <div class="form-group mb-3">
+                    <label>Distancia máxima:</label>
+                    <select name="distancia" class="form-select">
+                        <option selected value="500">500mts</option>
+                        <option value="300">300mts</option>
+                        <option value="100">100mts</option>
+                    </select>
+                </div>
             </div>
             <button type="submit" id="continuar" disabled="true" class="btn btn-primary">Continuar</button>
         </form>

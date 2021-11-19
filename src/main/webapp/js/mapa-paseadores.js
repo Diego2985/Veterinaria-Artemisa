@@ -1,4 +1,4 @@
-function mostrarPaseadores(latitud, longitud, paseadores) {
+function mostrarPaseadores(latitud, longitud, paseadores, perros) {
     window.addEventListener("load", () => {
         function datosMapa(map, casa, ui){
             var group = new H.map.Group();
@@ -19,6 +19,14 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
                 return paseador;
             }
 
+            const mostrarPerros = lista => {
+                let options;
+                for (let mascota of lista){
+                    options+=`<option value="${mascota.id}">${mascota.nombre}</option>`
+                }
+                return options;
+            }
+
             const htmlPaseador = (inicio, marker, paseador) => {
                 const distancia = inicio.getGeometry().distance(marker.getGeometry());
                 const validarAproxACantMax=paseador.cantidadActual>=paseador.cantidadMaxima-3;
@@ -35,6 +43,12 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
                             <input type='hidden' value='${paseador.id}' name='idPaseador' />
                             <input type='hidden' value='${latitud}' name='latitud' />
                             <input type='hidden' value='${longitud}' name='longitud' />
+                            <div class="form-group">
+                                <select name="perro" class="form-select form-select-sm my-2 w-75" style="width: 100%">
+                                    <option selected disabled>Elija su mascota</option>
+                                    ${mostrarPerros(perros)}
+                                </select>
+                            </div>
                             ${
                     !validarLlegadaACantMax ?
                         '<button type="submit" class="btn btn-success">Contratar</button>' :

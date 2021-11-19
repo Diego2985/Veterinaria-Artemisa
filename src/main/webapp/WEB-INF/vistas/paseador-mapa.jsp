@@ -46,6 +46,7 @@
 <script src="js/mapa-paseadores.js"></script>
 <script>
     const listaDePaseadores=[];
+    const listaDePerros=[];
     <c:forEach items="${paseadores}" var="paseador">
     listaDePaseadores.push({
         id: "${paseador.id}",
@@ -57,7 +58,13 @@
     })
     </c:forEach>
 
-    mostrarPaseadores("${ubicacion.coordenadas.latitud}", "${ubicacion.coordenadas.longitud}", listaDePaseadores)
+    <c:forEach items="${perros}" var="perro">
+        listaDePerros.push({
+            id: "${perro.id}",
+            nombre:"${perro.nombre}"
+        })
+    </c:forEach>
+    mostrarPaseadores("${ubicacion.coordenadas.latitud}", "${ubicacion.coordenadas.longitud}", listaDePaseadores, listaDePerros)
 </script>
 <script src="js/capturar-ubicacion.js"></script>
 </body>

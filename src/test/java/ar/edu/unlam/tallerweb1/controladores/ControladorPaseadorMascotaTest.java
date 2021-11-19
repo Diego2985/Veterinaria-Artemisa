@@ -124,5 +124,8 @@ public class ControladorPaseadorMascotaTest {
         assertThat(obtenidos.get("proceso")).isNotNull();
         assertThat(obtenidos.get("activos")).isNotNull();
         assertThat(obtenidos.get("finalizados")).isNotNull();
+        assertThat(obtenidos.get("proceso")).isInstanceOf(List.class);
+        assertThat(obtenidos.get("activos")).isInstanceOf(List.class);
+        assertThat(obtenidos.get("finalizados")).isInstanceOf(List.class);
     }
 }

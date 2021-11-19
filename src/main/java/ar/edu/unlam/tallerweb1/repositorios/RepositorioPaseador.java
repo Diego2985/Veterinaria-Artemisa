@@ -19,4 +19,6 @@ public interface RepositorioPaseador {
     RegistroPaseo buscarUnRegistroDePaseo(Long idRegistro);
 
     RegistroPaseo buscarPaseoEnProcesoOActivoDeUnUsuario(Long userId);
+
+    List<RegistroPaseo> obtenerTodosLosPaseosDeUnUsuario(Long userId);
 }

@@ -59,6 +59,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
         return (RegistroPaseo) getCurrentSession().createCriteria(RegistroPaseo.class).add(Restrictions.and(Restrictions.eq("usuario.id", userId), Restrictions.or(Restrictions.eq("estado", 0), Restrictions.eq("estado", 1)))).uniqueResult();
     }
 
+    @Override
+    public List<RegistroPaseo> obtenerTodosLosPaseosDeUnUsuario(Long userId) {
+        return getCurrentSession().createCriteria(RegistroPaseo.class).add(Restrictions.eq("usuario.id", userId)).list();
+    }
+
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

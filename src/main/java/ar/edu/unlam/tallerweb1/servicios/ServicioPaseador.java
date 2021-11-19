@@ -45,4 +45,6 @@ public interface ServicioPaseador {
     String obtenerImagenDeRutaDePaseadorAUsuario(Coordenadas usuario, Coordenadas paseador) throws UnsupportedEncodingException;
 
     String obtenerImagenDePosicionDelPaseador(Long id) throws UnsupportedEncodingException;
+
+    Map<String, List<RegistroPaseo>> obtenerTodosLosRegistrosDePaseoDelUsuario(Long userId);
 }

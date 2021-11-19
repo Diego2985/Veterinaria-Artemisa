@@ -159,6 +159,11 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         return getImageFromAPI(uri);
     }
 
+    @Override
+    public Map<String, List<RegistroPaseo>> obtenerTodosLosRegistrosDePaseoDelUsuario(Long userId) {
+        return null;
+    }
+
     private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
         byte[] imageGet=restTemplate.getForObject(uriImagen, byte[].class);

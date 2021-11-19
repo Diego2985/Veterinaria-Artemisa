@@ -84,7 +84,10 @@ public class ControladorPaseador {
 
     @RequestMapping("/paseador")
     public ModelAndView listaDePaseos(HttpServletRequest request){
-        return new ModelAndView("paseos-confirmados");
+        ModelMap model = new ModelMap();
+        Map<String, List<RegistroPaseo>> paseos = servicioPaseador.obtenerTodosLosRegistrosDePaseoDelUsuario((Long) request.getSession().getAttribute("userId"));
+        model.put("paseos", paseos);
+        return new ModelAndView("paseos-confirmados", model);
     }
 
     @RequestMapping("/paseador/en-proceso")

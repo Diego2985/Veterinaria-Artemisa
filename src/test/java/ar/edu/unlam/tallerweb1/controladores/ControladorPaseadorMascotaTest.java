@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.Paseadores;
 import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
+import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioMascotas;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.junit.Before;
@@ -12,7 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
@@ -93,7 +96,33 @@ public class ControladorPaseadorMascotaTest {
     }
 
     @Test
-    public void recibirTodosLosPaseosActivosDelUsuario() {
+    public void recibirTodosLosPaseosDeUnUsuario() {
+        givenTodosLosPaseosDelUsuario();
+        mav=whenSolicitoLosPaseos();
+        thenMeLosTieneQueEntregarSeparadosPorEstado(mav);
+    }
 
+    private void givenTodosLosPaseosDelUsuario() {
+        Map<String, List<RegistroPaseo>> todosLosPaseos=new HashMap<>();
+        List<RegistroPaseo> enProceso=new ArrayList<>();
+        List<RegistroPaseo> activos=new ArrayList<>();
+        List<RegistroPaseo> finalizados=new ArrayList<>();
+
+        todosLosPaseos.put("proceso", enProceso);
+        todosLosPaseos.put("activos", activos);
+        todosLosPaseos.put("finalizados", finalizados);
+
+        when(servicioPaseador.obtenerTodosLosRegistrosDePaseoDelUsuario(1L)).thenReturn(todosLosPaseos);
+    }
+
+    private ModelAndView whenSolicitoLosPaseos() {
+        return controladorPaseador.listaDePaseos(request);
+    }
+
+    private void thenMeLosTieneQueEntregarSeparadosPorEstado(ModelAndView mav) {
+        Map<String, List<RegistroPaseo>> obtenidos = (Map<String, List<RegistroPaseo>>) mav.getModel().get("paseos");
+        assertThat(obtenidos.get("proceso")).isNotNull();
+        assertThat(obtenidos.get("activos")).isNotNull();
+        assertThat(obtenidos.get("finalizados")).isNotNull();
     }
 }

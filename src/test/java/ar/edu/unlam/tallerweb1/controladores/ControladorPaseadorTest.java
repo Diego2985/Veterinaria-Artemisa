@@ -3,9 +3,11 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.Paseadores;
 import ar.edu.unlam.tallerweb1.excepciones.DatosCambiadosException;
 import ar.edu.unlam.tallerweb1.excepciones.PaseadorConCantMaxDeMascotasException;
+import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.servicios.ServicioMascotas;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,14 +27,20 @@ public class ControladorPaseadorTest {
     private Integer distancia = 500;
     private ModelAndView mav;
     private ServicioPaseador servicioPaseador = mock(ServicioPaseador.class);
-    private ControladorPaseador controladorPaseador = new ControladorPaseador(servicioPaseador);
+    private ServicioMascotas servicioMascotas = mock(ServicioMascotas.class);
+    private ControladorPaseador controladorPaseador = new ControladorPaseador(servicioPaseador, servicioMascotas);
     private HttpServletRequest request;
     private Paseador paseador = new Paseador();
+    private Mascota mascota = new Mascota();
 
     @Before
     public void init() {
         mockRequest();
         crearPaseador();
+
+        mascota.setId(1L);
+        mascota.setNombre("Firulais");
+        mascota.setTipo("Perro");
     }
 
     private void mockRequest() {
@@ -108,7 +116,7 @@ public class ControladorPaseadorTest {
     }
 
     private ModelAndView whenContratoAlPaseador(Long id) {
-        return controladorPaseador.contratarAlPaseador(id, latitud, longitud, request);
+        return controladorPaseador.contratarAlPaseador(id, latitud, longitud, mascota.getId(), request);
     }
 
     private void thenNoPodriaContratarlo(ModelAndView mav) {

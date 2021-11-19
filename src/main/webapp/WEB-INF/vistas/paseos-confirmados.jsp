@@ -9,12 +9,14 @@
     <div class="container mt-3">
         <div class="d-flex justify-content-between my-2 align-items-center">
             <h2>Paseos</h2>
-            <a href="/paseador/nuevo-paseo" class="btn btn-success">
+            <a href="paseador/nuevo-paseo" class="btn btn-success">
                 Nuevo Paseo
             </a>
         </div>
         <div>
             <h3>A confirmar</h3>
+            <c:choose>
+            <c:when test="${paseos.get('proceso').size() > 0}">
             <table class="table">
                 <thead>
                 <tr>
@@ -25,73 +27,100 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Firulais</td>
-                    <td>Marcelo</td>
-                    <td>
-                        <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="mock-routing">
-                            <img src="<c:url value="/images/mock-routing.jpg"/>" width="100" alt="ruta">
-                        </a>
-                    </td>
-                    <td>
-                        <button class="btn btn-success" type="button">Comenzar Paseo</button>
-                        <button class="btn btn-danger" type="button">Cancelar</button>
-                    </td>
-                </tr>
+                    <c:forEach items="${paseos.get('proceso')}" var="paseo">
+                        <tr>
+                            <td>${paseo.mascota.nombre}</td>
+                            <td>${paseo.paseador.nombre}</td>
+                            <td>
+                                <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="mock-routing">
+                                    <img src="<c:url value="/images/mock-routing.jpg"/>" width="100" alt="ruta">
+                                </a>
+                            </td>
+                            <td>
+                                <button class="btn btn-success" type="button">Comenzar Paseo</button>
+                                <button class="btn btn-danger" type="button">Cancelar</button>
+                            </td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
+            </c:when>
+            <c:otherwise>
+                <h4 class="text-center">No tiene paseos en proceso</h4>
+            </c:otherwise>
+            </c:choose>
         </div>
+        <hr/>
         <div>
             <h3>Activos</h3>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Mascota</th>
-                    <th>Paseador</th>
-                    <th>Tiempo restante</th>
-                    <th>Posición del paseador</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Firulais</td>
-                    <td>Marcelo</td>
-                    <td>23 minutos</td>
-                    <td>
-                        <a href="#" data-toggle="modal" data-target="#modalImage" data-title="¿Dónde está mi mascota?" data-image="mock-routing">
-                            <img src="<c:url value="/images/mock-routing.jpg"/>" width="100" alt="ruta">
-                        </a>
-                    </td>
-                    <td>
-                        <button class="btn btn-success" type="button">Finalizar Paseo</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <c:choose>
+                <c:when test="${paseos.get('activos').size() > 0}">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Mascota</th>
+                            <th>Paseador</th>
+                            <th>Tiempo restante</th>
+                            <th>Posición del paseador</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${paseos.get('activos')}" var="paseo">
+                            <tr>
+                                <td>${paseo.mascota.nombre}</td>
+                                <td>${paseo.paseador.nombre}</td>
+                                <td>23 minutos</td>
+                                <td>
+                                    <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="mock-routing">
+                                        <img src="<c:url value="/images/mock-routing.jpg"/>" width="100" alt="ruta">
+                                    </a>
+                                </td>
+                                <td>
+                                    <button class="btn btn-success" type="button">Finalizar Paseo</button>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </c:when>
+                <c:otherwise>
+                    <h4 class="text-center">No tiene paseos activos</h4>
+                </c:otherwise>
+            </c:choose>
         </div>
+        <hr/>
         <div>
             <h3>Finalizados</h3>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Mascota</th>
-                    <th>Paseador</th>
-                    <th>Hora de inicio</th>
-                    <th>Hora de fin</th>
-                    <th>Estado</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Firulais</td>
-                    <td>Marcelo</td>
-                    <td>11-02-2021 12:00</td>
-                    <td>11-02-2021 13:00</td>
-                    <td>Pago</td>
-                </tr>
-                </tbody>
-            </table>
+            <c:choose>
+                <c:when test="${paseos.get('finalizados').size() > 0}">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Mascota</th>
+                            <th>Paseador</th>
+                            <th>Hora de inicio</th>
+                            <th>Hora de fin</th>
+                            <th>Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${paseos.get('finalizados')}" var="paseo">
+                            <tr>
+                                <td>${paseo.mascota.nombre}</td>
+                                <td>${paseo.paseador.nombre}</td>
+                                <td>${paseo.horaInicio}</td>
+                                <td>${paseo.horaFinal}</td>
+                                <td>Pago</td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </c:when>
+                <c:otherwise>
+                    <h4 class="text-center">Todavía no posee paseos finalizados</h4>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
     <div class="modal fade" id="modalImage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

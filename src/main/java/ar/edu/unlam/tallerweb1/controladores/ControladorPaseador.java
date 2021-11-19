@@ -4,8 +4,10 @@ import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.*;
+import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioMascotas;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,10 +27,12 @@ import java.util.Map;
 @Controller
 public class ControladorPaseador {
     private ServicioPaseador servicioPaseador;
+    private ServicioMascotas servicioMascotas;
 
     @Autowired
-    public ControladorPaseador(ServicioPaseador servicioPaseador) {
+    public ControladorPaseador(ServicioPaseador servicioPaseador, ServicioMascotas servicioMascotas) {
         this.servicioPaseador = servicioPaseador;
+        this.servicioMascotas = servicioMascotas;
     }
 
     @RequestMapping("/ver-paseadores")
@@ -42,15 +46,17 @@ public class ControladorPaseador {
             ModelMap model = new ModelMap();
             List<Paseador> paseadores = servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
             Ubicacion ubicacion = servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud);
+            List<Mascota> perros = servicioMascotas.obtenerPerrosPorIdUsuario((Long) request.getSession().getAttribute("userId"));
             model.put("paseadores", paseadores);
             model.put("ubicacion", ubicacion);
+            model.put("perros", perros);
             return new ModelAndView("paseador-mapa", model);
         } catch (Exception e) {
             return new ModelAndView("error");
         }
     }
 
-    @RequestMapping("/paseador")
+    @RequestMapping("/paseador/nuevo-paseo")
     public ModelAndView verPaginaDePaseador(HttpServletRequest request) {
         Long userId = null;
         try {
@@ -74,6 +80,11 @@ public class ControladorPaseador {
             request.getSession().setAttribute("idRegistroPaseo", registroPaseo.getId());
             request.getSession().setAttribute("estadoPaseo", registroPaseo.getEstado());
         }
+    }
+
+    @RequestMapping("/paseador")
+    public ModelAndView listaDePaseos(HttpServletRequest request){
+        return new ModelAndView("paseos-confirmados");
     }
 
     @RequestMapping("/paseador/en-proceso")
@@ -108,11 +119,12 @@ public class ControladorPaseador {
     }
 
     @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
-    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud, HttpServletRequest request) {
+    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam Long perro, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         try {
+            Mascota mascota = servicioMascotas.obtenerMascotaPorId(perro);
             Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
-            RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"));
+            RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota);
             request.getSession().setAttribute("idRegistroPaseo", registro.getId());
             request.getSession().setAttribute("estadoPaseo", registro.getEstado());
             request.getSession().setAttribute("latitud", latitud);

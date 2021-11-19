@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
 import ar.edu.unlam.tallerweb1.excepciones.*;
+import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
@@ -54,11 +55,12 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario) {
+    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario, Mascota mascota) {
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
         RegistroPaseo registro=new RegistroPaseo();
         registro.setPaseador(paseador);
         registro.setUsuario(usuario);
+        registro.setMascota(mascota);
         repositorioPaseador.crearRegistroDePaseo(registro);
         return registro;
     }

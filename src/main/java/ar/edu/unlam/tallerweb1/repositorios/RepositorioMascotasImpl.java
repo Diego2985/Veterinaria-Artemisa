@@ -31,6 +31,14 @@ public class RepositorioMascotasImpl implements RepositorioMascotas {
         return (Mascota) getCurrentSession().createCriteria(Mascota.class).add(Restrictions.eq("id", idMascota)).uniqueResult();
     }
 
+    @Override
+    public List<Mascota> obtenerPerrosQueNoEstenEnPaseo(Long userId) {
+        return getCurrentSession().createCriteria(Mascota.class).add(Restrictions.and(Restrictions.eq("userId", userId),
+                Restrictions.eq("tipo", "Perro"),
+                Restrictions.eq("paseoActivo", false)
+                )).list();
+    }
+
     private Session getCurrentSession(){
         return sessionFactory.getCurrentSession();
     }

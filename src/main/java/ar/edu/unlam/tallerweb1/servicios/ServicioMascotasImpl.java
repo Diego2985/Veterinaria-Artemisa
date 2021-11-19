@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.excepciones.TodosLosPerrosConPaseoActivoException;
 import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMascotas;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,13 @@ public class ServicioMascotasImpl implements ServicioMascotas{
     @Override
     public Mascota obtenerMascotaPorId(Long idMascota) {
         return repositorioMascotas.obtenerMascotaPorId(idMascota);
+    }
+
+    @Override
+    public List<Mascota> obtenerPerrosQueNoEstenEnPaseo(Long userId) throws TodosLosPerrosConPaseoActivoException {
+        List<Mascota> perrosSinPaseoActivo = repositorioMascotas.obtenerPerrosQueNoEstenEnPaseo(userId);
+        if(perrosSinPaseoActivo.size() == 0)
+            throw new TodosLosPerrosConPaseoActivoException();
+        return perrosSinPaseoActivo;
     }
 }

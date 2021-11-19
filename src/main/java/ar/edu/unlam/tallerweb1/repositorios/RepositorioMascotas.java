@@ -8,4 +8,6 @@ public interface RepositorioMascotas {
     List<Mascota> obtenerPerrosPorIdUsuario(Long idUsuario);
 
     Mascota obtenerMascotaPorId(Long idMascota);
+
+    List<Mascota> obtenerPerrosQueNoEstenEnPaseo(Long userId);
 }

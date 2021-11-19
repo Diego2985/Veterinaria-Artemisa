@@ -35,18 +35,19 @@ public class ControladorPaseador {
         this.servicioMascotas = servicioMascotas;
     }
 
-    @RequestMapping("/ver-paseadores")
+    @RequestMapping("/paseador/ver-paseadores")
     public ModelAndView redirigirAlIntentarAccederAlMapa(){
         return new ModelAndView("redirect:/paseador");
     }
 
-    @RequestMapping(path = "/ver-paseadores", method = RequestMethod.POST)
+    @RequestMapping(path = "/paseador/ver-paseadores", method = RequestMethod.POST)
     public ModelAndView obtenerPaseadoresCercanos(@RequestParam Double latitud, @RequestParam Double longitud, @RequestParam Integer distancia, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
         try {
-            ModelMap model = new ModelMap();
+            Long userId = (Long) request.getSession().getAttribute("userId");
             List<Paseador> paseadores = servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
             Ubicacion ubicacion = servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud);
-            List<Mascota> perros = servicioMascotas.obtenerPerrosPorIdUsuario((Long) request.getSession().getAttribute("userId"));
+            List<Mascota> perros = servicioMascotas.obtenerPerrosQueNoEstenEnPaseo(userId);
             model.put("paseadores", paseadores);
             model.put("ubicacion", ubicacion);
             model.put("perros", perros);
@@ -59,18 +60,14 @@ public class ControladorPaseador {
     @RequestMapping("/paseador/nuevo-paseo")
     public ModelAndView verPaginaDePaseador(HttpServletRequest request) {
         Long userId = null;
+        ModelMap model = new ModelMap();
         try {
             userId = (Long) request.getSession().getAttribute("userId");
-            Integer estadoPaseo = (Integer) request.getSession().getAttribute("estadoPaseo");
-            servicioPaseador.validarEstadoEnSesion(estadoPaseo);
-            servicioPaseador.verificarSiUnUsuarioTieneUnPaseoActivo(userId);
+            servicioMascotas.obtenerPerrosQueNoEstenEnPaseo(userId);
             return new ModelAndView("paseador-inicio");
-        } catch (PaseoNoIniciadoException e) {
-            setearVariablesDeSesionSiNoExisten(request, userId);
-            return new ModelAndView("redirect:/paseador/en-proceso");
-        } catch (PaseoIniciadoException e) {
-            setearVariablesDeSesionSiNoExisten(request, userId);
-            return new ModelAndView("redirect:/paseador/seguimiento");
+        } catch (TodosLosPerrosConPaseoActivoException e) {
+            model.put("mensaje", e.getMessage());
+            return new ModelAndView("paseador-error", model);
         }
     }
 

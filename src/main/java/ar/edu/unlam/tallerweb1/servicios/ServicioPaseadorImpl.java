@@ -161,7 +161,19 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
 
     @Override
     public Map<String, List<RegistroPaseo>> obtenerTodosLosRegistrosDePaseoDelUsuario(Long userId) {
-        return null;
+        List<RegistroPaseo> paseos = repositorioPaseador.obtenerTodosLosPaseosDeUnUsuario(userId);
+        Map<String, List<RegistroPaseo>> paseosSeparados = new HashMap<>();
+        paseosSeparados.put("proceso", new ArrayList<>());
+        paseosSeparados.put("activos", new ArrayList<>());
+        paseosSeparados.put("finalizados", new ArrayList<>());
+        for (RegistroPaseo paseo: paseos) {
+            switch (paseo.getEstado()){
+                case 0: paseosSeparados.get("proceso").add(paseo);break;
+                case 1: paseosSeparados.get("activos").add(paseo);break;
+                case 2: paseosSeparados.get("finalizados").add(paseo);break;
+            }
+        }
+        return paseosSeparados;
     }
 
     private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {

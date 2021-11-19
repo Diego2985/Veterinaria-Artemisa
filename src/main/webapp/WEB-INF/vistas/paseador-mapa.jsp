@@ -43,7 +43,7 @@
         <div class="col-6"></div>
     </div>
 </div>
-<script src="js/mapa-paseadores.js"></script>
+<script src="<c:url value="/js/mapa-paseadores.js"/>"></script>
 <script>
     const listaDePaseadores=[];
     const listaDePerros=[];
@@ -66,6 +66,6 @@
     </c:forEach>
     mostrarPaseadores("${ubicacion.coordenadas.latitud}", "${ubicacion.coordenadas.longitud}", listaDePaseadores, listaDePerros)
 </script>
-<script src="js/capturar-ubicacion.js"></script>
+<script src="<c:url value="/js/capturar-ubicacion.js"/>"></script>
 </body>
 </html>

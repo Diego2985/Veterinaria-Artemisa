@@ -35,6 +35,6 @@
         <button type="submit" id="continuar" disabled="true" class="btn btn-primary">Continuar</button>
     </form>
 </div>
-<script src="js/capturar-ubicacion.js"></script>
+<script src="<c:url value="/js/capturar-ubicacion.js"/>"></script>
 </body>
 </html>

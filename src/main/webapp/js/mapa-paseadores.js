@@ -14,7 +14,7 @@ function mostrarPaseadores(latitud, longitud, paseadores, perros) {
             }, false);
 
             const customMarker = (latitud, longitud) => {
-                const markerPaseador = new H.map.Icon('images/paseador.png', {size: {w: 30, h: 30}});
+                const markerPaseador = new H.map.Icon('../images/paseador.png', {size: {w: 30, h: 30}});
                 const paseador = new H.map.Marker({lat: latitud, lng: longitud}, {icon: markerPaseador});
                 return paseador;
             }
@@ -39,7 +39,7 @@ function mostrarPaseadores(latitud, longitud, paseadores, perros) {
                      </div>
                     <div>Se encuentra a <strong>${Math.round(distancia)} mts.</strong></div>
                     <div>
-                        <form action='contratar-paseador' method='post'>
+                        <form action='../contratar-paseador' method='post'>
                             <input type='hidden' value='${paseador.id}' name='idPaseador' />
                             <input type='hidden' value='${latitud}' name='latitud' />
                             <input type='hidden' value='${longitud}' name='longitud' />

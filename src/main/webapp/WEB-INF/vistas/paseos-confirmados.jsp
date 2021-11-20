@@ -33,7 +33,7 @@
                             <td>${paseo.paseador.nombre}</td>
                             <td>
                                 <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="mock-routing">
-                                    <img src="<c:url value="/images/mock-routing.jpg"/>" width="100" alt="ruta">
+                                    <img src="<c:url value="data:image/jpeg;base64,${datosTiempo.get(paseo.id).imagenRuta}"/>" width="100" alt="ruta">
                                 </a>
                             </td>
                             <td>

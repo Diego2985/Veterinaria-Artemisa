@@ -48,6 +48,8 @@ public class ControladorPaseador {
             List<Paseador> paseadores = servicioPaseador.obtenerListaDePaseadoresCercanos(latitud, longitud, distancia);
             Ubicacion ubicacion = servicioPaseador.obtenerDireccionDeUbicacionActual(latitud, longitud);
             List<Mascota> perros = servicioMascotas.obtenerPerrosQueNoEstenEnPaseo(userId);
+            request.getSession().setAttribute("latitudUsuario", latitud);
+            request.getSession().setAttribute("longitudUsuario", longitud);
             model.put("paseadores", paseadores);
             model.put("ubicacion", ubicacion);
             model.put("perros", perros);
@@ -82,9 +84,18 @@ public class ControladorPaseador {
     @RequestMapping("/paseador")
     public ModelAndView listaDePaseos(HttpServletRequest request){
         ModelMap model = new ModelMap();
-        Map<String, List<RegistroPaseo>> paseos = servicioPaseador.obtenerTodosLosRegistrosDePaseoDelUsuario((Long) request.getSession().getAttribute("userId"));
-        model.put("paseos", paseos);
-        return new ModelAndView("paseos-confirmados", model);
+        try {
+            Map<String, List<RegistroPaseo>> paseos = servicioPaseador.obtenerTodosLosRegistrosDePaseoDelUsuario((Long) request.getSession().getAttribute("userId"));
+            Map<Long, DatosTiempo> rutasYTiempos = servicioPaseador.obtenerDatosDeTiempoYPosicion(paseos.get("proceso"),
+                    (Double) request.getSession().getAttribute("latitudUsuario"),
+                    (Double) request.getSession().getAttribute("longitudUsuario")
+            );
+            model.put("paseos", paseos);
+            model.put("rutasYTiempos", rutasYTiempos);
+            return new ModelAndView("paseos-confirmados", model);
+        } catch (IOException e) {
+            return new ModelAndView("error");
+        }
     }
 
     @RequestMapping("/paseador/en-proceso")
@@ -96,11 +107,9 @@ public class ControladorPaseador {
             }
             Long idRegistro = (Long) request.getSession().getAttribute("idRegistroPaseo");
             RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistro);
-            Double latitud = (Double) request.getSession().getAttribute("latitud");
-            Double longitud = (Double) request.getSession().getAttribute("longitud");
+            Double latitud = (Double) request.getSession().getAttribute("latitudUsuario");
+            Double longitud = (Double) request.getSession().getAttribute("longitudUsuario");
             Map<String, Coordenadas> coordenadas = servicioPaseador.obtenerCoordenadas(latitud, longitud, registro.getPaseador());
-            request.getSession().removeAttribute("latitud");
-            request.getSession().removeAttribute("longitud");
             DatosTiempo distanciaYTiempo = servicioPaseador.obtenerDistanciaYTiempo(coordenadas.get("usuario"), coordenadas.get("paseador"));
             String obtenerImagen = servicioPaseador.obtenerImagenDeRutaDePaseadorAUsuario(coordenadas.get("usuario"), coordenadas.get("paseador"));
             model.put("idPaseador", registro.getPaseador().getId());
@@ -127,8 +136,6 @@ public class ControladorPaseador {
             RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota);
             request.getSession().setAttribute("idRegistroPaseo", registro.getId());
             request.getSession().setAttribute("estadoPaseo", registro.getEstado());
-            request.getSession().setAttribute("latitud", latitud);
-            request.getSession().setAttribute("longitud", longitud);
             return new ModelAndView("redirect:paseador/en-proceso");
         } catch (PaseadorConCantMaxDeMascotasException e) {
             model.put("mensaje", "El paseador indicado no se encuentra disponible");

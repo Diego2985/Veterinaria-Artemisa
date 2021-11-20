@@ -19,13 +19,13 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Evento</h5>
+                        <h5 class="modal-title" id="modalTitulo">Evento</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label>Descripción:</label>
-                            <label id="modalTitulo"></label>
+                            <label id="modalDescription"></label>
                         </div>
                         <div class="mb-3">
                             <label>Fecha de atención:</label>
@@ -46,14 +46,20 @@
             const listaDeTurnos = [];
             <c:forEach items="${vacunas}" var="vacuna">
             listaDeTurnos.push({
-                title: "${vacuna.titulo}",
+                title: "Vacuna",
+                extendedProps: {
+                    description: '${vacuna.titulo}'
+                },
                 start: "${vacuna.fecha}",
                 color: "#ff9f89"
             })
             </c:forEach>
             <c:forEach items="${turnos}" var="turno">
             listaDeTurnos.push({
-                title: "${turno.serviciosSeleccionados}",
+                title: "Turno para Peluquería",
+                extendedProps: {
+                    description: '${turno.serviciosSeleccionados}'
+                },
                 start: "${turno.fecha.toString()}",
                 color: "#8fdf82"
             })

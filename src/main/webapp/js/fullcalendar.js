@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         events: traerEventos(),
         eventClick: function(info){
             $('#modalTitulo').html(info.event.title);
+            $('#modalDescription').html(info.event.extendedProps.description);
             $('#modalFecha').html(info.event.start.toLocaleString());
             $('#exampleModal').modal();
         }

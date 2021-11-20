@@ -14,6 +14,11 @@ public class Notificacion {
     private String titulo;
     private String descripcion;
     private String tipo;
+    private String fecha;
+
+    public Notificacion(String titulo) {
+        this.titulo = titulo;
+    }
 
     public Long getId() {
         return id;
@@ -48,6 +53,15 @@ public class Notificacion {
 
     public Notificacion setTipo(String tipo) {
         this.tipo = tipo;
+        return this;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public Notificacion setFecha(String fecha) {
+        this.fecha = fecha;
         return this;
     }
 }

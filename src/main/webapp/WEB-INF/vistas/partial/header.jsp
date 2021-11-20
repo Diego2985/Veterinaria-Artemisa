@@ -87,21 +87,14 @@
                         aria-expanded="false"
                 >
                     <i class="fas fa-bell"></i>
-                    <span class="badge rounded-pill badge-notification bg-danger"></span>
+                    <span class="badge rounded-pill badge-notification bg-danger">${requestScope.notificaciones.size()}</span>
                 </a>
-                <ul
-                        class="dropdown-menu dropdown-menu-end"
-                        aria-labelledby="navbarDropdownMenuLink"
-                >
-                    <li>
-                        <a class="dropdown-item" href="#">Noti 1</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Noti 2</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Noti 3</a>
-                    </li>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    <c:forEach var="notificacion" items="${requestScope.notificaciones}">
+                        <li>
+                            <a class="dropdown-item" href="#">${notificacion.titulo}</a>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
 

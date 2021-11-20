@@ -11,6 +11,7 @@ public class DatosTiempo {
     private Coordenadas coordenadasUsuario;
     private Coordenadas coordenadasPaseador;
     private Integer unidadSegundosAMinutos;
+    private String imagenRuta;
 
     public DatosTiempo() {
         this.unidadSegundosAMinutos=60;
@@ -46,6 +47,14 @@ public class DatosTiempo {
 
     public void setDistancia(Integer distancia) {
         this.distancia = distancia;
+    }
+
+    public String getImagenRuta() {
+        return imagenRuta;
+    }
+
+    public void setImagenRuta(String imagenRuta) {
+        this.imagenRuta = imagenRuta;
     }
 
     @JsonProperty("response")

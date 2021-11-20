@@ -176,6 +176,22 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         return paseosSeparados;
     }
 
+    @Override
+    public Map<Long, DatosTiempo> obtenerDatosDeTiempoYPosicion(List<RegistroPaseo> paseos, Double latitudUsuario, Double longitudUsuario) throws IOException {
+        Map<Long, DatosTiempo> listaDatosTiempo = new HashMap<>();
+        if(latitudUsuario != null && longitudUsuario != null){
+            for (RegistroPaseo paseo : paseos) {
+                Coordenadas paseador = new Coordenadas(paseo.getPaseador().getLatitud(), paseo.getPaseador().getLongitud());
+                Coordenadas usuario = new Coordenadas(latitudUsuario, longitudUsuario);
+                String imagen = obtenerImagenDeRutaDePaseadorAUsuario(usuario, paseador);
+                DatosTiempo datosTiempo = obtenerDistanciaYTiempo(usuario, paseador);
+                datosTiempo.setImagenRuta(imagen);
+                listaDatosTiempo.put(paseo.getId(), datosTiempo);
+            }
+        }
+        return listaDatosTiempo;
+    }
+
     private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
         byte[] imageGet=restTemplate.getForObject(uriImagen, byte[].class);

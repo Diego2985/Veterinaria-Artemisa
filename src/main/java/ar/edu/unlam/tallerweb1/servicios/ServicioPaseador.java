@@ -47,4 +47,6 @@ public interface ServicioPaseador {
     String obtenerImagenDePosicionDelPaseador(Long id) throws UnsupportedEncodingException;
 
     Map<String, List<RegistroPaseo>> obtenerTodosLosRegistrosDePaseoDelUsuario(Long userId);
+
+    Map<Long, DatosTiempo> obtenerDatosDeTiempoYPosicion(List<RegistroPaseo> paseos, Double latitudUsuario, Double longitudUsuario) throws IOException;
 }

@@ -10,8 +10,19 @@
         <title>Veterinaria</title>
     </head>
     <body>
-        <div class="row d-flex">
-            <a href="${pageContext.request.contextPath}/reservar-turno" class="btn btn-lg btn-primary mt-4">Reservar Turno</a>
+
+        <c:if test="${recompensa != null}">
+            <div class="alert alert-success px-5 mx-5 mt-5" role="alert">
+                <h4 class="alert-heading">¡Turno gratis!</h4>
+                <p>Por haber reservado más de 5 turnos te regalamos uno gratis.</p>
+                <hr>
+                <p class="mb-0">Tenés una semana para reclamar tur premio. ¡No lo olvides!</p>
+            </div>
+        </c:if>
+
+        <div class="d-flex position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
+            <a href="${pageContext.request.contextPath}/reservar-turno"
+               class="btn btn-primary rounded-circle"><i class="fas fa-plus" style="font-size: 1.5rem;"></i></a>
         </div>
 
         <c:if test="${empty turnos}">

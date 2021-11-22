@@ -1,9 +1,12 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Notificacion;
+import ar.edu.unlam.tallerweb1.modelo.Recompensa;
+import ar.edu.unlam.tallerweb1.modelo.TipoRecompensa;
 import ar.edu.unlam.tallerweb1.modelo.Turno;
 import ar.edu.unlam.tallerweb1.servicios.ServicioListadoTurno;
 import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacion;
+import ar.edu.unlam.tallerweb1.servicios.ServicioRecompensa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,11 +23,13 @@ public class ControladorListadoTurnos {
 
     private ServicioListadoTurno servicioListadoTurno;
     private ServicioNotificacion servicioNotificacion;
+    private ServicioRecompensa servicioRecompensa;
 
     @Autowired
-    public ControladorListadoTurnos(ServicioListadoTurno servicioListadoTurno, ServicioNotificacion servicioNotificacion) {
+    public ControladorListadoTurnos(ServicioListadoTurno servicioListadoTurno, ServicioNotificacion servicioNotificacion, ServicioRecompensa servicioRecompensa) {
         this.servicioListadoTurno = servicioListadoTurno;
         this.servicioNotificacion = servicioNotificacion;
+        this.servicioRecompensa = servicioRecompensa;
     }
 
     @RequestMapping(path="/listado-turnos", method= RequestMethod.GET)
@@ -34,6 +39,7 @@ public class ControladorListadoTurnos {
 
         model.put("turnos", getListadoDeTurnos(userId));
         model.put("notificaciones", getListadoDeNotificaciones(userId));
+        model.put("recompensa", getRecompensa(userId));
 
         return new ModelAndView("listado-turnos", model);
     }
@@ -47,6 +53,7 @@ public class ControladorListadoTurnos {
 
         model.put("turnos", getListadoDeTurnos(userId));
         model.put("notificaciones", getListadoDeNotificaciones(userId));
+        model.put("recompensa", getRecompensa(userId));
 
         return new ModelAndView("listado-turnos", model);
     }
@@ -57,5 +64,10 @@ public class ControladorListadoTurnos {
 
     public List<Turno> getListadoDeTurnos(Long userId) {
         return servicioListadoTurno.getListadoDeTurnos(userId);
+    }
+
+    private Recompensa getRecompensa(Long userId) {
+        return servicioRecompensa.obtenerRecompensas(userId, TipoRecompensa.TURNO_GRATIS)
+                .stream().findFirst().orElse(null);
     }
 }

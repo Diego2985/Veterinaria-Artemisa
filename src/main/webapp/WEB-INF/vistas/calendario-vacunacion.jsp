@@ -55,7 +55,7 @@
             </c:forEach>
             <c:forEach items="${turnos}" var="turno">
             listaDeTurnos.push({
-                title: "Turno para Peluquería",
+                title: "Turno",
                 extendedProps: {
                     description: '${turno.serviciosSeleccionados}'
                 },

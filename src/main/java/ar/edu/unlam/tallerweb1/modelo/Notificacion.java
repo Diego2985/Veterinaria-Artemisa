@@ -1,11 +1,13 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import ar.edu.unlam.tallerweb1.converter.TipoNotificacionConversor;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
 
 @Entity
+@Embeddable
+@DynamicUpdate
 public class Notificacion {
 
     @Id
@@ -13,11 +15,39 @@ public class Notificacion {
     private Long id;
     private String titulo;
     private String descripcion;
-    private String tipo;
+    @Convert(converter = TipoNotificacionConversor.class)
+    private TipoNotificacion tipo;
     private String fecha;
+    private String action;
+    private Long userId;
+    private Boolean leida;
 
-    public Notificacion(String titulo) {
+    public Boolean getLeida() {
+        return leida;
+    }
+
+    public Notificacion setLeida(Boolean leida) {
+        this.leida = leida;
+        return this;
+    }
+
+    public Notificacion(String titulo, String action) {
         this.titulo = titulo;
+        this.action = action;
+    }
+
+    public Notificacion() {
+
+    }
+
+    public Notificacion(Turno turno) {
+        titulo = "Tenes un turno pronto";
+        descripcion = turno.getServiciosSeleccionados();
+        tipo = TipoNotificacion.PROXIMO_TURNO;
+        fecha = turno.getFecha().toInstant().toString();
+        action = "listado-turnos";
+        userId = turno.getUserId();
+        leida = false;
     }
 
     public Long getId() {
@@ -47,11 +77,11 @@ public class Notificacion {
         return this;
     }
 
-    public String getTipo() {
+    public TipoNotificacion getTipo() {
         return tipo;
     }
 
-    public Notificacion setTipo(String tipo) {
+    public Notificacion setTipo(TipoNotificacion tipo) {
         this.tipo = tipo;
         return this;
     }
@@ -62,6 +92,24 @@ public class Notificacion {
 
     public Notificacion setFecha(String fecha) {
         this.fecha = fecha;
+        return this;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public Notificacion setAction(String action) {
+        this.action = action;
+        return this;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Notificacion setUserId(Long userId) {
+        this.userId = userId;
         return this;
     }
 }

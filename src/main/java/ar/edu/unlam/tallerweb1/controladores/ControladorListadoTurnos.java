@@ -9,10 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -38,13 +38,27 @@ public class ControladorListadoTurnos {
         return new ModelAndView("listado-turnos", model);
     }
 
+    @RequestMapping(path="/listado-turnos", method= RequestMethod.POST)
+    public ModelAndView setearNotificacionLeida(@RequestParam Long idNotificacion, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+        Long userId = (Long) request.getSession().getAttribute("userId");
+
+        List<Notificacion> notificaciones = getListadoDeNotificaciones(userId);
+        notificaciones.forEach(item -> {
+            if (item.getId().equals(idNotificacion)) {
+                item.setLeida(true);
+                servicioNotificacion.update(idNotificacion, userId);
+            }
+        });
+
+        model.put("turnos", getListadoDeTurnos(userId));
+        model.put("notificaciones", getListadoDeNotificaciones(userId));
+
+        return new ModelAndView("listado-turnos", model);
+    }
+
     private List<Notificacion>  getListadoDeNotificaciones(Long userId) {
-//        return servicioNotificacion.getNotificaciones(userId);
-        List<Notificacion> notificaciones = new ArrayList<>();
-        notificaciones.add(new Notificacion("Hola"));
-        notificaciones.add(new Notificacion("Chau"));
-        notificaciones.add(new Notificacion("Ver más"));
-        return notificaciones;
+        return servicioNotificacion.getNotificaciones(userId);
     }
 
     public List<Turno> getListadoDeTurnos(Long userId) {

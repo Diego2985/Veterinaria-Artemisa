@@ -87,12 +87,18 @@
                         aria-expanded="false"
                 >
                     <i class="fas fa-bell"></i>
-                    <span class="badge rounded-pill badge-notification bg-danger">${requestScope.notificaciones.size()}</span>
+                    <c:if test="${not empty requestScope.notificaciones}">
+                        <span class="badge rounded-pill badge-notification bg-danger">${requestScope.notificaciones.size()}</span>
+                    </c:if>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                     <c:forEach var="notificacion" items="${requestScope.notificaciones}">
                         <li>
-                            <a class="dropdown-item" href="#">${notificacion.titulo}</a>
+                            <form action='${notificacion.action}' method='post'>
+                                <input type='hidden' value='${notificacion.id}' name='idNotificacion' />
+                                <input type='submit' value='${notificacion.titulo}' />
+<%--                                <a class="dropdown-item" href="">${notificacion.titulo}</a>--%>
+                            </form>
                         </li>
                     </c:forEach>
                 </ul>
@@ -120,10 +126,7 @@
                         aria-labelledby="navbarDropdownMenuLink2"
                 >
                     <li>
-                        <a class="dropdown-item" href="#">Mi perfil</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Ajuestes</a>
+                        <a class="dropdown-item" href="#">Mis mascotas</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="#">Cerrar sesión</a>

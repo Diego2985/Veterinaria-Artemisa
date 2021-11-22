@@ -1,13 +1,10 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
 import ar.edu.unlam.tallerweb1.converter.TipoNotificacionConversor;
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 
 @Entity
 @Embeddable
-@DynamicUpdate
 public class Notificacion {
 
     @Id
@@ -22,23 +19,7 @@ public class Notificacion {
     private Long userId;
     private Boolean leida;
 
-    public Boolean getLeida() {
-        return leida;
-    }
-
-    public Notificacion setLeida(Boolean leida) {
-        this.leida = leida;
-        return this;
-    }
-
-    public Notificacion(String titulo, String action) {
-        this.titulo = titulo;
-        this.action = action;
-    }
-
-    public Notificacion() {
-
-    }
+    public Notificacion() {}
 
     public Notificacion(Turno turno) {
         titulo = "Tenes un turno pronto";
@@ -111,5 +92,14 @@ public class Notificacion {
     public Notificacion setUserId(Long userId) {
         this.userId = userId;
         return this;
+    }
+
+    public Notificacion setLeida(Boolean leida) {
+        this.leida = leida;
+        return this;
+    }
+
+    public Boolean getLeida() {
+        return leida;
     }
 }

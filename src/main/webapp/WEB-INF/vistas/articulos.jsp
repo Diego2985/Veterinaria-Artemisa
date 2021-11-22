@@ -35,7 +35,8 @@
                                     <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
                                         <div id="toast" class="toast hide" data-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
                                             <div class="toast-header">
-                                                <strong class="mr-auto">¡Nuevo articulo para tu mascota!</strong>
+                                                <img src="<c:url value="/images/dogo.jpeg"/>" class="rounded mr-2" alt="..." style="height: 40px">
+                                                <strong class="mr-4 ml-4">${articulo.descripcion}</strong>
                                                 <form action="setear-articulo-mostrado" method="POST">
                                                     <input type='hidden' value='${articulo.id}' name='idArticulo' />
                                                     <button type="submit" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -43,9 +44,8 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                            <div class="toast-body">
-                                                <img src="<c:url value="/images/dogo.jpeg"/>" class="rounded mr-2" alt="..." style="height: 40px">
-                                                    ${articulo.descripcion}
+                                            <div class="toast-body text-left">
+                                                ¡Nuevo articulo para tu mascota!
                                             </div>
                                         </div>
                                     </div>

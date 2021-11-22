@@ -13,10 +13,10 @@
 
         <c:if test="${recompensa != null}">
             <div class="alert alert-success px-5 mx-5 mt-5" role="alert">
-                <h4 class="alert-heading">¡Turno gratis!</h4>
-                <p>Por haber reservado más de 5 turnos te regalamos uno gratis.</p>
+                <h4 class="alert-heading">${recompensa.titulo}</h4>
+                <p>${recompensa.descripcion}</p>
                 <hr>
-                <p class="mb-0">Tenés una semana para reclamar tur premio. ¡No lo olvides!</p>
+                <p class="mb-0">${recompensa.caducidad}</p>
             </div>
         </c:if>
 

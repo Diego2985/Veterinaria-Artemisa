@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,8 +36,21 @@ public class ServicioRecompensaImpl implements ServicioRecompensa {
     }
 
     @Override
-    public void generarRecompensa() {
-
+    public void generarRecompensa(Long userId, TipoRecompensa tipoRecompensa, Long turnoId) {
+        Optional<Recompensa> recompensaYaExistente = obtenerRecompensas(userId, TipoRecompensa.TURNO_GRATIS)
+                .stream().findAny();
+        if (recompensaYaExistente.isEmpty() && turnoId > 5) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, 7);
+            Recompensa recompensa = new Recompensa()
+                    .setTitulo("¡Turno gratis!")
+                    .setDescripcion("Por haber reservado más de 5 turnos te regalamos uno gratis.")
+                    .setCaducidad("Tenés una semana para reclamar tur premio. ¡No lo olvides!")
+                    .setFecha(calendar.getTime().toInstant().toString())
+                    .setTipo(tipoRecompensa)
+                    .setUserId(userId);
+            repositorioRecompensa.guardarRecompensa(recompensa);
+        }
     }
 
     public Date getFechaFormateada(String fecha) {

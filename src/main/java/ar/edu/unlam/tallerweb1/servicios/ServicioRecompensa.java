@@ -8,5 +8,5 @@ import java.util.List;
 public interface ServicioRecompensa {
     List<Recompensa> obtenerRecompensas(Long userId, TipoRecompensa tipoRecompensa);
 
-    void generarRecompensa();
+    void generarRecompensa(Long userId, TipoRecompensa turnoGratis, Long turnoId);
 }

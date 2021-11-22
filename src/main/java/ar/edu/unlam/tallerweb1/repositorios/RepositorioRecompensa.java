@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface RepositorioRecompensa {
     List<Recompensa> obtenerRecompensas(Long userId, TipoRecompensa tipoRecompensa);
+
+    void guardarRecompensa(Recompensa recompensa);
 }

@@ -29,4 +29,9 @@ public class RepositorioRecompensaImpl implements RepositorioRecompensa {
                 .add(Restrictions.eq("tipo", tipoRecompensa))
                 .list();
     }
+
+    @Override
+    public void guardarRecompensa(Recompensa recompensa) {
+        sessionFactory.getCurrentSession().save(recompensa);
+    }
 }

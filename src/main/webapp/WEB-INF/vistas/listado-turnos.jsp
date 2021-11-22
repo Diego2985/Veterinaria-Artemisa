@@ -20,9 +20,10 @@
             </div>
         </c:if>
 
-        <div class="d-flex position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
-            <a href="${pageContext.request.contextPath}/reservar-turno"
-               class="btn btn-primary rounded-circle"><i class="fas fa-plus" style="font-size: 1.5rem;"></i></a>
+        <div class="d-flex position-fixed bottom-0 right-0 m-3" style="z-index: 5; right: 0; bottom: 0;">
+            <form action="reservar-turno" method="GET">
+                <button type="submit" class="btn btn-primary rounded-circle"><i class="fas fa-plus" style="font-size: 1.2rem;"></i></button>
+            </form>
         </div>
 
         <c:if test="${empty turnos}">

@@ -3,7 +3,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>Veterinaria</title>
+    <title>Artemisa</title>
     <!-- Font Awesome -->
     <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
@@ -19,6 +19,9 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.5.0/mdb.min.css"
             rel="stylesheet"
     />
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://image.flaticon.com/icons/png/512/489/489868.png" />
+
 </head>
 
 <body>

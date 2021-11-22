@@ -22,14 +22,14 @@
 
         <div class="d-flex position-fixed bottom-0 right-0 m-3" style="z-index: 5; right: 0; bottom: 0;">
             <form action="reservar-turno" method="GET">
-                <button type="submit" class="btn btn-primary rounded-circle"><i class="fas fa-plus" style="font-size: 1.2rem;"></i></button>
+                <button type="submit" class="btn btn-primary btn-lg btn-floating"><i class="fas fa-plus"></i></button>
             </form>
         </div>
 
         <c:if test="${empty turnos}">
             <div class="text-center mt-5 mb-5 p-5">
                 <h4><span>No tenés turnos</span></h4>
-                <p>Para reservar presiona en "Reservar Turno"</p>
+                <p>Para reservar presiona en "+"</p>
                 <br>
             </div>
         </c:if>

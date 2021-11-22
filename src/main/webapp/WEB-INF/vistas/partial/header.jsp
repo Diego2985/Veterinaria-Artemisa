@@ -96,7 +96,7 @@
                         <li>
                             <form action='${notificacion.action}' method='post'>
                                 <input type='hidden' value='${notificacion.id}' name='idNotificacion' />
-                                <input type='submit' value='${notificacion.titulo}' />
+                                <input type='submit' class="border-0 bg-light" value='${notificacion.titulo}' readonly />
                             </form>
                         </li>
                     </c:forEach>

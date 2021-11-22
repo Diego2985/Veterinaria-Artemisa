@@ -63,6 +63,13 @@ public class ServicioNotificacionImpl implements ServicioNotificacion {
                 }
                 break;
             }
+            case NUEVO_ARTICULO: {
+                long dias = getDifferenceDays(getFechaFormateada(notificacion.getFecha()), new Date());
+                if (dias < MIN_DIAS_PROXIMO_TURNO && !notificacion.getLeida()) {
+                    notificacionesAMostrar.add(notificacion);
+                }
+                break;
+            }
         }
     }
 

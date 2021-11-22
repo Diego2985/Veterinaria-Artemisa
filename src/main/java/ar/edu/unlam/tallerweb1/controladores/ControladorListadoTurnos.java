@@ -43,13 +43,7 @@ public class ControladorListadoTurnos {
         ModelMap model = new ModelMap();
         Long userId = (Long) request.getSession().getAttribute("userId");
 
-        List<Notificacion> notificaciones = getListadoDeNotificaciones(userId);
-        notificaciones.forEach(item -> {
-            if (item.getId().equals(idNotificacion)) {
-                item.setLeida(true);
-                servicioNotificacion.update(idNotificacion, userId);
-            }
-        });
+        servicioNotificacion.update(idNotificacion, userId);
 
         model.put("turnos", getListadoDeTurnos(userId));
         model.put("notificaciones", getListadoDeNotificaciones(userId));

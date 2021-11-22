@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Articulo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioArticulo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacion;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,7 +19,8 @@ public class BusquedaArticulosTest {
     Articulo art1=new Articulo();
     Articulo art2=new Articulo();
     private ServicioArticulo servicioArticulo=mock(ServicioArticulo.class);
-    private ControladorArticulo controladorArticulo=new ControladorArticulo(servicioArticulo);
+    private ServicioNotificacion servicioNotificacion = mock(ServicioNotificacion.class);
+    private ControladorArticulo controladorArticulo=new ControladorArticulo(servicioArticulo, servicioNotificacion);
 
     @Before
     public void init(){

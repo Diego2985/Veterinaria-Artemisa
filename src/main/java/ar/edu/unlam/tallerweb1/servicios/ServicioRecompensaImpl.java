@@ -36,20 +36,42 @@ public class ServicioRecompensaImpl implements ServicioRecompensa {
     }
 
     @Override
-    public void generarRecompensa(Long userId, TipoRecompensa tipoRecompensa, Long turnoId) {
-        Optional<Recompensa> recompensaYaExistente = obtenerRecompensas(userId, TipoRecompensa.TURNO_GRATIS)
+    public void generarRecompensa(Long userId, TipoRecompensa tipoRecompensa, Long cantidad) {
+        Optional<Recompensa> recompensaYaExistente = obtenerRecompensas(userId, tipoRecompensa)
                 .stream().findAny();
-        if (recompensaYaExistente.isEmpty() && turnoId > 5) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DATE, 7);
-            Recompensa recompensa = new Recompensa()
-                    .setTitulo("¡Turno gratis!")
-                    .setDescripcion("Por haber reservado más de 5 turnos te regalamos uno gratis.")
-                    .setCaducidad("Tenés una semana para reclamar tur premio. ¡No lo olvides!")
-                    .setFecha(calendar.getTime().toInstant().toString())
-                    .setTipo(tipoRecompensa)
-                    .setUserId(userId);
-            repositorioRecompensa.guardarRecompensa(recompensa);
+        if (recompensaYaExistente.isEmpty()) {
+            switch (tipoRecompensa) {
+                case TURNO_GRATIS: {
+                    if (cantidad > 5) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DATE, 7);
+                        Recompensa recompensa = new Recompensa()
+                                .setTitulo("¡Turno gratis!")
+                                .setDescripcion("Por haber reservado más de 5 turnos te regalamos uno gratis.")
+                                .setCaducidad("Tenés una semana para reclamar tur premio. ¡No lo olvides!")
+                                .setFecha(calendar.getTime().toInstant().toString())
+                                .setTipo(tipoRecompensa)
+                                .setUserId(userId);
+                        repositorioRecompensa.guardarRecompensa(recompensa);
+                    }
+                    break;
+                }
+                case ALIMENTO_GRATIS: {
+                    if (cantidad > 2) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DATE, 7);
+                        Recompensa recompensa = new Recompensa()
+                                .setTitulo("¡Alimento gratis!")
+                                .setDescripcion("Por tener registrado más de 2 mascotas te regalamos un alimento gratis.")
+                                .setCaducidad("Tenés una semana para reclamar tur premio. ¡No lo olvides!")
+                                .setFecha(calendar.getTime().toInstant().toString())
+                                .setTipo(tipoRecompensa)
+                                .setUserId(userId);
+                        repositorioRecompensa.guardarRecompensa(recompensa);
+                    }
+                    break;
+                }
+            }
         }
     }
 

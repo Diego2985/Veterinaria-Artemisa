@@ -8,6 +8,15 @@
   </head>
   <body>
 
+    <c:if test="${recompensa != null}">
+      <div class="alert alert-success px-5 mx-5 mt-5" role="alert">
+        <h4 class="alert-heading">${recompensa.titulo}</h4>
+        <p>${recompensa.descripcion}</p>
+        <hr>
+        <p class="mb-0">${recompensa.caducidad}</p>
+      </div>
+    </c:if>
+
     <table class="table mx-5">
       <thead class="thead-dark">
         <tr>

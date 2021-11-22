@@ -97,7 +97,6 @@
                             <form action='${notificacion.action}' method='post'>
                                 <input type='hidden' value='${notificacion.id}' name='idNotificacion' />
                                 <input type='submit' value='${notificacion.titulo}' />
-<%--                                <a class="dropdown-item" href="">${notificacion.titulo}</a>--%>
                             </form>
                         </li>
                     </c:forEach>

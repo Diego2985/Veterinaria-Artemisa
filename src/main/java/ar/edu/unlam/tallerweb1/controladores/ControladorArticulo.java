@@ -60,6 +60,18 @@ public class ControladorArticulo {
         return new ModelAndView("articulos", model);
     }
 
+    @RequestMapping(path = "/setear-articulo-mostrado", method = RequestMethod.POST)
+    public ModelAndView setearArticuloMostrado(@RequestParam Long idArticulo, HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+        Long userId = (Long) request.getSession().getAttribute("userId");
+
+        servicioArticulo.update(idArticulo);
+
+        model.put("articulos", servicioArticulo.getArticulos());
+        model.put("notificaciones", getListadoDeNotificaciones(userId));
+        return new ModelAndView("articulos", model);
+    }
+
     private List<Notificacion> getListadoDeNotificaciones(Long userId) {
         return servicioNotificacion.getNotificaciones(userId);
     }

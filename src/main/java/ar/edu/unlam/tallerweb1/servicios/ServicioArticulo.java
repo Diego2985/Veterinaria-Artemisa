@@ -9,4 +9,6 @@ public interface ServicioArticulo {
     List<Articulo> getArticulos();
 
     List<Articulo> buscarArticulosPorNombre(String busqueda);
+
+    void update(Long idArticulo);
 }

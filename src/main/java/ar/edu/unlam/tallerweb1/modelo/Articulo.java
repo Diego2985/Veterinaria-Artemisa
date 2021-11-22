@@ -1,9 +1,6 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Articulo {
@@ -14,6 +11,26 @@ public class Articulo {
     private String titulo;
     private String descripcion;
     private float precio;
+    @Column(nullable = false)
+    private boolean mostrado = false;
+
+    public boolean isMostrado() {
+        return mostrado;
+    }
+
+    public void setMostrado(boolean mostrado) {
+        this.mostrado = mostrado;
+    }
+
+    public Boolean getEsNuevo() {
+        return esNuevo;
+    }
+
+    public void setEsNuevo(Boolean esNuevo) {
+        this.esNuevo = esNuevo;
+    }
+
+    private Boolean esNuevo;
 
     public Articulo() {}
 
@@ -49,4 +66,11 @@ public class Articulo {
         this.titulo = tituloArticulo;
     }
 
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 }

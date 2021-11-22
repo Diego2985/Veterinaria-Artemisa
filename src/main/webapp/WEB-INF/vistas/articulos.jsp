@@ -5,6 +5,8 @@
 <html>
     <head>
         <title>Title</title>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
     </head>
     <body>
 
@@ -27,6 +29,31 @@
                                     class="img-fluid"
                                     alt="..."
                             />
+                            <c:if test="${articulo.esNuevo}">
+                                <h6><span class="badge btn-primary">¡Nuevo!</span></h6>
+                                <c:if test="${not articulo.mostrado}">
+                                    <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
+                                        <div id="toast" class="toast hide" data-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
+                                            <div class="toast-header">
+                                                <strong class="mr-auto">¡Nuevo articulo para tu mascota!</strong>
+                                                <form action="setear-articulo-mostrado" method="POST">
+                                                    <input type='hidden' value='${articulo.id}' name='idArticulo' />
+                                                    <button type="submit" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                                        <span aria-hidden="false">&times;</span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="toast-body">
+                                                <img src="<c:url value="/images/dogo.jpeg"/>" class="rounded mr-2" alt="..." style="height: 40px">
+                                                    ${articulo.descripcion}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        $('.toast').toast("show");
+                                    </script>
+                                </c:if>
+                            </c:if>
                             <div class="card-body">
                                 <h5 class="card-title">${articulo.tituloArticulo}</h5>
                                 <h6 class="card-text">${articulo.descripcion}</h6>
@@ -39,8 +66,6 @@
             </c:forEach>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
         <%@ include file = "partial/footer.jsp" %>
     </body>
 </html>

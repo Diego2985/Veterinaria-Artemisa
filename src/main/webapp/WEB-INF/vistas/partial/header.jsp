@@ -131,7 +131,7 @@
                         <a class="dropdown-item" href="${contextPath}/mis-mascotas">Mis mascotas</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">Cerrar sesión</a>
+                        <a class="dropdown-item" href="${contextPath}/cerrar-sesion">Cerrar sesión</a>
                     </li>
                 </ul>
             </div>

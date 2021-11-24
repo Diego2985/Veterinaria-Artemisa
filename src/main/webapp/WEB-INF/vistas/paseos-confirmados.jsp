@@ -35,14 +35,37 @@
                         <tr>
                             <td>${paseo.mascota.nombre}</td>
                             <td>${paseo.paseador.nombre}</td>
-                            <td>${paseosAConfirmar.get(paseo.id).distancia} mts.</td>
-                            <td>${paseosAConfirmar.get(paseo.id).tiempo} minutos</td>
                             <td>
-                                <c:if test="${paseosAConfirmar.get(paseo.id).imagenRuta != null}">
-                                    <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="${paseosAConfirmar.get(paseo.id).imagenRuta}">
-                                        <img src="<c:url value="data:image/jpeg;base64,${paseosAConfirmar.get(paseo.id).imagenRuta}"/>" width="100" alt="ruta">
-                                    </a>
-                                </c:if>
+                                <c:choose>
+                                    <c:when test="${paseosAConfirmar.get(paseo.id).distancia != null}">
+                                        ${paseosAConfirmar.get(paseo.id).distancia} mts.</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span>Sin información</span>
+                                    </c:otherwise>
+                                </c:choose>
+
+                            <td>
+                                <c:choose>
+                                    <c:when test="${paseosAConfirmar.get(paseo.id).tiempo != null}">
+                                        ${paseosAConfirmar.get(paseo.id).tiempo} minutos
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span>Sin información</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${paseosAConfirmar.get(paseo.id).imagenRuta != null}">
+                                        <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="${paseosAConfirmar.get(paseo.id).imagenRuta}">
+                                            <img src="<c:url value="data:image/jpeg;base64,${paseosAConfirmar.get(paseo.id).imagenRuta}"/>" width="100" alt="ruta">
+                                        </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span>Sin información</span>
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
                             <td>
                                 <form action="paseador/comenzar-seguimiento" method="post">

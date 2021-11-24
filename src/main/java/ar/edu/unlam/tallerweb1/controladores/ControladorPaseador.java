@@ -100,7 +100,6 @@ public class ControladorPaseador {
             Mascota mascota = servicioMascotas.obtenerMascotaPorId(perro);
             Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
             RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota);
-            servicioPaseador.cambiarEstadoDePaseoDeMascota(mascota);
             request.getSession().setAttribute("idRegistroPaseo", registro.getId());
             request.getSession().setAttribute("estadoPaseo", registro.getEstado());
             return new ModelAndView("redirect:paseador/en-proceso");

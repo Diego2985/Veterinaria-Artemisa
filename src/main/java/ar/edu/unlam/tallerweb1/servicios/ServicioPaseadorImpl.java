@@ -63,6 +63,8 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         registro.setUsuario(usuario);
         registro.setMascota(mascota);
         repositorioPaseador.crearRegistroDePaseo(registro);
+        mascota.setPaseoActivo(true);
+        repositorioPaseador.cambiarEstadoDePaseoDePerro(mascota);
         return registro;
     }
 

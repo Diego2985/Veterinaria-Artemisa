@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.modelo.Mascota;
+import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
@@ -68,7 +69,7 @@ public class ServicioPaseadorMascotasTest {
     }
 
     private void whenSeContrataUnPaseo(Mascota mascota) {
-        servicioPaseador.cambiarEstadoDePaseoDeMascota(mascota);
+        servicioPaseador.crearRegistroDePaseo(any(Paseador.class), 1L, mascota);
     }
 
     private void thenCambiaElEstadoDePaseoDeLaMascota(Mascota mascota) {

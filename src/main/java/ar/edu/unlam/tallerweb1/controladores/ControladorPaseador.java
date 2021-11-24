@@ -132,4 +132,17 @@ public class ControladorPaseador {
             return new ModelAndView("paseador-error", model);
         }
     }
+
+    @RequestMapping(path = "/paseador/cancelar", method = RequestMethod.POST)
+    public ModelAndView cancelarPaseo(@RequestParam Long idRegistro){
+        ModelMap model = new ModelMap();
+        try {
+            RegistroPaseo registro = servicioPaseador.obtenerRegistroDePaseo(idRegistro);
+            servicioPaseador.actualizarRegistroDePaseo(idRegistro, registro.getPaseador().getId(), registro.getUsuario().getId(), 4);
+            return new ModelAndView("redirect:/paseador");
+        } catch (DatosCambiadosException e) {
+            model.put("mensaje", e.getMessage());
+            return new ModelAndView("paseador-error", model);
+        }
+    }
 }

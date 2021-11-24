@@ -74,7 +74,10 @@
                                     <input type="hidden" name="idUsuario" value="${paseo.usuario.id}"/>
                                     <button type="submit" class="btn btn-success">Comenzar paseo</button>
                                 </form>
-                                <button class="btn btn-danger" type="button">Cancelar</button>
+                                <form action="paseador/cancelar" method="post">
+                                    <input type="hidden" name="idRegistro" value="${paseo.id}">
+                                    <button class="btn btn-danger" type="submit">Cancelar</button>
+                                </form>
                             </td>
                         </tr>
                     </c:forEach>
@@ -152,7 +155,17 @@
                                 <td>${paseo.paseador.nombre}</td>
                                 <td>${paseo.horaInicio}</td>
                                 <td>${paseo.horaFinal}</td>
-                                <td>Pago</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${paseo.estado ==2}">
+                                            Finalizado correctamente
+                                        </c:when>
+                                        <c:otherwise>
+                                            Cancelado
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </td>
                             </tr>
                         </c:forEach>
                         </tbody>

@@ -173,7 +173,7 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
             switch (paseo.getEstado()){
                 case 0: paseosSeparados.get("proceso").add(paseo);break;
                 case 1: paseosSeparados.get("activos").add(paseo);break;
-                case 2: paseosSeparados.get("finalizados").add(paseo);break;
+                default: paseosSeparados.get("finalizados").add(paseo);break;
             }
         }
         return paseosSeparados;

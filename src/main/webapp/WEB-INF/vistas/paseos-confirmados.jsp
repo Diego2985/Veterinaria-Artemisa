@@ -32,8 +32,8 @@
                             <td>${paseo.mascota.nombre}</td>
                             <td>${paseo.paseador.nombre}</td>
                             <td>
-                                <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="${rutasYTiempos.get(paseo.id).imagenRuta}">
-                                    <img src="<c:url value="data:image/jpeg;base64,${rutasYTiempos.get(paseo.id).imagenRuta}"/>" width="100" alt="ruta">
+                                <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="${paseosAConfirmar.get(paseo.id).imagenRuta}">
+                                    <img src="<c:url value="data:image/jpeg;base64,${paseosAConfirmar.get(paseo.id).imagenRuta}"/>" width="100" alt="ruta">
                                 </a>
                             </td>
                             <td>

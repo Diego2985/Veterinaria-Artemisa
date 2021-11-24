@@ -36,6 +36,39 @@ public class ControladorPaseador {
         this.servicioMascotas = servicioMascotas;
     }
 
+    @RequestMapping("/paseador")
+    public ModelAndView listaDePaseos(HttpServletRequest request){
+        ModelMap model = new ModelMap();
+        try {
+            Map<String, List<RegistroPaseo>> paseos = servicioPaseador.obtenerTodosLosRegistrosDePaseoDelUsuario((Long) request.getSession().getAttribute("userId"));
+            Map<Long, DatosTiempo> datosPaseosAConfirmar = servicioPaseador.obtenerDatosDeTiempoYPosicion(paseos.get("proceso"),
+                    (Double) request.getSession().getAttribute("latitudUsuario"),
+                    (Double) request.getSession().getAttribute("longitudUsuario")
+            );
+            Map<Long, PaseoActivo> datosPaseosActivos = servicioPaseador.obtenerMasDatosDePaseosActivos(paseos.get("activos"));
+            model.put("paseosActivos", datosPaseosActivos);
+            model.put("paseos", paseos);
+            model.put("paseosAConfirmar", datosPaseosAConfirmar);
+            return new ModelAndView("paseos-confirmados", model);
+        } catch (IOException e) {
+            return new ModelAndView("error");
+        }
+    }
+
+    @RequestMapping("/paseador/nuevo-paseo")
+    public ModelAndView verPaginaDePaseador(HttpServletRequest request) {
+        Long userId = null;
+        ModelMap model = new ModelMap();
+        try {
+            userId = (Long) request.getSession().getAttribute("userId");
+            servicioMascotas.obtenerPerrosQueNoEstenEnPaseo(userId);
+            return new ModelAndView("paseador-inicio");
+        } catch (TodosLosPerrosConPaseoActivoException e) {
+            model.put("mensaje", e.getMessage());
+            return new ModelAndView("paseador-error", model);
+        }
+    }
+
     @RequestMapping("/paseador/ver-paseadores")
     public ModelAndView redirigirAlIntentarAccederAlMapa(){
         return new ModelAndView("redirect:/paseador");
@@ -60,44 +93,19 @@ public class ControladorPaseador {
         }
     }
 
-    @RequestMapping("/paseador/nuevo-paseo")
-    public ModelAndView verPaginaDePaseador(HttpServletRequest request) {
-        Long userId = null;
+    @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
+    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam Long perro, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         try {
-            userId = (Long) request.getSession().getAttribute("userId");
-            servicioMascotas.obtenerPerrosQueNoEstenEnPaseo(userId);
-            return new ModelAndView("paseador-inicio");
-        } catch (TodosLosPerrosConPaseoActivoException e) {
-            model.put("mensaje", e.getMessage());
+            Mascota mascota = servicioMascotas.obtenerMascotaPorId(perro);
+            Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
+            RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota);
+            request.getSession().setAttribute("idRegistroPaseo", registro.getId());
+            request.getSession().setAttribute("estadoPaseo", registro.getEstado());
+            return new ModelAndView("redirect:paseador/en-proceso");
+        } catch (PaseadorConCantMaxDeMascotasException e) {
+            model.put("mensaje", "El paseador indicado no se encuentra disponible");
             return new ModelAndView("paseador-error", model);
-        }
-    }
-
-    private void setearVariablesDeSesionSiNoExisten(HttpServletRequest request, Long userId) {
-        if(request.getSession().getAttribute("idRegistroPaseo") == null || request.getSession().getAttribute("estadoPaseo") == null){
-            RegistroPaseo registroPaseo = servicioPaseador.obtenerRegistroDePaseoActivoOEnProceso(userId);
-            request.getSession().setAttribute("idRegistroPaseo", registroPaseo.getId());
-            request.getSession().setAttribute("estadoPaseo", registroPaseo.getEstado());
-        }
-    }
-
-    @RequestMapping("/paseador")
-    public ModelAndView listaDePaseos(HttpServletRequest request){
-        ModelMap model = new ModelMap();
-        try {
-            Map<String, List<RegistroPaseo>> paseos = servicioPaseador.obtenerTodosLosRegistrosDePaseoDelUsuario((Long) request.getSession().getAttribute("userId"));
-            Map<Long, DatosTiempo> rutasYTiempos = servicioPaseador.obtenerDatosDeTiempoYPosicion(paseos.get("proceso"),
-                    (Double) request.getSession().getAttribute("latitudUsuario"),
-                    (Double) request.getSession().getAttribute("longitudUsuario")
-            );
-            Map<Long, PaseoActivo> datosPaseosActivos = servicioPaseador.obtenerMasDatosDePaseosActivos(paseos.get("activos"));
-            model.put("paseosActivos", datosPaseosActivos);
-            model.put("paseos", paseos);
-            model.put("rutasYTiempos", rutasYTiempos);
-            return new ModelAndView("paseos-confirmados", model);
-        } catch (IOException e) {
-            return new ModelAndView("error");
         }
     }
 
@@ -130,18 +138,15 @@ public class ControladorPaseador {
         }
     }
 
-    @RequestMapping(path = "/contratar-paseador", method = RequestMethod.POST)
-    public ModelAndView contratarAlPaseador(@RequestParam Long idPaseador, @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam Long perro, HttpServletRequest request) {
+    @RequestMapping(path = "/paseador/comenzar-seguimiento", method = RequestMethod.POST)
+    public ModelAndView realizarSeguimientoDePaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         try {
-            Mascota mascota = servicioMascotas.obtenerMascotaPorId(perro);
-            Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
-            RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota);
-            request.getSession().setAttribute("idRegistroPaseo", registro.getId());
-            request.getSession().setAttribute("estadoPaseo", registro.getEstado());
-            return new ModelAndView("redirect:paseador/en-proceso");
-        } catch (PaseadorConCantMaxDeMascotasException e) {
-            model.put("mensaje", "El paseador indicado no se encuentra disponible");
+            servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 1);
+            request.getSession().setAttribute("estadoPaseo", 1);
+            return new ModelAndView("redirect:seguimiento");
+        } catch (DatosCambiadosException e) {
+            model.put("mensaje", e.getMessage());
             return new ModelAndView("paseador-error", model);
         }
     }
@@ -163,19 +168,6 @@ public class ControladorPaseador {
             return new ModelAndView("seguimiento-paseo", model);
         } catch (UnsupportedEncodingException e) {
             model.put("mensaje", "Error en la obtención de la imagen. Intente más tarde");
-            return new ModelAndView("paseador-error", model);
-        }
-    }
-
-    @RequestMapping(path = "/paseador/comenzar-seguimiento", method = RequestMethod.POST)
-    public ModelAndView realizarSeguimientoDePaseo(@RequestParam Long idRegistro, @RequestParam Long idPaseador, @RequestParam Long idUsuario, HttpServletRequest request) {
-        ModelMap model = new ModelMap();
-        try {
-            servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 1);
-            request.getSession().setAttribute("estadoPaseo", 1);
-            return new ModelAndView("redirect:seguimiento");
-        } catch (DatosCambiadosException e) {
-            model.put("mensaje", e.getMessage());
             return new ModelAndView("paseador-error", model);
         }
     }

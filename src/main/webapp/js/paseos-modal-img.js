@@ -13,5 +13,5 @@ $('#modalImage').on('show.bs.modal', function (event) {
     var title = button.data('title') // Extract info from data-* attributes
     var modal = $(this)
     modal.find('.modal-title').text(title)
-    modal.find('.modal-body').html("<img src='data:image/jpeg;base64,"+image+"' style='height: 75vh' alt='wide-img'/>")
+    modal.find('.modal-body').html("<img src='data:image/jpeg;base64,"+image+"' style='height: 100%; width: 100%' alt='wide-img'/>")
 })

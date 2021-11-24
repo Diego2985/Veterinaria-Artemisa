@@ -99,10 +99,8 @@ public class ControladorPaseador {
         try {
             Mascota mascota = servicioMascotas.obtenerMascotaPorId(perro);
             Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
-            RegistroPaseo registro = servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota);
-            request.getSession().setAttribute("idRegistroPaseo", registro.getId());
-            request.getSession().setAttribute("estadoPaseo", registro.getEstado());
-            return new ModelAndView("redirect:paseador/en-proceso");
+            servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota);
+            return new ModelAndView("redirect:/paseador");
         } catch (PaseadorConCantMaxDeMascotasException e) {
             model.put("mensaje", "El paseador indicado no se encuentra disponible");
             return new ModelAndView("paseador-error", model);
@@ -114,7 +112,6 @@ public class ControladorPaseador {
         ModelMap model = new ModelMap();
         try {
             servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 1);
-            request.getSession().setAttribute("estadoPaseo", 1);
             return new ModelAndView("redirect:/paseador");
         } catch (DatosCambiadosException e) {
             model.put("mensaje", e.getMessage());
@@ -127,8 +124,7 @@ public class ControladorPaseador {
         ModelMap model = new ModelMap();
         try {
             RegistroPaseo registro = servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 2);
-            request.getSession().removeAttribute("idRegistroPaseo");
-            request.getSession().removeAttribute("estadoPaseo");
+            servicioPaseador.cambiarEstadoDePaseoDeMascota(registro.getMascota());
             model.put("registro", registro);
             return new ModelAndView("paseo-finalizado", model);
         } catch (DatosCambiadosException e) {

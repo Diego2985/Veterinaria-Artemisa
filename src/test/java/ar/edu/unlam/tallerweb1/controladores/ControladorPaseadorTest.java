@@ -173,35 +173,4 @@ public class ControladorPaseadorTest {
     private void thenDebeCapturarLaExcepcion(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("paseador-error");
     }
-    
-    // Tests donde se quiere acceder a sitios no permitidos dentro de Paseador
-    @Test
-    public void impedirAccesoASeguimientoSiNoTieneUnPaseoCreado() {
-        givenUnUsuarioSinPaseo();
-        mav=whenQuiereAccederASeguimientoDePaseo();
-        thenDeberiaRedirigirloAlInicioDePaseador(mav);
-    }
-
-    private void givenUnUsuarioSinPaseo() {
-        when(servicioPaseador.chequearAccesoCorrecto(request, 1)).thenReturn(true);
-    }
-
-    private ModelAndView whenQuiereAccederASeguimientoDePaseo() {
-        return controladorPaseador.consultarSeguimiento(request);
-    }
-
-    private void thenDeberiaRedirigirloAlInicioDePaseador(ModelAndView mav) {
-        assertThat(mav.getViewName()).isEqualTo("redirect:/paseador");
-    }
-
-    @Test
-    public void impedirAccesoAlPaseoEnProcesoSiNoTieneUnPaseoCreado() {
-        givenUnUsuarioSinPaseo();
-        mav=whenQuieroAccederAlPaseoEnProceso();
-        thenDeberiaRedirigirloAlInicioDePaseador(mav);
-    }
-
-    private ModelAndView whenQuieroAccederAlPaseoEnProceso() {
-        return controladorPaseador.consultarSeguimiento(request);
-    }
 }

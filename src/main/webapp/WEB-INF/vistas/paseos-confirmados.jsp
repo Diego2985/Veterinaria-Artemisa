@@ -24,7 +24,9 @@
                 <tr>
                     <th>Mascota</th>
                     <th>Paseador</th>
-                    <th>Ruta del paseador</th>
+                    <th>Distancia</th>
+                    <th>Tiempo de llegada</th>
+                    <th>Ruta de llegada</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
@@ -33,13 +35,22 @@
                         <tr>
                             <td>${paseo.mascota.nombre}</td>
                             <td>${paseo.paseador.nombre}</td>
+                            <td>${paseosAConfirmar.get(paseo.id).distancia} mts.</td>
+                            <td>${paseosAConfirmar.get(paseo.id).tiempo} minutos</td>
                             <td>
-                                <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="${paseosAConfirmar.get(paseo.id).imagenRuta}">
-                                    <img src="<c:url value="data:image/jpeg;base64,${paseosAConfirmar.get(paseo.id).imagenRuta}"/>" width="100" alt="ruta">
-                                </a>
+                                <c:if test="${paseosAConfirmar.get(paseo.id).imagenRuta != null}">
+                                    <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="${paseosAConfirmar.get(paseo.id).imagenRuta}">
+                                        <img src="<c:url value="data:image/jpeg;base64,${paseosAConfirmar.get(paseo.id).imagenRuta}"/>" width="100" alt="ruta">
+                                    </a>
+                                </c:if>
                             </td>
                             <td>
-                                <button class="btn btn-success" type="button">Comenzar Paseo</button>
+                                <form action="paseador/comenzar-seguimiento" method="post">
+                                    <input type="hidden" name="idRegistro" value="${paseo.id}"/>
+                                    <input type="hidden" name="idPaseador" value="${paseo.paseador.id}"/>
+                                    <input type="hidden" name="idUsuario" value="${paseo.usuario.id}"/>
+                                    <button type="submit" class="btn btn-success">Comenzar paseo</button>
+                                </form>
                                 <button class="btn btn-danger" type="button">Cancelar</button>
                             </td>
                         </tr>
@@ -79,7 +90,12 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-success" type="button">Finalizar Paseo</button>
+                                    <form method="post" action="paseador/finalizar-paseo">
+                                        <input type="hidden" name="idRegistro" value="${paseo.id}" />
+                                        <input type="hidden" name="idPaseador" value="${paseo.paseador.id}" />
+                                        <input type="hidden" name="idUsuario" value="${paseo.usuario.id}" />
+                                        <button class="btn btn-success" type="submit">Finalizar Paseo</button>
+                                    </form>
                                 </td>
                             </tr>
                         </c:forEach>

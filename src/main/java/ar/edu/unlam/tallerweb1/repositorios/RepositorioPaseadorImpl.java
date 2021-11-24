@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
+import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import org.hibernate.Session;
@@ -62,6 +63,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
     @Override
     public List<RegistroPaseo> obtenerTodosLosPaseosDeUnUsuario(Long userId) {
         return getCurrentSession().createCriteria(RegistroPaseo.class).add(Restrictions.eq("usuario.id", userId)).list();
+    }
+
+    @Override
+    public void cambiarEstadoDePaseoDePerro(Mascota mascota) {
+
     }
 
     public Session getCurrentSession() {

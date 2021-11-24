@@ -52,4 +52,6 @@ public interface ServicioPaseador {
     Map<Long, DatosTiempo> obtenerDatosDeTiempoYPosicion(List<RegistroPaseo> paseos, Double latitudUsuario, Double longitudUsuario) throws IOException;
 
     Map<Long, PaseoActivo> obtenerMasDatosDePaseosActivos(List<RegistroPaseo> paseos) throws UnsupportedEncodingException;
+
+    void cambiarEstadoDePaseoDeMascota(Mascota mascota);
 }

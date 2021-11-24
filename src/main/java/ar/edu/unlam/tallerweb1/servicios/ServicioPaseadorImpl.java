@@ -205,6 +205,12 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         return mapPaseosActivos;
     }
 
+    @Override
+    public void cambiarEstadoDePaseoDeMascota(Mascota mascota) {
+        mascota.setPaseoActivo(!mascota.getPaseoActivo());
+        repositorioPaseador.cambiarEstadoDePaseoDePerro(mascota);
+    }
+
     private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
         byte[] imageGet=restTemplate.getForObject(uriImagen, byte[].class);

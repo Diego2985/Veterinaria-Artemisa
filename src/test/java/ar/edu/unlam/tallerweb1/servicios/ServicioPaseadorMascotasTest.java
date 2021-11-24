@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
@@ -50,5 +51,27 @@ public class ServicioPaseadorMascotasTest {
         assertThat(obtenidos.get("proceso")).hasSize(1);
         assertThat(obtenidos.get("activos")).hasSize(1);
         assertThat(obtenidos.get("finalizados")).hasSize(1);
+    }
+
+    @Test
+    public void seContrataAlPaseadorYCambiaElEstadoDePaseoDelPerro() {
+        Mascota mascota = givenUnaMascotaDeTipoPerro();
+        whenSeContrataUnPaseo(mascota);
+        thenCambiaElEstadoDePaseoDeLaMascota(mascota);
+    }
+
+    private Mascota givenUnaMascotaDeTipoPerro() {
+        Mascota mascota = new Mascota();
+        mascota.setTipo("Perro");
+        doNothing().when(repositorioPaseador).cambiarEstadoDePaseoDePerro(mascota);
+        return mascota;
+    }
+
+    private void whenSeContrataUnPaseo(Mascota mascota) {
+        servicioPaseador.cambiarEstadoDePaseoDeMascota(mascota);
+    }
+
+    private void thenCambiaElEstadoDePaseoDeLaMascota(Mascota mascota) {
+        assertThat(mascota.getPaseoActivo()).isTrue();
     }
 }

@@ -9,9 +9,11 @@
     <div class="container mt-3">
         <div class="d-flex justify-content-between my-2 align-items-center">
             <h2>Paseos</h2>
-            <a href="paseador/nuevo-paseo" class="btn btn-success">
-                Nuevo Paseo
-            </a>
+            <div class="d-flex position-fixed bottom-0 right-0 m-3" style="z-index: 5; right: 0; bottom: 0;">
+                <a href="paseador/nuevo-paseo" class="btn btn-primary btn-lg btn-floating">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
         </div>
         <div>
             <h3>A confirmar</h3>

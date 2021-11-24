@@ -70,10 +70,10 @@
                             <tr>
                                 <td>${paseo.mascota.nombre}</td>
                                 <td>${paseo.paseador.nombre}</td>
-                                <td>23 minutos</td>
+                                <td>${paseosActivos.get(paseo.id).tiempoRestante}</td>
                                 <td>
-                                    <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="mock-routing">
-                                        <img src="<c:url value="/images/mock-routing.jpg"/>" width="100" alt="ruta">
+                                    <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="${paseosActivos.get(paseo.id).imgPosicionPaseador}">
+                                        <img src="<c:url value="data:image/jpeg;base64,${paseosActivos.get(paseo.id).imgPosicionPaseador}"/>" width="100" alt="ruta">
                                     </a>
                                 </td>
                                 <td>

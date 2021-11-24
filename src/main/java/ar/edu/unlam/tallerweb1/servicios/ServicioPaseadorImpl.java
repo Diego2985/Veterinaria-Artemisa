@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.converter.PaseoActivo;
 import ar.edu.unlam.tallerweb1.excepciones.*;
 import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
@@ -190,6 +191,18 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
             }
         }
         return listaDatosTiempo;
+    }
+
+    @Override
+    public Map<Long, PaseoActivo> obtenerMasDatosDePaseosActivos(List<RegistroPaseo> paseos) throws UnsupportedEncodingException {
+        Map<Long, PaseoActivo> mapPaseosActivos = new HashMap<>();
+        for (RegistroPaseo paseo:paseos) {
+            String imagen = obtenerImagenDePosicionDelPaseador(paseo.getPaseador().getId());
+            Integer minutosRestantes = Math.toIntExact(((paseo.getHoraFinal().getTime() - new Date().getTime()) / 1000) / 60);
+            PaseoActivo paseoActivo = new PaseoActivo(paseo, minutosRestantes, imagen);
+            mapPaseosActivos.put(paseo.getId(), paseoActivo);
+        }
+        return mapPaseosActivos;
     }
 
     private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {

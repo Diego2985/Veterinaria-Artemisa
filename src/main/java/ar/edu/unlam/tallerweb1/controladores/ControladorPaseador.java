@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.converter.PaseoActivo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import ar.edu.unlam.tallerweb1.excepciones.*;
 import ar.edu.unlam.tallerweb1.modelo.Mascota;
@@ -90,6 +91,8 @@ public class ControladorPaseador {
                     (Double) request.getSession().getAttribute("latitudUsuario"),
                     (Double) request.getSession().getAttribute("longitudUsuario")
             );
+            Map<Long, PaseoActivo> datosPaseosActivos = servicioPaseador.obtenerMasDatosDePaseosActivos(paseos.get("activos"));
+            model.put("paseosActivos", datosPaseosActivos);
             model.put("paseos", paseos);
             model.put("rutasYTiempos", rutasYTiempos);
             return new ModelAndView("paseos-confirmados", model);

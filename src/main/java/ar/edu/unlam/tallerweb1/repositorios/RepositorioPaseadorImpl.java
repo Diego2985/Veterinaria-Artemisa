@@ -67,7 +67,7 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
 
     @Override
     public void cambiarEstadoDePaseoDePerro(Mascota mascota) {
-
+        getCurrentSession().update(mascota);
     }
 
     public Session getCurrentSession() {

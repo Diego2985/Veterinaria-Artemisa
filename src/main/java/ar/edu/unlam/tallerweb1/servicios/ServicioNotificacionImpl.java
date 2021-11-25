@@ -21,6 +21,7 @@ public class ServicioNotificacionImpl implements ServicioNotificacion {
 
     private final RepositorioNotificacion repositorioNotificacion;
     private final static int MIN_DIAS_PROXIMO_TURNO = 3;
+    private final static int MIN_DIAS_NUEVO_ARTICULO = 2;
 
     @Autowired
     public ServicioNotificacionImpl(RepositorioNotificacion repositorioNotificacion) {
@@ -65,7 +66,7 @@ public class ServicioNotificacionImpl implements ServicioNotificacion {
             }
             case NUEVO_ARTICULO: {
                 long dias = getDifferenceDays(getFechaFormateada(notificacion.getFecha()), new Date());
-                if (dias < MIN_DIAS_PROXIMO_TURNO && !notificacion.getLeida()) {
+                if (dias < MIN_DIAS_NUEVO_ARTICULO && !notificacion.getLeida()) {
                     notificacionesAMostrar.add(notificacion);
                 }
                 break;

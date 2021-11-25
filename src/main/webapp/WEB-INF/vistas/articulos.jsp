@@ -23,7 +23,7 @@
                     <div class="col-6 col-sm-3 d-flex justify-content-center">
                         <div class="card text-center d-flex justify-content-center" >
                             <img
-                                    src="<c:url value="/images/dogo.jpeg"/>"
+                                    src="<c:url value="/images/articulo-${articulo.id}.jpg"/>"
                                     class="img-fluid"
                                     alt="..."
                             />
@@ -31,9 +31,15 @@
                                 <h5 class="card-title">${articulo.tituloArticulo}</h5>
                                 <h6 class="card-text">${articulo.descripcion}</h6>
                                 <div class="container text-center">
-                                    <h3 class="card-title">$${articulo.precio}</h3>
+                                    <h3 class="card-title">${articulo.precio}</h3>
                                 </div>
                             </div>
+                            <form method="get" action="compra-articulo">
+                                <div class="form-group">
+
+                                    <button type="submit" class="btn btn-success">Comprar</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
             </c:forEach>

@@ -13,6 +13,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class BusquedaArticulosTest {
+
+
     private String busqueda;
     private ModelAndView mav;
     Articulo art1=new Articulo();

@@ -59,7 +59,7 @@
                                         <div id="toast" class="toast hide" data-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">
                                             <div class="toast-header row-">
                                                 <div class="col-sm">
-                                                    <img src="<c:url value="/images/dogo.jpeg"/>" class="mr-2" alt="..." style="height: 40px">
+                                                    <img src="<c:url value="/images/articulo-${articulo.id}.jpg"/>" class="mr-2" alt="..." style="height: 40px">
                                                 </div>
                                                 <div class="col-sm">
                                                     <strong class="mr-4 ml-4">${articulo.descripcion}</strong>

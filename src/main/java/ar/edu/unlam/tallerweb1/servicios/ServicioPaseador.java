@@ -1,7 +1,9 @@
 package ar.edu.unlam.tallerweb1.servicios;
 import ar.edu.unlam.tallerweb1.converter.Coordenadas;
 import ar.edu.unlam.tallerweb1.converter.DatosTiempo;
+import ar.edu.unlam.tallerweb1.converter.PaseoActivo;
 import ar.edu.unlam.tallerweb1.excepciones.*;
+import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.converter.Ubicacion;
@@ -21,7 +23,7 @@ public interface ServicioPaseador {
 
     Paseador obtenerPaseador(Long idPaseador, Boolean chequeoCantidadMaxima) throws PaseadorConCantMaxDeMascotasException;
 
-    RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario);
+    RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario, Mascota mascota);
 
     RegistroPaseo actualizarRegistroDePaseo(Long idRegistro, Long idPaseador, Long idUsuario, Integer estado) throws DatosCambiadosException;
 
@@ -44,4 +46,12 @@ public interface ServicioPaseador {
     String obtenerImagenDeRutaDePaseadorAUsuario(Coordenadas usuario, Coordenadas paseador) throws UnsupportedEncodingException;
 
     String obtenerImagenDePosicionDelPaseador(Long id) throws UnsupportedEncodingException;
+
+    Map<String, List<RegistroPaseo>> obtenerTodosLosRegistrosDePaseoDelUsuario(Long userId);
+
+    Map<Long, DatosTiempo> obtenerDatosDeTiempoYPosicion(List<RegistroPaseo> paseos, Double latitudUsuario, Double longitudUsuario) throws IOException;
+
+    Map<Long, PaseoActivo> obtenerMasDatosDePaseosActivos(List<RegistroPaseo> paseos) throws UnsupportedEncodingException;
+
+    void cambiarEstadoDePaseoDeMascota(Mascota mascota);
 }

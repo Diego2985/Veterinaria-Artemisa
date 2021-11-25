@@ -7,7 +7,7 @@
 <body>
     <div class="container mt-3">
         <h2>${mensaje}</h2>
-        <a href="/paseador">Volver</a>
+        <a href="<c:url value="/paseador" />">Volver</a>
     </div>
 </body>
 </html>

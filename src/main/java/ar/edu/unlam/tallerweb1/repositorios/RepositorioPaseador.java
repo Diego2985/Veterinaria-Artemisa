@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
+import ar.edu.unlam.tallerweb1.modelo.Mascota;
 import ar.edu.unlam.tallerweb1.modelo.Paseador;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 
@@ -19,4 +20,8 @@ public interface RepositorioPaseador {
     RegistroPaseo buscarUnRegistroDePaseo(Long idRegistro);
 
     RegistroPaseo buscarPaseoEnProcesoOActivoDeUnUsuario(Long userId);
+
+    List<RegistroPaseo> obtenerTodosLosPaseosDeUnUsuario(Long userId);
+
+    void cambiarEstadoDePaseoDePerro(Mascota mascota);
 }

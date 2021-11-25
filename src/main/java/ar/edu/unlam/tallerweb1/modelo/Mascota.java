@@ -21,6 +21,7 @@ public class Mascota {
     private Date fechaNacimiento;
     private String tipo;
     private Long userId;
+    private Boolean paseoActivo = false;
     @Transient
     private long edad;
 
@@ -67,6 +68,14 @@ public class Mascota {
     public Mascota setUserId(Long userId) {
         this.userId = userId;
         return this;
+    }
+
+    public Boolean getPaseoActivo() {
+        return paseoActivo;
+    }
+
+    public void setPaseoActivo(Boolean paseoActivo) {
+        this.paseoActivo = paseoActivo;
     }
 
     public long getEdad() {

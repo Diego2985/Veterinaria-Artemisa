@@ -8,7 +8,7 @@
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/config.js"></script>
-    <script src="js/mapa.js"></script>
+    <script src="<c:url value="/js/config.js"/>"></script>
+    <script src="<c:url value="/js/mapa.js"/>"></script>
 </body>
 </html>

@@ -15,6 +15,8 @@ public class RegistroPaseo {
     private Date horaInicio;
     private Date horaFinal;
     private Integer estado=0;
+    @OneToOne
+    private Mascota mascota;
 
     public Long getId() {
         return id;
@@ -62,5 +64,13 @@ public class RegistroPaseo {
 
     public void setEstado(Integer estado) {
         this.estado = estado;
+    }
+
+    public Mascota getMascota() {
+        return mascota;
+    }
+
+    public void setMascota(Mascota mascota) {
+        this.mascota = mascota;
     }
 }

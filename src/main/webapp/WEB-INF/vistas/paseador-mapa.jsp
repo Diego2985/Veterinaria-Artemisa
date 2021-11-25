@@ -22,6 +22,14 @@
                         <i class="fas fa-map-marker-alt"></i>
                     </button>
                 </div>
+                <div class="form-group mb-3">
+                    <label>Distancia máxima:</label>
+                    <select name="distancia" class="form-select">
+                        <option selected value="500">500mts</option>
+                        <option value="300">300mts</option>
+                        <option value="100">100mts</option>
+                    </select>
+                </div>
             </div>
             <button type="submit" id="continuar" disabled="true" class="btn btn-primary">Continuar</button>
         </form>
@@ -35,9 +43,10 @@
         <div class="col-6"></div>
     </div>
 </div>
-<script src="js/mapa-paseadores.js"></script>
+<script src="<c:url value="/js/mapa-paseadores.js"/>"></script>
 <script>
     const listaDePaseadores=[];
+    const listaDePerros=[];
     <c:forEach items="${paseadores}" var="paseador">
     listaDePaseadores.push({
         id: "${paseador.id}",
@@ -49,8 +58,14 @@
     })
     </c:forEach>
 
-    mostrarPaseadores("${ubicacion.coordenadas.latitud}", "${ubicacion.coordenadas.longitud}", listaDePaseadores)
+    <c:forEach items="${perros}" var="perro">
+        listaDePerros.push({
+            id: "${perro.id}",
+            nombre:"${perro.nombre}"
+        })
+    </c:forEach>
+    mostrarPaseadores("${ubicacion.coordenadas.latitud}", "${ubicacion.coordenadas.longitud}", listaDePaseadores, listaDePerros)
 </script>
-<script src="js/capturar-ubicacion.js"></script>
+<script src="<c:url value="/js/capturar-ubicacion.js"/>"></script>
 </body>
 </html>

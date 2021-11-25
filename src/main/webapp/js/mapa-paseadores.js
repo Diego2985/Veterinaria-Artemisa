@@ -1,4 +1,4 @@
-function mostrarPaseadores(latitud, longitud, paseadores) {
+function mostrarPaseadores(latitud, longitud, paseadores, perros) {
     window.addEventListener("load", () => {
         function datosMapa(map, casa, ui){
             var group = new H.map.Group();
@@ -14,9 +14,17 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
             }, false);
 
             const customMarker = (latitud, longitud) => {
-                const markerPaseador = new H.map.Icon('images/paseador.png', {size: {w: 30, h: 30}});
+                const markerPaseador = new H.map.Icon('../images/paseador.png', {size: {w: 30, h: 30}});
                 const paseador = new H.map.Marker({lat: latitud, lng: longitud}, {icon: markerPaseador});
                 return paseador;
+            }
+
+            const mostrarPerros = lista => {
+                let options;
+                for (let mascota of lista){
+                    options+=`<option value="${mascota.id}">${mascota.nombre}</option>`
+                }
+                return options;
             }
 
             const htmlPaseador = (inicio, marker, paseador) => {
@@ -31,10 +39,16 @@ function mostrarPaseadores(latitud, longitud, paseadores) {
                      </div>
                     <div>Se encuentra a <strong>${Math.round(distancia)} mts.</strong></div>
                     <div>
-                        <form action='contratar-paseador' method='post'>
+                        <form action='../contratar-paseador' method='post'>
                             <input type='hidden' value='${paseador.id}' name='idPaseador' />
                             <input type='hidden' value='${latitud}' name='latitud' />
                             <input type='hidden' value='${longitud}' name='longitud' />
+                            <div class="form-group">
+                                <select name="perro" class="form-select form-select-sm my-2 w-75" style="width: 100%">
+                                    <option selected disabled>Elija su mascota</option>
+                                    ${mostrarPerros(perros)}
+                                </select>
+                            </div>
                             ${
                     !validarLlegadaACantMax ?
                         '<button type="submit" class="btn btn-success">Contratar</button>' :

@@ -8,6 +8,7 @@
 <body>
     <div class="container mt-3">
         <h2>El paseo ha finalizado con éxito. Muchas gracias.</h2>
+        <a href="<c:url value="/paseador" />">Volver</a>
     </div>
 </body>
 </html>

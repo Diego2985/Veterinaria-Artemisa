@@ -9,4 +9,7 @@ public interface RepositorioArticulo {
     List<Articulo> getArticulos();
 
     List<Articulo> buscarArticuloPorNombre(String busqueda);
+
+    void update(Articulo item);
+
 }

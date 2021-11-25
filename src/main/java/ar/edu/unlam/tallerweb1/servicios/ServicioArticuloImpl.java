@@ -30,4 +30,15 @@ public class ServicioArticuloImpl implements ServicioArticulo {
     public List<Articulo> buscarArticulosPorNombre(String busqueda) {
         return repositorioArticulo.buscarArticuloPorNombre(busqueda);
     }
+
+    @Override
+    public void update(Long idArticulo) {
+        List<Articulo> articulos = getArticulos();
+        articulos.forEach(item -> {
+            if (item.getId().equals(idArticulo)) {
+                item.setMostrado(true);
+                repositorioArticulo.update(item);
+            }
+        });
+    }
 }

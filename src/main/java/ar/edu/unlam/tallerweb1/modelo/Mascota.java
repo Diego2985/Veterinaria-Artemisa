@@ -3,6 +3,10 @@ package ar.edu.unlam.tallerweb1.modelo;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Entity
@@ -18,6 +22,8 @@ public class Mascota {
     private String tipo;
     private Long userId;
     private Boolean paseoActivo = false;
+    @Transient
+    private long edad;
 
     public Long getId() {
         return id;
@@ -70,5 +76,29 @@ public class Mascota {
 
     public void setPaseoActivo(Boolean paseoActivo) {
         this.paseoActivo = paseoActivo;
+    }
+
+    public long getEdad() {
+        YearMonth from = YearMonth.from(
+                getFechaNacimiento()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+        );
+
+        YearMonth to = YearMonth.from
+                (new Date()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+        );
+
+        edad = ChronoUnit.MONTHS.between(from, to);
+        return edad;
+    }
+
+    public Mascota setEdad(long edad) {
+        this.edad = edad;
+        return this;
     }
 }

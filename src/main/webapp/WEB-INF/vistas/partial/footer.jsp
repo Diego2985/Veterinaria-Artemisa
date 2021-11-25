@@ -12,8 +12,8 @@
 
     <!-- Copyright -->
     <div class="text-center text-dark p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2021 Copyright:
-        <a class="text-dark" href="https://mdbootstrap.com/">Petshop.com</a>
+        © 2021 Taller web -
+        <a class="text-dark" href="https://mdbootstrap.com/">Veterinaria Artemisa</a>
     </div>
     <!-- Copyright -->
 </footer>

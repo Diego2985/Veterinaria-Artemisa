@@ -4,8 +4,9 @@ import ar.edu.unlam.tallerweb1.excepciones.FechaNoSeleccionada;
 import ar.edu.unlam.tallerweb1.excepciones.HoraNoSeleccionada;
 import ar.edu.unlam.tallerweb1.excepciones.ServicioNoSeleccionado;
 import ar.edu.unlam.tallerweb1.excepciones.TurnoExistente;
-import ar.edu.unlam.tallerweb1.modelo.DatosTurno;
-import ar.edu.unlam.tallerweb1.modelo.Servicio;
+import ar.edu.unlam.tallerweb1.modelo.*;
+import ar.edu.unlam.tallerweb1.servicios.ServicioNotificacion;
+import ar.edu.unlam.tallerweb1.servicios.ServicioRecompensa;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReservarTurno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -23,15 +24,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ControladorReservarTurno {
 
     private final ServicioReservarTurno servicioReservarTurno;
+    private final ServicioNotificacion servicioNotificacion;
+    private final ServicioRecompensa servicioRecompensa;
 
     @Autowired
-    public ControladorReservarTurno(ServicioReservarTurno servicioReservarTurno) {
+    public ControladorReservarTurno(ServicioReservarTurno servicioReservarTurno, ServicioNotificacion servicioNotificacion, ServicioRecompensa servicioRecompensa) {
         this.servicioReservarTurno = servicioReservarTurno;
+        this.servicioNotificacion = servicioNotificacion;
+        this.servicioRecompensa = servicioRecompensa;
     }
 
     @RequestMapping(path="/reservar-turno")
@@ -47,7 +53,9 @@ public class ControladorReservarTurno {
 
         try {
             Long userId = (Long) request.getSession().getAttribute("userId");
-            servicioReservarTurno.reservar(datosTurno, userId);
+            Turno turno = servicioReservarTurno.reservar(datosTurno, userId);
+            servicioNotificacion.generaTurnoNotificacion(turno);
+            servicioRecompensa.generarRecompensa(userId, TipoRecompensa.TURNO_GRATIS, turno.getId());
         } catch (FechaNoSeleccionada e) {
             return reservaFallida(modelMap, "Fecha no seleccionada");
         } catch (HoraNoSeleccionada e) {

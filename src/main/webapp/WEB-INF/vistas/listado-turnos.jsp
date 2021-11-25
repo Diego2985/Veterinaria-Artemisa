@@ -1,21 +1,35 @@
 <%@ taglib prefix="th" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file = "partial/header.jsp" %>
+<c:set var="notificaciones" value="${notificaciones}" scope="request" />
+<jsp:include page="partial/header.jsp" />
 <!DOCTYPE html>
 <html>
     <head>
         <title>Veterinaria</title>
     </head>
     <body>
-        <div class="row d-flex">
-            <a href="${pageContext.request.contextPath}/reservar-turno" class="btn btn-lg btn-primary mt-4">Reservar Turno</a>
+
+        <c:if test="${recompensa != null}">
+            <div class="alert alert-success px-5 mx-5 mt-5" role="alert">
+                <h4 class="alert-heading">${recompensa.titulo}</h4>
+                <p>${recompensa.descripcion}</p>
+                <hr>
+                <p class="mb-0">${recompensa.caducidad}</p>
+            </div>
+        </c:if>
+
+        <div class="d-flex position-fixed bottom-0 right-0 m-3" style="z-index: 5; right: 0; bottom: 0;">
+            <form action="reservar-turno" method="GET">
+                <button type="submit" class="btn btn-primary btn-lg btn-floating"><i class="fas fa-plus"></i></button>
+            </form>
         </div>
 
         <c:if test="${empty turnos}">
             <div class="text-center mt-5 mb-5 p-5">
                 <h4><span>No tenés turnos</span></h4>
-                <p>Para reservar presiona en "Reservar Turno"</p>
+                <p>Para reservar presiona en "+"</p>
                 <br>
             </div>
         </c:if>
@@ -44,9 +58,8 @@
         </c:forEach>
 
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" ></script>
-        <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
         <%@ include file = "partial/footer.jsp" %>
     </body>
 </html>

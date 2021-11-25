@@ -45,6 +45,11 @@ public class RepositorioArticuloImpl implements RepositorioArticulo {
                 .list();
     }
 
+    @Override
+    public void update(Articulo item) {
+        getCurrentSession().save(item);
+    }
+
     private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

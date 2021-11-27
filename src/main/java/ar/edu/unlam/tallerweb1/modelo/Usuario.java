@@ -1,9 +1,10 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 // Clase que modela el concepto de Usuario, la anotacion @Entity le avisa a hibernate que esta clase es persistible
 // el paquete ar.edu.unlam.tallerweb1.modelo esta indicado en el archivo hibernateCOntext.xml para que hibernate
@@ -21,7 +22,12 @@ public class Usuario {
 	private String password;
 	private String rol;
 	private Boolean activo = false;
-	
+	private String nombre;
+	@Column(name = "fecha_nacimiento")
+	private Date fechaNacimiento;
+	@Transient
+	private long edad;
+
 	public Long getId() {
 		return id;
 	}
@@ -60,4 +66,46 @@ public class Usuario {
     public void activar() {
 		activo = true;
     }
+
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public Usuario setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+		return this;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public Usuario setNombre(String nombre) {
+		this.nombre = nombre;
+		return this;
+	}
+
+	public Usuario setEdad(long edad) {
+		this.edad = edad;
+		return this;
+	}
+
+	public long getEdad() {
+		YearMonth from = YearMonth.from(
+				getFechaNacimiento()
+						.toInstant()
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate()
+		);
+
+		YearMonth to = YearMonth.from
+				(new Date()
+						.toInstant()
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate()
+				);
+
+		edad = ChronoUnit.YEARS.between(from, to);
+		return edad;
+	}
 }

@@ -79,6 +79,10 @@
                 <i class="fas fa-shopping-cart"></i>
             </a>
 
+            <a class="text-reset me-3" href="${contextPath}/listado-usuarios">
+                <i class="fab fa-gratipay"></i>
+            </a>
+
             <!-- Notifications -->
             <div class="dropstart">
                 <a

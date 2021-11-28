@@ -31,7 +31,7 @@
           <td class="align-middle">${usuario.nombre}</td>
           <td class="align-middle">${usuario.edad}</td>
           <td class="align-middle">
-            <form method="post" action="articulos">
+            <form method="get" action="chatear">
               <div class="form-group">
                 <input type="hidden" name="idUsuario" value="${usuario.id}"/>
                 <button type="submit" class="btn btn-success">Conversar</button>

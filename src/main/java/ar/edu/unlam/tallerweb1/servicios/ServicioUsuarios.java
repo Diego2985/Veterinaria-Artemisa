@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ServicioUsuarios {
     List<Usuario> getUsuarios(Long userId);
+    Usuario getUsuarioPorId(Long userId);
 }

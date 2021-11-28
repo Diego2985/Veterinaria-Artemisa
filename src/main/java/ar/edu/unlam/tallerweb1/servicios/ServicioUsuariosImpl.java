@@ -25,4 +25,9 @@ public class ServicioUsuariosImpl implements ServicioUsuarios {
     public List<Usuario> getUsuarios(Long userId) {
         return repositorioUsuario.getUsuarios(userId);
     }
+
+    @Override
+    public Usuario getUsuarioPorId(Long userId) {
+        return repositorioUsuario.buscarUsuarioPorId(userId);
+    }
 }

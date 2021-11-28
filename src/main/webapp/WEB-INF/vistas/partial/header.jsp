@@ -79,7 +79,7 @@
                 <i class="fas fa-shopping-cart"></i>
             </a>
 
-            <a class="text-reset me-3" href="${contextPath}/listado-usuarios">
+            <a class="text-reset me-3" href="${contextPath}/listado-conversaciones">
                 <i class="fab fa-gratipay"></i>
             </a>
 

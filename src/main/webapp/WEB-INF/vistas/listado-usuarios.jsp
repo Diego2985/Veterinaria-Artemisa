@@ -8,6 +8,12 @@
   </head>
   <body>
 
+    <div class="text-center mt-3 mb-3 p-3">
+      <h4><span>¡Conectate!</span></h4>
+      <p>Selecciona con quien quieres hablar ;)</p>
+      <br>
+    </div>
+
     <table class="table mx-5">
       <thead class="thead-dark">
       <tr>

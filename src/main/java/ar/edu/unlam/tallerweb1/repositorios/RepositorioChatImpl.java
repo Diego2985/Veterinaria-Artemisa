@@ -21,10 +21,12 @@ import java.io.Serializable;
 public class RepositorioChatImpl implements RepositorioChat {
 
     private final SessionFactory sessionFactory;
+    private final RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public RepositorioChatImpl(SessionFactory sessionFactory) {
+    public RepositorioChatImpl(SessionFactory sessionFactory, RepositorioUsuario repositorioUsuario) {
         this.sessionFactory = sessionFactory;
+        this.repositorioUsuario = repositorioUsuario;
     }
 
     @Override
@@ -37,11 +39,9 @@ public class RepositorioChatImpl implements RepositorioChat {
         Criteria criteria = getCurrentSession()
                 .createCriteria(Conversacion.class);
 
-        Usuario emisor = new Usuario();
-        emisor.setId(emisorId);
+        Usuario emisor = repositorioUsuario.buscarUsuarioPorId(emisorId);
 
-        Usuario receptor = new Usuario();
-        receptor.setId(receptorId);
+        Usuario receptor = repositorioUsuario.buscarUsuarioPorId(receptorId);
 
         Criterion rest1 = Restrictions.and(Restrictions.eq("emisor", emisor),
                 Restrictions.eq("receptor", receptor));

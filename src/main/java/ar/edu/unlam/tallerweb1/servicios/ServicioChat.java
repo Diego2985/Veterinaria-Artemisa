@@ -1,11 +1,12 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import ar.edu.unlam.tallerweb1.modelo.Conversacion;
 import ar.edu.unlam.tallerweb1.modelo.OutputMessage;
+
+import java.util.List;
 
 public interface ServicioChat {
 
     void guardarMensaje(OutputMessage mensaje);
 
-    Conversacion existeConversacion(Long emisorId, Long receptorId);
+    List<OutputMessage> getMensajes(String idConversacion);
 }

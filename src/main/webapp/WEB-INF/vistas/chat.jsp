@@ -76,7 +76,7 @@
                         `
                 response.insertAdjacentHTML('beforeend', newChild2);
             }
-            document.getElementById('text').innerText = '';
+            document.getElementById('text').value = '';
         }
     </script>
 </head>
@@ -122,7 +122,26 @@
                     </div>
                     <div class="chat-history">
                         <ul class="m-b-0" id="mensajes">
-
+                            <c:forEach var="mensaje" items="${mensajes}">
+                                <c:choose>
+                                    <c:when test="${mensaje.from == userId}">
+                                        <li class='clearfix'>
+                                            <div class='message-data text-right other-message bg-transparent'>
+                                                    ${mensaje.time}
+                                            </div>
+                                            <div class='message other-message float-right'>${mensaje.text}</div>
+                                        </li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class='clearfix'>
+                                            <div class='message-data'>
+                                                <span class='message-data-time'>${mensaje.time}</span>
+                                            </div>
+                                            <div class='message my-message'>${mensaje.text}</div>
+                                        </li>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
                         </ul>
                     </div>
 

@@ -5,10 +5,13 @@ import ar.edu.unlam.tallerweb1.modelo.Conversacion;
 import ar.edu.unlam.tallerweb1.modelo.OutputMessage;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioChat;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -16,10 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServicioChatImpl implements ServicioChat {
 
     private final RepositorioChat repositorioChat;
+    private final RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public ServicioChatImpl(RepositorioChat repositorioChat) {
+    public ServicioChatImpl(RepositorioChat repositorioChat, RepositorioUsuario repositorioUsuario) {
         this.repositorioChat = repositorioChat;
+        this.repositorioUsuario = repositorioUsuario;
     }
 
     @Override
@@ -31,12 +36,10 @@ public class ServicioChatImpl implements ServicioChat {
         } else  {
             Conversacion nuevaConversacion = new Conversacion();
 
-            Usuario emisor = new Usuario();
-            emisor.setId(Long.parseLong(mensaje.getFrom()));
+            Usuario emisor = repositorioUsuario.buscarUsuarioPorId(Long.parseLong(mensaje.getFrom()));
             nuevaConversacion.setEmisor(emisor);
 
-            Usuario receptor = new Usuario();
-            receptor.setId(mensaje.getUserReceptorId());
+            Usuario receptor = repositorioUsuario.buscarUsuarioPorId(mensaje.getUserReceptorId());
             nuevaConversacion.setReceptor(receptor);
 
             Long conversacionId = (Long) repositorioChat.crearConversacion(nuevaConversacion);
@@ -46,7 +49,7 @@ public class ServicioChatImpl implements ServicioChat {
     }
 
     @Override
-    public Conversacion existeConversacion(Long emisorId, Long receptorId) {
-        return repositorioChat.existeConversacion(emisorId, receptorId);
+    public List<OutputMessage> getMensajes(String idConversacion) {
+        return repositorioChat.getMensajes(idConversacion);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -55,6 +56,14 @@ public class RepositorioChatImpl implements RepositorioChat {
     @Override
     public Serializable crearConversacion(Conversacion conversacion) {
         return getCurrentSession().save(conversacion);
+    }
+
+    @Override
+    public List<OutputMessage> getMensajes(String idConversacion) {
+        return getCurrentSession()
+                .createCriteria(OutputMessage.class)
+                .add(Restrictions.eq("conversacionId", Long.parseLong(idConversacion)))
+                .list();
     }
 
     private Session getCurrentSession() {

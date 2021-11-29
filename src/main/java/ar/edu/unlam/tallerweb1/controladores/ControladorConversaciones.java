@@ -26,6 +26,7 @@ public class ControladorConversaciones {
         Long userId = (Long) request.getSession().getAttribute("userId");
 
         model.put("conversaciones", servicioConversaciones.conversaciones(userId));
+        model.put("userId", userId);
 
         return new ModelAndView("listado-conversaciones", model);
     }

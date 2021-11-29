@@ -1,6 +1,5 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.modelo.Conversacion;
 import ar.edu.unlam.tallerweb1.modelo.Mensaje;
 import ar.edu.unlam.tallerweb1.modelo.OutputMessage;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -19,11 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class ControladorChat {
-
-//    private final SimpMessagingTemplate template;
 
     private final ServicioChat servicioChat;
     private final ServicioUsuarios servicioUsuarios;
@@ -36,13 +34,22 @@ public class ControladorChat {
         this.servicioUsuarios = servicioUsuarios;
     }
 
-    @RequestMapping(path="/chatear", method= RequestMethod.GET)
-    public ModelAndView irAChatear(@RequestParam("idUsuario") String idUsuario, HttpServletRequest request) {
+    @RequestMapping(path = "/chatear", method = RequestMethod.GET)
+    public ModelAndView irAChatear(
+            @RequestParam("idUsuario") String idUsuario,
+            @RequestParam(required = false, value = "idConversacion") String idConversacion,
+            HttpServletRequest request
+    ) {
         ModelMap model = new ModelMap();
         userId = (Long) request.getSession().getAttribute("userId");
 
         receptorId = Long.parseLong(idUsuario);
         Usuario usuario = servicioUsuarios.getUsuarioPorId(receptorId);
+
+        if (idConversacion != null) {
+            List<OutputMessage> mensajes = servicioChat.getMensajes(idConversacion);
+            model.put("mensajes", mensajes);
+        }
 
         model.put("userId", userId);
         model.put("receptor", usuario);
@@ -55,7 +62,8 @@ public class ControladorChat {
     public OutputMessage send(Mensaje mensaje) throws Exception {
         String time = new SimpleDateFormat("HH:mm").format(new Date());
         OutputMessage mensajeAGuardar = new OutputMessage(mensaje.getFrom(), mensaje.getText(), time);
-        mensajeAGuardar.setUserReceptorId(receptorId);
+        mensajeAGuardar.setUserReceptorId(
+                Long.parseLong(mensaje.getFrom()) != receptorId? receptorId : userId);
         servicioChat.guardarMensaje(mensajeAGuardar);
         return mensajeAGuardar;
     }

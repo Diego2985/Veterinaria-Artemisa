@@ -46,16 +46,34 @@
                             width="60px"
                     />
                     </th>
-                    <td class="align-middle">${conversacion.receptor.nombre}</td>
-                    <td class="align-middle">${conversacion.receptor.edad}</td>
-                    <td class="align-middle">
-                        <form method="get" action="chatear">
-                            <div class="form-group">
-                                <input type="hidden" name="idUsuario" value="${conversacion.id}"/>
-                                <button type="submit" class="btn btn-success">Conversar</button>
-                            </div>
-                        </form>
-                    </td>
+                    <c:choose>
+                        <c:when test="${conversacion.receptor.id != userId}">
+                            <td class="align-middle">${conversacion.receptor.nombre}</td>
+                            <td class="align-middle">${conversacion.receptor.edad}</td>
+                            <td class="align-middle">
+                                <form method="get" action="chatear">
+                                    <div class="form-group">
+                                        <input type="hidden" name="idUsuario" value="${conversacion.receptor.id}"/>
+                                        <input type="hidden" name="idConversacion" value="${conversacion.id}"/>
+                                        <button type="submit" class="btn btn-success">Conversar</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </c:when>
+                        <c:otherwise>
+                            <td class="align-middle">${conversacion.emisor.nombre}</td>
+                            <td class="align-middle">${conversacion.emisor.edad}</td>
+                            <td class="align-middle">
+                                <form method="get" action="chatear">
+                                    <div class="form-group">
+                                        <input type="hidden" name="idUsuario" value="${conversacion.emisor.id}"/>
+                                        <input type="hidden" name="idConversacion" value="${conversacion.id}"/>
+                                        <button type="submit" class="btn btn-success">Conversar</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </c:otherwise>
+                    </c:choose>
                 </tr>
             </c:forEach>
             </tbody>

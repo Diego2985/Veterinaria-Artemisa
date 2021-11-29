@@ -8,7 +8,7 @@
   </head>
   <body>
 
-    <div class="text-center mt-3 mb-3 p-3">
+    <div class="text-center mt-3 mb-2 p-3">
       <h4><span>¡Conectate!</span></h4>
       <p>Selecciona con quien quieres hablar ;)</p>
       <br>

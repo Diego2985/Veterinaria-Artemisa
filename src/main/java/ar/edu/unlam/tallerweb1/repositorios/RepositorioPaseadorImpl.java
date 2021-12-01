@@ -70,6 +70,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
         getCurrentSession().update(mascota);
     }
 
+    @Override
+    public List<RegistroPaseo> obtenerPaseosDeUnPaseador(long l, int i) {
+        return null;
+    }
+
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

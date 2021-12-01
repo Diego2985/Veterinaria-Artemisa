@@ -53,6 +53,9 @@ public class ControladorLogin {
 		Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
 		if (usuarioBuscado != null) {
 			request.getSession().setAttribute("userId", usuarioBuscado.getId());
+			request.getSession().setAttribute("userRol", usuarioBuscado.getRol());
+			if(usuarioBuscado.getRol() == "2")
+				return new ModelAndView("redirect:paseador/paseos/pendientes");
 			return new ModelAndView("redirect:/articulos");
 		} else {
 			// si el usuario no existe agrega un mensaje de error en el modelo.

@@ -54,4 +54,6 @@ public interface ServicioPaseador {
     Map<Long, PaseoActivo> obtenerMasDatosDePaseosActivos(List<RegistroPaseo> paseos) throws UnsupportedEncodingException;
 
     void cambiarEstadoDePaseoDeMascota(Mascota mascota);
+
+    List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId);
 }

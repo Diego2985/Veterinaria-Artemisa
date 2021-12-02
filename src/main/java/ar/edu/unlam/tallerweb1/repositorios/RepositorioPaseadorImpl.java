@@ -71,8 +71,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
     }
 
     @Override
-    public List<RegistroPaseo> obtenerPaseosDeUnPaseador(long l, int i) {
-        return null;
+    public List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long idPaseador, Integer estado) {
+        return getCurrentSession().createCriteria(RegistroPaseo.class).add(Restrictions.and(
+                Restrictions.eq("paseador.id", idPaseador),
+                Restrictions.eq("estado", estado)
+        )).list();
     }
 
     public Session getCurrentSession() {

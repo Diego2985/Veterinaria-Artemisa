@@ -25,5 +25,5 @@ public interface RepositorioPaseador {
 
     void cambiarEstadoDePaseoDePerro(Mascota mascota);
 
-    List<RegistroPaseo> obtenerPaseosDeUnPaseador(long l, int i);
+    List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long idPaseador, Integer estado);
 }

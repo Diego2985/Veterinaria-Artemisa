@@ -17,6 +17,24 @@ public class RegistroPaseo {
     private Integer estado=0;
     @OneToOne
     private Mascota mascota;
+    private String domicilio;
+    private String imgMapa;
+
+    public String getImgMapa() {
+        return imgMapa;
+    }
+
+    public void setImgMapa(String imgMapa) {
+        this.imgMapa = imgMapa;
+    }
+
+    public String getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
+    }
 
     public Long getId() {
         return id;

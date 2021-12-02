@@ -13,6 +13,15 @@ public class Paseador {
     private Double longitud;
     private Integer cantidadActual;
     private Integer cantidadMaxima;
+    private Integer idUsuario;
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
     public Integer getCantidadActual() {
         return cantidadActual;

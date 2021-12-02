@@ -23,30 +23,31 @@ public class ControladorPerfilPaseador {
 
     @RequestMapping("/paseador/paseos/pendientes")
     public ModelAndView obtenerPaseosPendientes(HttpServletRequest request) {
-        if (request.getSession().getAttribute("userId") == null || request.getSession().getAttribute("userRol") != "2")
+        if (request.getSession().getAttribute("userId") == null || !request.getSession().getAttribute("userRol").equals("2"))
             return new ModelAndView("redirect:/");
         ModelMap model = new ModelMap();
         List<RegistroPaseo> paseos = servicioPaseador.obtenerPaseosDeUnPaseador((Long) request.getSession().getAttribute("userId"), 0);
         model.put("paseos", paseos);
-        model.put("titulo", "Paseos pendientes");
-        return new ModelAndView("perfil-paseador-lista", model);
+        return new ModelAndView("paseador-lista-pendientes", model);
     }
 
     @RequestMapping("/paseador/paseos/activos")
     public ModelAndView obtenerPaseosActivos(HttpServletRequest request) {
+        if (request.getSession().getAttribute("userId") == null || !request.getSession().getAttribute("userRol").equals("2"))
+            return new ModelAndView("redirect:/");
         ModelMap model = new ModelMap();
         List<RegistroPaseo> paseos = servicioPaseador.obtenerPaseosDeUnPaseador((Long) request.getSession().getAttribute("userId"), 1);
         model.put("paseos", paseos);
-        model.put("titulo", "Paseos activos");
-        return new ModelAndView("perfil-paseador-lista", model);
+        return new ModelAndView("paseador-lista-activos", model);
     }
 
     @RequestMapping("/paseador/paseos/finalizados")
     public ModelAndView obtenerPaseosFinalizados(HttpServletRequest request) {
+        if (request.getSession().getAttribute("userId") == null || !request.getSession().getAttribute("userRol").equals("2"))
+            return new ModelAndView("redirect:/");
         ModelMap model = new ModelMap();
         List<RegistroPaseo> paseos = servicioPaseador.obtenerPaseosDeUnPaseador((Long) request.getSession().getAttribute("userId"), 2);
         model.put("paseos", paseos);
-        model.put("titulo", "Paseos finalizados");
-        return new ModelAndView("perfil-paseador-lista", model);
+        return new ModelAndView("paseador-lista-finalizados", model);
     }
 }

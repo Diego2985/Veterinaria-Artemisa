@@ -18,14 +18,23 @@ public class RegistroPaseo {
     @OneToOne
     private Mascota mascota;
     private String domicilio;
-    private String imgMapa;
+    private Double latitudUsuario;
+    private Double longitudUsuario;
 
-    public String getImgMapa() {
-        return imgMapa;
+    public Double getLatitudUsuario() {
+        return latitudUsuario;
     }
 
-    public void setImgMapa(String imgMapa) {
-        this.imgMapa = imgMapa;
+    public void setLatitudUsuario(Double latitudUsuario) {
+        this.latitudUsuario = latitudUsuario;
+    }
+
+    public Double getLongitudUsuario() {
+        return longitudUsuario;
+    }
+
+    public void setLongitudUsuario(Double longitudUsuario) {
+        this.longitudUsuario = longitudUsuario;
     }
 
     public String getDomicilio() {

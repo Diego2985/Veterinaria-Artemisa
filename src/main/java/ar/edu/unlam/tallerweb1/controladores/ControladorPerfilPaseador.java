@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -23,12 +25,19 @@ public class ControladorPerfilPaseador {
 
     @RequestMapping("/paseador/paseos/pendientes")
     public ModelAndView obtenerPaseosPendientes(HttpServletRequest request) {
-        if (request.getSession().getAttribute("userId") == null || !request.getSession().getAttribute("userRol").equals("2"))
-            return new ModelAndView("redirect:/");
         ModelMap model = new ModelMap();
-        List<RegistroPaseo> paseos = servicioPaseador.obtenerPaseosDeUnPaseador((Long) request.getSession().getAttribute("userId"), 0);
-        model.put("paseos", paseos);
-        return new ModelAndView("paseador-lista-pendientes", model);
+        try {
+            if (request.getSession().getAttribute("userId") == null || !request.getSession().getAttribute("userRol").equals("2"))
+                return new ModelAndView("redirect:/");
+            List<RegistroPaseo> paseos = servicioPaseador.obtenerPaseosDeUnPaseador((Long) request.getSession().getAttribute("userId"), 0);
+            HashMap<Long, String> imagenesDeRutas = servicioPaseador.obtenerImagenesDeRutaADomicilios(paseos);
+            model.put("imagenes", imagenesDeRutas);
+            model.put("paseos", paseos);
+            return new ModelAndView("paseador-lista-pendientes", model);
+        } catch (UnsupportedEncodingException e) {
+            model.put("mensaje", e.getMessage());
+            return new ModelAndView("paseador-error", model);
+        }
     }
 
     @RequestMapping("/paseador/paseos/activos")

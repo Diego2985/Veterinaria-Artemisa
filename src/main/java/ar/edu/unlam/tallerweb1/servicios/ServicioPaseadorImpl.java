@@ -56,12 +56,16 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario, Mascota mascota) {
+    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario, Mascota mascota, Double latitud, Double longitud) throws IOException {
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
+        Ubicacion domicilio = obtenerDireccionDeUbicacionActual(latitud, longitud);
         RegistroPaseo registro=new RegistroPaseo();
         registro.setPaseador(paseador);
         registro.setUsuario(usuario);
         registro.setMascota(mascota);
+        registro.setLatitudUsuario(latitud);
+        registro.setLongitudUsuario(longitud);
+        registro.setDomicilio(domicilio.toString());
         repositorioPaseador.crearRegistroDePaseo(registro);
         mascota.setPaseoActivo(true);
         repositorioPaseador.cambiarEstadoDePaseoDePerro(mascota);
@@ -216,6 +220,19 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     @Override
     public List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId, Integer estado) {
         return repositorioPaseador.obtenerPaseosDeUnPaseador(userId, estado);
+    }
+
+    @Override
+    public HashMap<Long, String> obtenerImagenesDeRutaADomicilios(List<RegistroPaseo> paseos) throws UnsupportedEncodingException {
+        HashMap<Long, String> imagenes = new HashMap<>();
+        for (RegistroPaseo paseo: paseos
+             ) {
+            Coordenadas usuario = new Coordenadas(paseo.getLatitudUsuario(), paseo.getLongitudUsuario());
+            Coordenadas paseador = new Coordenadas(paseo.getPaseador().getLatitud(), paseo.getPaseador().getLongitud());
+            String imagen = obtenerImagenDeRutaDePaseadorAUsuario(usuario, paseador);
+            imagenes.put(paseo.getId(), imagen);
+        }
+        return imagenes;
     }
 
     private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {

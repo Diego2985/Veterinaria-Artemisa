@@ -99,9 +99,9 @@ public class ControladorPaseador {
         try {
             Mascota mascota = servicioMascotas.obtenerMascotaPorId(perro);
             Paseador paseador = servicioPaseador.obtenerPaseador(idPaseador, true);
-            servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota);
+            servicioPaseador.crearRegistroDePaseo(paseador, (Long) request.getSession().getAttribute("userId"), mascota, latitud, longitud);
             return new ModelAndView("redirect:/paseador");
-        } catch (PaseadorConCantMaxDeMascotasException e) {
+        } catch (PaseadorConCantMaxDeMascotasException | IOException e ) {
             model.put("mensaje", "El paseador indicado no se encuentra disponible");
             return new ModelAndView("paseador-error", model);
         }

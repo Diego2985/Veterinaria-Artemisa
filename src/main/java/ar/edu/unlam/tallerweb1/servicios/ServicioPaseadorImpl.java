@@ -214,8 +214,8 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId) {
-        return repositorioPaseador.obtenerPaseosDeUnPaseador(userId, 0);
+    public List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId, Integer estado) {
+        return repositorioPaseador.obtenerPaseosDeUnPaseador(userId, estado);
     }
 
     private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {

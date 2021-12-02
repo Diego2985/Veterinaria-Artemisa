@@ -4,8 +4,6 @@ import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -38,7 +36,7 @@ public class PerfilPaseadorTest {
     }
 
     private List<RegistroPaseo> whenSolicitoLosPaseosPendientes() {
-        return servicioPaseador.obtenerPaseosDeUnPaseador(2L);
+        return servicioPaseador.obtenerPaseosDeUnPaseador(2L, 0);
     }
 
     private void thenObtengoLosPaseosPendientesDeEsePaseador(List<RegistroPaseo> paseos) {

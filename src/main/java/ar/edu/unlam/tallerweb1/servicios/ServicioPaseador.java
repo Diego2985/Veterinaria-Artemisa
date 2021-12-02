@@ -55,5 +55,5 @@ public interface ServicioPaseador {
 
     void cambiarEstadoDePaseoDeMascota(Mascota mascota);
 
-    List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId);
+    List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId, Integer estado);
 }

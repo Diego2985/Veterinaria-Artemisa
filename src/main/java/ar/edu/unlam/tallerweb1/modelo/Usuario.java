@@ -1,15 +1,20 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 // Clase que modela el concepto de Usuario, la anotacion @Entity le avisa a hibernate que esta clase es persistible
 // el paquete ar.edu.unlam.tallerweb1.modelo esta indicado en el archivo hibernateCOntext.xml para que hibernate
 // busque entities en el
 @Entity
+@Embeddable
 public class Usuario {
 
 	// La anotacion id indica que este atributo es el utilizado como clave primaria de la entity, se indica que el valor es autogenerado.
@@ -25,6 +30,9 @@ public class Usuario {
 	private String nombre;
 	@Column(name = "fecha_nacimiento")
 	private Date fechaNacimiento;
+	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private List<Mascota> mascotas;
 	@Transient
 	private long edad;
 
@@ -87,6 +95,15 @@ public class Usuario {
 
 	public Usuario setEdad(long edad) {
 		this.edad = edad;
+		return this;
+	}
+
+	public List<Mascota> getMascotas() {
+		return mascotas;
+	}
+
+	public Usuario setMascotas(List<Mascota> mascotas) {
+		this.mascotas = mascotas;
 		return this;
 	}
 

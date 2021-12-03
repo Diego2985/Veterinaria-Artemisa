@@ -10,17 +10,18 @@
 
     <div class="text-center mt-3 mb-2 p-3">
       <h4><span>¡Conectate!</span></h4>
-      <p>Selecciona con quien quieres hablar ;)</p>
+      <p>Conversá con quien quieras hablar ;)</p>
       <br>
     </div>
 
     <table class="table mx-5">
       <thead class="thead-dark">
       <tr>
-        <th scope="col">Foto</th>
+        <th scope="col"></th>
         <th scope="col">Nombre</th>
         <th scope="col">Edad</th>
-        <th scope="col">Conectar</th>
+        <th scope="col">Mascotas</th>
+        <th scope="col"></th>
       </tr>
       </thead>
       <tbody>
@@ -36,6 +37,7 @@
           </th>
           <td class="align-middle">${usuario.nombre}</td>
           <td class="align-middle">${usuario.edad}</td>
+          <td class="align-middle">${usuario.mascotas.size()}</td>
           <td class="align-middle">
             <form method="get" action="chatear">
               <div class="form-group">

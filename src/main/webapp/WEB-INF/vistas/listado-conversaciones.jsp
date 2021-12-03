@@ -29,7 +29,7 @@
         <table class="table mx-5">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">Foto</th>
+                <th scope="col"></th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Edad</th>
                 <th scope="col">Conectar</th>

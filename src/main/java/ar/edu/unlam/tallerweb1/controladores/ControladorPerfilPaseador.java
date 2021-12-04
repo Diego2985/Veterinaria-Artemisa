@@ -1,8 +1,8 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.converter.PaseoActivo;
 import ar.edu.unlam.tallerweb1.modelo.RegistroPaseo;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPaseador;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ControladorPerfilPaseador {
@@ -42,12 +44,19 @@ public class ControladorPerfilPaseador {
 
     @RequestMapping("/paseador/paseos/activos")
     public ModelAndView obtenerPaseosActivos(HttpServletRequest request) {
-        if (request.getSession().getAttribute("userId") == null || !request.getSession().getAttribute("userRol").equals("2"))
-            return new ModelAndView("redirect:/");
         ModelMap model = new ModelMap();
-        List<RegistroPaseo> paseos = servicioPaseador.obtenerPaseosDeUnPaseador((Long) request.getSession().getAttribute("userId"), 1);
-        model.put("paseos", paseos);
-        return new ModelAndView("paseador-lista-activos", model);
+        try {
+            if (request.getSession().getAttribute("userId") == null || !request.getSession().getAttribute("userRol").equals("2"))
+                return new ModelAndView("redirect:/");
+            List<RegistroPaseo> paseos = servicioPaseador.obtenerPaseosDeUnPaseador((Long) request.getSession().getAttribute("userId"), 1);
+            Map<Long, PaseoActivo> tiempos = servicioPaseador.obtenerMasDatosDePaseosActivos(paseos);
+            model.put("paseos", paseos);
+            model.put("tiempos", tiempos);
+            return new ModelAndView("paseador-lista-activos", model);
+        } catch (IOException e) {
+            model.put("mensaje", e.getMessage());
+            return new ModelAndView("paseador-error", model);
+        }
     }
 
     @RequestMapping("/paseador/paseos/finalizados")

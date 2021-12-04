@@ -161,7 +161,11 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     @Override
     public String obtenerImagenDePosicionDelPaseador(Long id) throws UnsupportedEncodingException {
         Paseador paseador = repositorioPaseador.obtenerUnPaseador(id);
-        Coordenadas coordenadas = new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
+        return obtenerImagenDePosicion(paseador.getLatitud(), paseador.getLongitud());
+    }
+
+    private String obtenerImagenDePosicion(Double latitud, Double longitud) throws UnsupportedEncodingException {
+        Coordenadas coordenadas = new Coordenadas(latitud, longitud);
         String uri = "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&i&c="+coordenadas.toString()+"&h=300&w=400&r=10";
         return getImageFromAPI(uri);
     }
@@ -204,8 +208,9 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         Map<Long, PaseoActivo> mapPaseosActivos = new HashMap<>();
         for (RegistroPaseo paseo:paseos) {
             String imagen = obtenerImagenDePosicionDelPaseador(paseo.getPaseador().getId());
+            String imgUsuario = obtenerImagenDePosicion(paseo.getLatitudUsuario(), paseo.getLongitudUsuario());
             Integer minutosRestantes = Math.toIntExact(((paseo.getHoraFinal().getTime() - new Date().getTime()) / 1000) / 60);
-            PaseoActivo paseoActivo = new PaseoActivo(paseo, minutosRestantes, imagen);
+            PaseoActivo paseoActivo = new PaseoActivo(paseo, minutosRestantes, imagen, imgUsuario);
             mapPaseosActivos.put(paseo.getId(), paseoActivo);
         }
         return mapPaseosActivos;
@@ -219,7 +224,8 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
 
     @Override
     public List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId, Integer estado) {
-        return repositorioPaseador.obtenerPaseosDeUnPaseador(userId, estado);
+        Paseador paseador = repositorioPaseador.obtenerPaseadorPorIdUsuario(userId);
+        return repositorioPaseador.obtenerPaseosDeUnPaseador(paseador.getId(), estado);
     }
 
     @Override

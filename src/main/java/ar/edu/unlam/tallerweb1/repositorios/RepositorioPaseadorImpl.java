@@ -78,6 +78,11 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
         )).list();
     }
 
+    @Override
+    public Paseador obtenerPaseadorPorIdUsuario(Long userId) {
+        return (Paseador) getCurrentSession().createCriteria(Paseador.class).add(Restrictions.eq("idUsuario", userId)).uniqueResult();
+    }
+
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

@@ -12,13 +12,7 @@
     <script type="text/javascript">
         var stompClient = null;
 
-        function setConnected(connected) {
-            document.getElementById('connect').disabled = connected;
-            document.getElementById('disconnect').disabled = !connected;
-            document.getElementById('conversationDiv').style.visibility
-                = connected ? 'visible' : 'hidden';
-            document.getElementById('response').innerHTML = '';
-        }
+        function setConnected(connected) {}
 
         function connect() {
             var socket = new SockJS('${contextPath}/chat');
@@ -41,19 +35,12 @@
         }
 
         function sendMessage() {
-            var from = document.getElementById('from').value;
             var text = document.getElementById('text').value;
             stompClient.send("/app/chat", {},
                 JSON.stringify({'from':${userId}, 'text': text}));
         }
 
         function showMessageOutput(messageOutput) {
-            // var response = document.getElementById('response');
-            // var p = document.createElement('p');
-            // p.style.wordWrap = 'break-word';
-            // p.appendChild(document.createTextNode(messageOutput.from + ": "
-            //     + messageOutput.text + " (" + messageOutput.time + ")"));
-            // response.appendChild(p);
             var response = document.getElementById('mensajes');
             if (parseInt(messageOutput.from) === ${userId}) {
                 var newChild = `
@@ -80,83 +67,75 @@
         }
     </script>
 </head>
-<body onload="disconnect()">
-<div>
-    <div>
-        <input type="text" id="from" placeholder="Choose a nickname"/>
-    </div>
-    <br/>
-    <div>
-        <button id="connect" onclick="connect();">Connect</button>
-        <button id="disconnect" disabled="disabled" onclick="disconnect();">
-            Disconnect
-        </button>
-    </div>
-    <br/>
-    <div id="conversationDiv">
-        <%--                <input type="text" id="text" placeholder="Write a message..."/>--%>
-        <%--                <button id="sendMessage" onclick="sendMessage();">Send</button>--%>
-        <p id="response"></p>
-    </div>
-</div>
+<body onload="connect()" onunload="disconnect()">
 
-<div class="container">
-    <div class="row clearfix">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="chat">
-                    <div class="chat-header clearfix">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <c:if test="${receptor != null}">
-                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
-                                    </a>
-                                    <div class="chat-about">
-                                        <h6 class="m-b-0">${receptor.nombre}</h6>
-                                        <small>3 Mascotas</small>
-                                    </div>
-                                </c:if>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card mt-5">
+                    <div class="chat">
+                        <div class="chat-header clearfix">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <c:if test="${receptor != null}">
+                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
+                                        </a>
+                                        <div class="chat-about">
+                                            <h6 class="m-b-0">${receptor.nombre}</h6>
+                                            <c:choose>
+                                                <c:when test="${receptor.mascotas.size() == 0}">
+                                                    <small>No tiene mascotas</small>
+                                                </c:when>
+                                                <c:when test="${receptor.mascotas.size() == 1}">
+                                                    <small>1 mascota</small>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <small>${receptor.mascotas.size()} mascotas</small>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </c:if>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="chat-history">
-                        <ul class="m-b-0" id="mensajes">
-                            <c:forEach var="mensaje" items="${mensajes}">
-                                <c:choose>
-                                    <c:when test="${mensaje.from == userId}">
-                                        <li class='clearfix'>
-                                            <div class='message-data text-right other-message bg-transparent'>
-                                                    ${mensaje.time}
-                                            </div>
-                                            <div class='message other-message float-right'>${mensaje.text}</div>
-                                        </li>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class='clearfix'>
-                                            <div class='message-data'>
-                                                <span class='message-data-time'>${mensaje.time}</span>
-                                            </div>
-                                            <div class='message my-message'>${mensaje.text}</div>
-                                        </li>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-                        </ul>
-                    </div>
-
-                    <div class="chat-message clearfix">
-                        <div class="input-group mb-0">
-                            <input type="text" id="text" class="form-control" placeholder="Escribe un mensaje...">
-                            <button class="btn btn-primary" id="sendMessage" onclick="sendMessage();">Enviar</button>
+                        <div class="chat-history">
+                            <ul class="m-b-0" id="mensajes">
+                                <c:forEach var="mensaje" items="${mensajes}">
+                                    <c:choose>
+                                        <c:when test="${mensaje.from == userId}">
+                                            <li class='clearfix'>
+                                                <div class='message-data text-right other-message bg-transparent'>
+                                                        ${mensaje.time}
+                                                </div>
+                                                <div class='message other-message float-right'>${mensaje.text}</div>
+                                            </li>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li class='clearfix'>
+                                                <div class='message-data'>
+                                                    <span class='message-data-time'>${mensaje.time}</span>
+                                                </div>
+                                                <div class='message my-message'>${mensaje.text}</div>
+                                            </li>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </ul>
                         </div>
-                    </div>
 
+                        <div class="chat-message clearfix">
+                            <div class="input-group mb-0">
+                                <input type="text" id="text" class="form-control" placeholder="Escribe un mensaje...">
+                                <button class="btn btn-primary" id="sendMessage" onclick="sendMessage();">Enviar</button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <%@ include file="partial/footer.jsp" %>
 </body>

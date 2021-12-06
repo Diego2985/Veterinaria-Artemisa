@@ -112,6 +112,8 @@ public class ControladorPaseador {
         ModelMap model = new ModelMap();
         try {
             servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 1);
+            if(request.getSession().getAttribute("userRol").equals("2"))
+                return new ModelAndView("redirect:/paseador/paseos/pendientes");
             return new ModelAndView("redirect:/paseador");
         } catch (DatosCambiadosException e) {
             model.put("mensaje", e.getMessage());
@@ -126,6 +128,8 @@ public class ControladorPaseador {
             RegistroPaseo registro = servicioPaseador.actualizarRegistroDePaseo(idRegistro, idPaseador, idUsuario, 2);
             servicioPaseador.cambiarEstadoDePaseoDeMascota(registro.getMascota());
             model.put("registro", registro);
+            if(request.getSession().getAttribute("userRol").equals("2"))
+                return new ModelAndView("redirect:/paseador/paseos/activos");
             return new ModelAndView("paseo-finalizado", model);
         } catch (DatosCambiadosException e) {
             model.put("mensaje", e.getMessage());

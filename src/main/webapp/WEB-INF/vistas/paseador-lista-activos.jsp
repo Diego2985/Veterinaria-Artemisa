@@ -35,7 +35,12 @@
                             ${tiempos.get(paseo.id).tiempoRestante} minutos
                         </td>
                         <td>
-                            <button type="button" class="btn btn-success">Finalizar Paseo</button>
+                            <form method="post" action="<c:url value="/paseador/finalizar-paseo"/>">
+                                <input type="hidden" name="idRegistro" value="${paseo.id}" />
+                                <input type="hidden" name="idPaseador" value="${paseo.paseador.id}" />
+                                <input type="hidden" name="idUsuario" value="${paseo.usuario.id}" />
+                                <button class="btn btn-success" type="submit">Finalizar Paseo</button>
+                            </form>
                         </td>
                     </tr>
                 </c:forEach>

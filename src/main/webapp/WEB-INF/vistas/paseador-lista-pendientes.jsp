@@ -31,7 +31,12 @@
                                 </a>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-success">Comenzar Paseo</button>
+                                <form action="<c:url value="/paseador/comenzar-seguimiento"/>" method="post">
+                                    <input type="hidden" name="idRegistro" value="${paseo.id}"/>
+                                    <input type="hidden" name="idPaseador" value="${paseo.paseador.id}"/>
+                                    <input type="hidden" name="idUsuario" value="${paseo.usuario.id}"/>
+                                    <button type="submit" class="btn btn-success">Comenzar paseo</button>
+                                </form>
                             </td>
                         </tr>
                     </c:forEach>

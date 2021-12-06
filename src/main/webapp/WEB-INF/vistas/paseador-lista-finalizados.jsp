@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="partial/header.jsp" %>
+<%@ include file="partial/header-paseador.jsp" %>
 <html>
 <head>
   <title>Veterinaria</title>

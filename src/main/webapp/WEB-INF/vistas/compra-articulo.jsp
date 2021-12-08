@@ -5,105 +5,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>Veterinaria Artemisa</title>
+    <link rel="stylesheet" href="${contextPath}/css/mercadoPago.css">
 </head>
 <body>
-<form:form method="post" action="compra-articulo" modelAttribute="datosCompra">
-    <div class="padding">
+<div class="container-fluid px-1 px-md-2 px-lg-4 py-5 mx-auto">
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-9 col-sm-11">
+            <div class="card border-0">
+    <form id="form-checkout" >
         <div class="row">
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <strong>Tarjeta de debito</strong>
-                        <small>entrar los detalles de los datos</small>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="name">Nombre</label>
-
-    <form:input path="nombre" class="form-control" type="text" placeholder="Ingresa tu nombre"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <%--@declare id="ccnumber"--%><label for="ccnumber">Numero de tarjeta de credito</label>
-                                    <div class="input-group">
-                                        <label>
-                                            <form:input path="numeroCredito" class="form-control" type="text" placeholder="0000 0000 0000 0000" autocomplete="email"/>
-                                        </label>
-                                        <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="mdi mdi-credit-card"></i>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4">
-                                <label for="ccmonth">Mes</label>
-                                <form:select path="mes" class="form-control" id="ccmonth">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                </form:select>
-                            </div>
-                            <div class="form-group col-sm-4">
-                                <label for="ccyear">Año</label>
-                                <form:select path="anio" class="form-control" id="ccyear">
-                                    <option>2014</option>
-                                    <option>2015</option>
-                                    <option>2016</option>
-                                    <option>2017</option>
-                                    <option>2018</option>
-                                    <option>2019</option>
-                                    <option>2020</option>
-                                    <option>2021</option>
-                                    <option>2022</option>
-                                    <option>2023</option>
-                                    <option>2024</option>
-                                    <option>2025</option>
-                                </form:select>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="cvv">CVV/CVC</label>
-                                    <input class="form-control" id="cvv" type="text" placeholder="123">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-
-                        <button class="btn btn-sm btn-success float-right" type="submit">
-                            <i class="mdi mdi-gamepad-circle"></i> Continuar</button>
-                        <button class="btn btn-sm btn-danger" type="reset">
-                            <i class="mdi mdi-lock-reset"></i> Resetear</button>
-
-                    </div>
+            <div class="col-sm-7 border-line pb-3">
+                <div class="form-group">
+                    <p class="text-muted text-sm mb-0">Numero de Tarjeta</p>
+                    <div class="row px-3"><input type="text" name="cardNumber" id="form-checkout__cardNumber" />
                 </div>
-            </div>
+                    <div class="form-group">
+                        <p class="text-muted text-sm mb-0">Mes</p><input type="text" name="cardExpirationMonth" id="form-checkout__cardExpirationMonth" />
+                    </div>
+                    <div class="form-group">
+                        <p class="text-muted text-sm mb-0">Año</p><input type="text" name="cardExpirationYear" id="form-checkout__cardExpirationYear" />
+                    </div>
+                    <div class="form-group">
+                        <p class="text-muted text-sm mb-0">Nombre del titular</p><input type="text" name="cardholderName" id="form-checkout__cardholderName"/>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-muted text-sm mb-0">Email</p><input type="email" name="cardholderEmail" id="form-checkout__cardholderEmail"/>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-muted text-sm mb-0">CVV/CVC</p><input type="text" name="securityCode" id="form-checkout__securityCode" />
+                    </div>  <select name="issuer" id="form-checkout__issuer"></select>
+
+
+                    <div class="form-group">
+                        <p class="text-muted text-sm mb-0">Documento</p><input type="text" name="identificationNumber" id="form-checkout__identificationNumber"/>
+                    </div> <select name="identificationType" id="form-checkout__identificationType"></select>
+          <select name="installments" id="form-checkout__installments"></select>
+                    <div class="col-sm-5 text-sm-center justify-content-center pt-4 pb-4"></div><button type="submit" id="form-checkout__submit"class="btn btn-red text-center mt-4">Pagar</button>
+          <progress value="0" class="progress-bar">Cargando...</progress>
+    </form>
+          </div>
         </div>
     </div>
-</form:form>
-
-
+</div>
 
 <!-- Placed at the end of the document so the pages load faster -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script>
+    const mp = new MercadoPago('TEST-0bd8f6ff-620f-4df7-a047-670ca51a949d');
+    // Add step #3
+</script>
+
+<script src="js/mercadoPago.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" ></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="js/bootstrap.min.js" type="text/javascript"></script>

@@ -20,7 +20,7 @@
             rel="stylesheet"
     />
 
-    <link rel="shortcut icon" type="image/x-icon" href="https://image.flaticon.com/icons/png/512/489/489868.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="${contextPath}/images/logo-white.png" />
 
 </head>
 
@@ -59,7 +59,7 @@
                     <a class="nav-link" href="${contextPath}/articulos">Articulos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${contextPath}/listado-turnos">Mis Turnos</a>
+                    <a class="nav-link" href="${contextPath}/listado-turnos">Peluquería</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${contextPath}/paseador">Paseadores</a>

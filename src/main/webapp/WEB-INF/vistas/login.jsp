@@ -16,7 +16,7 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <div id="loginbox" class="col-md-4 col-sm mx-auto align-items-center">
+                <div id="loginbox" class="col-md-4 col-sm mx-auto mt-5">
                     <%--Definicion de un form asociado a la accion /validar-login por POST. Se indica ademas que el model attribute se--%>
                     <%--debe referenciar con el nombre usuario, spring mapea los elementos de la vista con los atributos de dicho objeto--%>
                     <%--para eso debe coincidir el valor del elemento path de cada input con el nombre de un atributo del objeto --%>
@@ -31,12 +31,10 @@
                         </div>
 
                         <%--Elementos de entrada de datos, el elemento path debe indicar en que atributo del objeto usuario se guardan los datos ingresados--%>
-                        <form:input path="email" id="email" type="email" class="form-control mt-2" placeholder="Email" />
+                        <form:input path="email" id="email" type="email" class="form-control" placeholder="Email" />
                         <form:input path="password" type="password" id="password" class="form-control mt-2" placeholder="Password"/>
 
-                        <button class="btn btn-primary btn-block mt-4" type="submit"/>
-                            Iniciar sesión
-                        </button>
+                        <button class="btn btn-primary btn-block mt-4 d-block" type="submit">Iniciar sesión</button>
                     </form:form>
                     <%--Bloque que es visible si el elemento error no esta vacio	--%>
                     <c:if test="${not empty error}">

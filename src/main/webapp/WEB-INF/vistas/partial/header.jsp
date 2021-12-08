@@ -74,9 +74,9 @@
 
         <!-- Right elements -->
         <div class="d-flex align-items-center">
-            <!-- Icon -->
-            <a class="text-reset me-3" href="#">
-                <i class="fas fa-shopping-cart"></i>
+
+            <a class="text-reset me-3" href="${contextPath}/listado-conversaciones">
+                <i class="fab fa-gratipay" style="color: red"></i>
             </a>
 
             <!-- Notifications -->

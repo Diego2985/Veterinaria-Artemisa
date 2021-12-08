@@ -13,4 +13,6 @@ public interface RepositorioUsuario {
 	void modificar(Usuario usuario);
 
     Usuario buscarUsuarioPorId(Long idUsuario);
+
+	List<Usuario> getUsuarios(Long userId);
 }

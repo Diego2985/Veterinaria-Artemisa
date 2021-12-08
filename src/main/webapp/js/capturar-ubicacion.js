@@ -6,13 +6,15 @@ const buttonContinuar = document.getElementById("continuar")
 
 getUbicacion.addEventListener("click", () => {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(localizacion => {
+        // navigator.geolocation.getCurrentPosition(localizacion => {
             latitud = -34.588902;
             longitud = -58.409851;
             setMensaje.value = "Listo"
             setLatitud.value = latitud
             setLongitud.value = longitud
             buttonContinuar.disabled = false
-        })
-    } else setMensaje.value = "Debe habilitar la geolocalización"
+        // })
+    } else {
+        setMensaje.value = "Debe habilitar la geolocalización"
+    }
 })

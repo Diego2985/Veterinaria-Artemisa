@@ -27,7 +27,7 @@
         </div>
 
         <c:if test="${empty turnos}">
-            <div class="text-center mt-5 mb-5 p-5">
+            <div class="text-center mt-5 mb-5 p-5" style="height: 100%;">
                 <h4><span>No tenés turnos</span></h4>
                 <p>Para reservar presiona en "+"</p>
                 <br>

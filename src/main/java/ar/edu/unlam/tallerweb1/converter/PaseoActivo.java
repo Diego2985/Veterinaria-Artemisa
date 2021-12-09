@@ -6,11 +6,21 @@ public class PaseoActivo {
     private RegistroPaseo paseo;
     private Integer tiempoRestante;
     private String imgPosicionPaseador;
+    private String imgPosicionUsuario;
 
-    public PaseoActivo(RegistroPaseo paseo, Integer tiempoRestante, String imgPosicionPaseador) {
+    public PaseoActivo(RegistroPaseo paseo, Integer tiempoRestante, String imgPosicionPaseador, String imgPosicionUsuario) {
         this.paseo = paseo;
         this.tiempoRestante = tiempoRestante;
         this.imgPosicionPaseador = imgPosicionPaseador;
+        this.imgPosicionUsuario = imgPosicionUsuario;
+    }
+
+    public String getImgPosicionUsuario() {
+        return imgPosicionUsuario;
+    }
+
+    public void setImgPosicionUsuario(String imgPosicionUsuario) {
+        this.imgPosicionUsuario = imgPosicionUsuario;
     }
 
     public RegistroPaseo getPaseo() {

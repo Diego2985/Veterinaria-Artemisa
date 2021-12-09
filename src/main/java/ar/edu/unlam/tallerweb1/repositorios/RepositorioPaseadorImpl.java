@@ -70,6 +70,19 @@ public class RepositorioPaseadorImpl implements RepositorioPaseador {
         getCurrentSession().update(mascota);
     }
 
+    @Override
+    public List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long idPaseador, Integer estado) {
+        return getCurrentSession().createCriteria(RegistroPaseo.class).add(Restrictions.and(
+                Restrictions.eq("paseador.id", idPaseador),
+                Restrictions.eq("estado", estado)
+        )).list();
+    }
+
+    @Override
+    public Paseador obtenerPaseadorPorIdUsuario(Long userId) {
+        return (Paseador) getCurrentSession().createCriteria(Paseador.class).add(Restrictions.eq("idUsuario", userId)).uniqueResult();
+    }
+
     public Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }

@@ -17,6 +17,33 @@ public class RegistroPaseo {
     private Integer estado=0;
     @OneToOne
     private Mascota mascota;
+    private String domicilio;
+    private Double latitudUsuario;
+    private Double longitudUsuario;
+
+    public Double getLatitudUsuario() {
+        return latitudUsuario;
+    }
+
+    public void setLatitudUsuario(Double latitudUsuario) {
+        this.latitudUsuario = latitudUsuario;
+    }
+
+    public Double getLongitudUsuario() {
+        return longitudUsuario;
+    }
+
+    public void setLongitudUsuario(Double longitudUsuario) {
+        this.longitudUsuario = longitudUsuario;
+    }
+
+    public String getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
+    }
 
     public Long getId() {
         return id;

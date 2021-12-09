@@ -10,8 +10,8 @@
         <title>Veterinaria</title>
     </head>
     <body>
-        <div class="container row d-flex justify-content-center">
-            <div class="col-5 border border-dark rounded mt-2 mb-2">
+        <div class="container row align-items-center">
+            <div class="col-md-6 mx-auto border border-dark rounded mt-5 mb-5">
                 <form:form action="reservar-turno" method="POST" modelAttribute="datosTurno">
                     <br><br>
 
@@ -43,6 +43,9 @@
                     <h6><span class="text-danger">${error}</span></h6>
                     <br>
                 </c:if>
+            </div>
+            <div class="col-md-6 mx-auto">
+                <img src="<c:url value="/images/pelu-dogi.jpeg"/>">
             </div>
         </div>
 

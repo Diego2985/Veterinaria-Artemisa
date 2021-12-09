@@ -11,6 +11,7 @@ import ar.edu.unlam.tallerweb1.converter.Ubicacion;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public interface ServicioPaseador {
 
     Paseador obtenerPaseador(Long idPaseador, Boolean chequeoCantidadMaxima) throws PaseadorConCantMaxDeMascotasException;
 
-    RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario, Mascota mascota);
+    RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario, Mascota mascota, Double latitud, Double longitud) throws IOException;
 
     RegistroPaseo actualizarRegistroDePaseo(Long idRegistro, Long idPaseador, Long idUsuario, Integer estado) throws DatosCambiadosException;
 
@@ -54,4 +55,8 @@ public interface ServicioPaseador {
     Map<Long, PaseoActivo> obtenerMasDatosDePaseosActivos(List<RegistroPaseo> paseos) throws UnsupportedEncodingException;
 
     void cambiarEstadoDePaseoDeMascota(Mascota mascota);
+
+    List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId, Integer estado);
+
+    HashMap<Long, String> obtenerImagenesDeRutaADomicilios(List<RegistroPaseo> paseos) throws UnsupportedEncodingException;
 }

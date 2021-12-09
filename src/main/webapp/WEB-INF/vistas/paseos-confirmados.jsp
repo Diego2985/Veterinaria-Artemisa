@@ -68,12 +68,6 @@
                                 </c:choose>
                             </td>
                             <td>
-                                <form action="paseador/comenzar-seguimiento" method="post">
-                                    <input type="hidden" name="idRegistro" value="${paseo.id}"/>
-                                    <input type="hidden" name="idPaseador" value="${paseo.paseador.id}"/>
-                                    <input type="hidden" name="idUsuario" value="${paseo.usuario.id}"/>
-                                    <button type="submit" class="btn btn-success">Comenzar paseo</button>
-                                </form>
                                 <form action="paseador/cancelar" method="post">
                                     <input type="hidden" name="idRegistro" value="${paseo.id}">
                                     <button class="btn btn-danger" type="submit">Cancelar</button>
@@ -101,7 +95,6 @@
                             <th>Paseador</th>
                             <th>Tiempo restante</th>
                             <th>Posición del paseador</th>
-                            <th>Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -114,14 +107,6 @@
                                     <a href="#" data-toggle="modal" data-target="#modalImage" data-title="Ruta de Paseador a mi casa" data-image="${paseosActivos.get(paseo.id).imgPosicionPaseador}">
                                         <img src="<c:url value="data:image/jpeg;base64,${paseosActivos.get(paseo.id).imgPosicionPaseador}"/>" width="100" alt="ruta">
                                     </a>
-                                </td>
-                                <td>
-                                    <form method="post" action="paseador/finalizar-paseo">
-                                        <input type="hidden" name="idRegistro" value="${paseo.id}" />
-                                        <input type="hidden" name="idPaseador" value="${paseo.paseador.id}" />
-                                        <input type="hidden" name="idUsuario" value="${paseo.usuario.id}" />
-                                        <button class="btn btn-success" type="submit">Finalizar Paseo</button>
-                                    </form>
                                 </td>
                             </tr>
                         </c:forEach>

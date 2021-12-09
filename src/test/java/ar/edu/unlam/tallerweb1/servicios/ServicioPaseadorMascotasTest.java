@@ -7,6 +7,7 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioPaseador;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ public class ServicioPaseadorMascotasTest {
     private RepositorioPaseador repositorioPaseador = mock(RepositorioPaseador.class);
     private RepositorioUsuario repositorioUsuario = mock(RepositorioUsuario.class);
     private ServicioPaseador servicioPaseador = new ServicioPaseadorImpl(repositorioPaseador, repositorioUsuario);
+    private Double latitud = -34.588902;
+    private Double longitud = -58.409851;
 
     @Test
     public void separarLosPaseosPorEstado() {
@@ -55,7 +58,7 @@ public class ServicioPaseadorMascotasTest {
     }
 
     @Test
-    public void seContrataAlPaseadorYCambiaElEstadoDePaseoDelPerro() {
+    public void seContrataAlPaseadorYCambiaElEstadoDePaseoDelPerro() throws IOException {
         Mascota mascota = givenUnaMascotaDeTipoPerro();
         whenSeContrataUnPaseo(mascota);
         thenCambiaElEstadoDePaseoDeLaMascota(mascota);
@@ -68,8 +71,8 @@ public class ServicioPaseadorMascotasTest {
         return mascota;
     }
 
-    private void whenSeContrataUnPaseo(Mascota mascota) {
-        servicioPaseador.crearRegistroDePaseo(any(Paseador.class), 1L, mascota);
+    private void whenSeContrataUnPaseo(Mascota mascota) throws IOException {
+        servicioPaseador.crearRegistroDePaseo(any(Paseador.class), 1L, mascota, latitud, longitud);
     }
 
     private void thenCambiaElEstadoDePaseoDeLaMascota(Mascota mascota) {

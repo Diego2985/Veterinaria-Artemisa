@@ -56,12 +56,16 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     }
 
     @Override
-    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario, Mascota mascota) {
+    public RegistroPaseo crearRegistroDePaseo(Paseador paseador, Long idUsuario, Mascota mascota, Double latitud, Double longitud) throws IOException {
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
+        Ubicacion domicilio = obtenerDireccionDeUbicacionActual(latitud, longitud);
         RegistroPaseo registro=new RegistroPaseo();
         registro.setPaseador(paseador);
         registro.setUsuario(usuario);
         registro.setMascota(mascota);
+        registro.setLatitudUsuario(latitud);
+        registro.setLongitudUsuario(longitud);
+        registro.setDomicilio(domicilio.toString());
         repositorioPaseador.crearRegistroDePaseo(registro);
         mascota.setPaseoActivo(true);
         repositorioPaseador.cambiarEstadoDePaseoDePerro(mascota);
@@ -157,7 +161,11 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     @Override
     public String obtenerImagenDePosicionDelPaseador(Long id) throws UnsupportedEncodingException {
         Paseador paseador = repositorioPaseador.obtenerUnPaseador(id);
-        Coordenadas coordenadas = new Coordenadas(paseador.getLatitud(), paseador.getLongitud());
+        return obtenerImagenDePosicion(paseador.getLatitud(), paseador.getLongitud());
+    }
+
+    private String obtenerImagenDePosicion(Double latitud, Double longitud) throws UnsupportedEncodingException {
+        Coordenadas coordenadas = new Coordenadas(latitud, longitud);
         String uri = "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey=41cx0azEXC6uud3WIi1gIPI3A-nysczi2ogguQ6UQOM&i&c="+coordenadas.toString()+"&h=300&w=400&r=10";
         return getImageFromAPI(uri);
     }
@@ -200,8 +208,9 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
         Map<Long, PaseoActivo> mapPaseosActivos = new HashMap<>();
         for (RegistroPaseo paseo:paseos) {
             String imagen = obtenerImagenDePosicionDelPaseador(paseo.getPaseador().getId());
+            String imgUsuario = obtenerImagenDePosicion(paseo.getLatitudUsuario(), paseo.getLongitudUsuario());
             Integer minutosRestantes = Math.toIntExact(((paseo.getHoraFinal().getTime() - new Date().getTime()) / 1000) / 60);
-            PaseoActivo paseoActivo = new PaseoActivo(paseo, minutosRestantes, imagen);
+            PaseoActivo paseoActivo = new PaseoActivo(paseo, minutosRestantes, imagen, imgUsuario);
             mapPaseosActivos.put(paseo.getId(), paseoActivo);
         }
         return mapPaseosActivos;
@@ -211,6 +220,25 @@ public class ServicioPaseadorImpl implements ServicioPaseador {
     public void cambiarEstadoDePaseoDeMascota(Mascota mascota) {
         mascota.setPaseoActivo(!mascota.getPaseoActivo());
         repositorioPaseador.cambiarEstadoDePaseoDePerro(mascota);
+    }
+
+    @Override
+    public List<RegistroPaseo> obtenerPaseosDeUnPaseador(Long userId, Integer estado) {
+        Paseador paseador = repositorioPaseador.obtenerPaseadorPorIdUsuario(userId);
+        return repositorioPaseador.obtenerPaseosDeUnPaseador(paseador.getId(), estado);
+    }
+
+    @Override
+    public HashMap<Long, String> obtenerImagenesDeRutaADomicilios(List<RegistroPaseo> paseos) throws UnsupportedEncodingException {
+        HashMap<Long, String> imagenes = new HashMap<>();
+        for (RegistroPaseo paseo: paseos
+             ) {
+            Coordenadas usuario = new Coordenadas(paseo.getLatitudUsuario(), paseo.getLongitudUsuario());
+            Coordenadas paseador = new Coordenadas(paseo.getPaseador().getLatitud(), paseo.getPaseador().getLongitud());
+            String imagen = obtenerImagenDeRutaDePaseadorAUsuario(usuario, paseador);
+            imagenes.put(paseo.getId(), imagen);
+        }
+        return imagenes;
     }
 
     private String getImageFromAPI(String uriImagen) throws UnsupportedEncodingException {

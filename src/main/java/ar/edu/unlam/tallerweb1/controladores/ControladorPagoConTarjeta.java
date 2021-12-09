@@ -4,16 +4,18 @@ import ar.edu.unlam.tallerweb1.converter.DatosPagoConTarjeta;
 
 import ar.edu.unlam.tallerweb1.converter.RespuestaDePago;
 
+import ar.edu.unlam.tallerweb1.modelo.OrderData;
 import ar.edu.unlam.tallerweb1.servicios.PagoConTarjetaServicio;
+import com.mercadopago.MercadoPago;
+import com.mercadopago.exceptions.MPConfException;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.Preference;
+import com.mercadopago.resources.datastructures.preference.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ControladorPagoConTarjeta {
@@ -29,5 +31,24 @@ public class ControladorPagoConTarjeta {
     public ResponseEntity procesarPago(@RequestBody @Validated DatosPagoConTarjeta datosPagoConTarjeta) throws MPException {
         RespuestaDePago pago = pagoConTarjetaServicio.procesoDePago(datosPagoConTarjeta);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @RequestMapping(path = "/create_preference", method = RequestMethod.POST)
+    public ResponseEntity<String> crearPreferencia(@RequestBody @Validated OrderData orderData) throws MPException {
+        // Agrega credenciales
+        MercadoPago.SDK.setAccessToken("TEST-441666672441213-120702-b301080f64acfd6b5c50cbffb38ab8b7-130399654");
+        // Crea un objeto de preferencia
+        Preference preference = new Preference();
+
+        // Crea un ítem en la preferencia
+        Item item = new Item();
+        item.setTitle(orderData.getTitle())
+                .setDescription(orderData.getDescription())
+                .setQuantity(orderData.getQuantity())
+                .setUnitPrice(orderData.getPrice());
+        preference.appendItem(item);
+        preference.save();
+
+        return ResponseEntity.status(HttpStatus.OK).body(preference.getId());
     }
 }

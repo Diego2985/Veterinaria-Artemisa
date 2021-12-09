@@ -1,100 +1,58 @@
-const cardForm = mp.cardForm({
-    amount: "100.5",
-    autoMount: true,
-    form: {
-        id: "form-checkout",
-        cardholderName: {
-            id: "form-checkout__cardholderName",
-            placeholder: "Titular de la tarjeta",
-        },
-        cardholderEmail: {
-            id: "form-checkout__cardholderEmail",
-            placeholder: "E-mail",
-        },
-        cardNumber: {
-            id: "form-checkout__cardNumber",
-            placeholder: "Número de la tarjeta",
-        },
-        cardExpirationMonth: {
-            id: "form-checkout__cardExpirationMonth",
-            placeholder: "Mes de vencimiento",
-        },
-        cardExpirationYear: {
-            id: "form-checkout__cardExpirationYear",
-            placeholder: "Año de vencimiento",
-        },
-        securityCode: {
-            id: "form-checkout__securityCode",
-            placeholder: "Código de seguridad",
-        },
-        installments: {
-            id: "form-checkout__installments",
-            placeholder: "Cuotas",
-        },
-        identificationType: {
-            id: "form-checkout__identificationType",
-            placeholder: "Tipo de documento",
-        },
-        identificationNumber: {
-            id: "form-checkout__identificationNumber",
-            placeholder: "Número de documento",
-        },
-        issuer: {
-            id: "form-checkout__issuer",
-            placeholder: "Banco emisor",
-        },
-    },
-    callbacks: {
-        onFormMounted: error => {
-            if (error) return console.warn("Form Mounted handling error: ", error);
-            console.log("Form mounted");
-        },
-        onSubmit: event => {
-            event.preventDefault();
+window.document.onload = function(e){
+    // Add SDK credentials
+// REPLACE WITH YOUR PUBLIC KEY AVAILABLE IN: https://developers.mercadopago.com/panel
+    const mercadopago = new MercadoPago('TEST-0bd8f6ff-620f-4df7-a047-670ca51a949d', {
+        locale: 'es-AR' // The most common are: 'pt-BR', 'es-AR' and 'en-US'
+    });
 
-            const {
-                paymentMethodId: payment_method_id,
-                issuerId: issuer_id,
-                cardholderEmail: email,
-                amount,
-                token,
-                installments,
-                identificationNumber,
-                identificationType,
-            } = cardForm.getCardFormData();
+// Handle call to backend and generate preference.
+    document.getElementById("checkout-btn").addEventListener("click", function() {
+        pagar();
+    });
+}
 
-            fetch("http://localhost:8080/proyecto_limpio_spring_war_exploded/process_payment", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    token,
-                    editorID:issuer_id,
-                    metodoDePagoId: payment_method_id,
-                    cantidadDeTransaccion: Number(amount),
-                    cuotas: Number(installments),
-                    descripcionProducto: "Descripción del producto",
-                    pagador: {
-                        email,
-                        identificacion: {
-                            tipo: identificationType,
-                            numero: identificationNumber,
-                        },
-                    },
-                }),
-            }).then(res=>res.json()).then(res=>console.log(res))
+function pagar() {
+    $('#checkout-btn').attr("disabled", true);
+
+    const orderData = {
+        quantity: 1,
+        title: "Alimento",
+        description: "Para perro",
+        price: 500.0
+    };
+
+    fetch("http://localhost:8080/Veterinaria_Artemisa_war_exploded/create_preference", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
         },
-        onFetching: (resource) => {
-            console.log("Fetching resource: ", resource);
+        body: JSON.stringify(orderData),
+    })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(preference) {
+            console.log('createCheckoutButton');
+            createCheckoutButton(preference.id);
+        })
+        .catch(function(e) {
+            console.log(e);
+            alert("Unexpected error" + e.message);
+            $('#checkout-btn').attr("disabled", false);
+        });
+}
 
-            // Animate progress bar
-            const progressBar = document.querySelector(".progress-bar");
-            progressBar.removeAttribute("value");
-
-            return () => {
-                progressBar.setAttribute("value", "0");
-            };
+// Create preference when click on checkout button
+function createCheckoutButton(preferenceId) {
+    // Initialize the checkout
+    console.log(preferenceId);
+    mercadopago.checkout({
+        preference: {
+            id: preferenceId
         },
-    },
-});
+        render: {
+            container: '.cho-container', // Class name where the payment button will be displayed
+            label: 'Pagar', // Change the payment button text (optional)
+        }
+    });
+}

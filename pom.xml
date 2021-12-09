@@ -178,8 +178,8 @@
 		</dependency>
         <dependency>
             <groupId>com.mercadopago</groupId>
-            <artifactId>dx-java</artifactId>
-            <version>1.0.33</version>
+            <artifactId>sdk-java</artifactId>
+            <version>1.9.0</version>
         </dependency>
     </dependencies>
 </project>

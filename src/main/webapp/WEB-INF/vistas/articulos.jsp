@@ -39,9 +39,8 @@
 
         <div class="row container-fluid d-flex align-items-center mt-3">
             <form method="post" action="articulos">
-                <div class="form-group">
-                    <label for="articulo">Buscar artículo:</label>
-                    <input id="articulo" type="text" name="busqueda" class="form-control mb-2" placeholder="Ingrese el titulo o descripción del artículo">
+                <div class="input-group py-4 border-primary">
+                    <input id="articulo" type="text" name="busqueda" class="form-control" placeholder="Ingrese el titulo o descripción del artículo">
                     <button type="submit" class="btn btn-success">Buscar</button>
                 </div>
             </form>
@@ -50,11 +49,12 @@
             </c:if>
             <c:forEach var="articulo" items="${articulos}" varStatus="loop">
                     <div class="col-6 col-sm-3 d-flex justify-content-center">
-                        <div class="card text-center d-flex justify-content-center" >
+                        <div class="card text-center d-flex justify-content-center mt-4" >
                             <img
                                     src="<c:url value="/images/articulo-${articulo.id}.jpg"/>"
                                     class="img-fluid"
-                                    alt="..."
+                                    alt="articulo"
+                                    style="height: 250px;"
                             />
                             <c:if test="${articulo.esNuevo}">
                                 <h6><span class="badge btn-primary">¡Nuevo!</span></h6>
@@ -87,11 +87,14 @@
                                     </script>
                                 </c:if>
                             </c:if>
+                            <c:if test="${!articulo.esNuevo}">
+                                <h6><span class="badge btn-primary invisible">Hola</span></h6>
+                            </c:if>
                             <div class="card-body">
                                 <h5 class="card-title" id="product-title">${articulo.tituloArticulo}</h5>
                                 <h6 class="card-text" id="product-description">${articulo.descripcion}</h6>
                                 <div class="container text-center">
-                                    <h3 class="card-title" id="unit-price">${articulo.precio}</h3>
+                                    <h3 class="card-title" id="unit-price">$${articulo.precio}</h3>
                                 </div>
                             </div>
                             <form>

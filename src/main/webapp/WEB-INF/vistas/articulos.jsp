@@ -48,7 +48,7 @@
             <c:if test="${articulos.size()==0}">
                 <h2>No se encontraron artículos</h2>
             </c:if>
-            <c:forEach var="articulo" items="${articulos}">
+            <c:forEach var="articulo" items="${articulos}" varStatus="loop">
                     <div class="col-6 col-sm-3 d-flex justify-content-center">
                         <div class="card text-center d-flex justify-content-center" >
                             <img
@@ -96,15 +96,14 @@
                             </div>
                             <form>
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-success" id="checkout-btn" onclick="pagar()">Comprar</button>
+                                    <button type="button" class="btn btn-success checkout-btn">Comprar</button>
                                 </div>
                             </form>
+                            <div class="cho-container-${loop.index}"></div>
                         </div>
                     </div>
             </c:forEach>
         </div>
-
-        <div class="cho-container"></div>
 
         <%@ include file = "partial/footer.jsp" %>
     </body>

@@ -6,10 +6,13 @@ import ar.edu.unlam.tallerweb1.converter.RespuestaDePago;
 
 import ar.edu.unlam.tallerweb1.modelo.OrderData;
 import ar.edu.unlam.tallerweb1.servicios.PagoConTarjetaServicio;
+import com.google.gson.Gson;
+import com.google.gson.JsonNull;
 import com.mercadopago.MercadoPago;
 import com.mercadopago.exceptions.MPConfException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.Preference;
+import com.mercadopago.resources.datastructures.preference.BackUrls;
 import com.mercadopago.resources.datastructures.preference.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,6 +50,13 @@ public class ControladorPagoConTarjeta {
                 .setQuantity(orderData.getQuantity())
                 .setUnitPrice(orderData.getPrice());
         preference.appendItem(item);
+        preference.setBackUrls(
+                new BackUrls()
+                .setSuccess("http://localhost:8080/Veterinaria_Artemisa_war_exploded/articulos")
+                .setPending("http://localhost:8080/Veterinaria_Artemisa_war_exploded/articulos")
+                .setFailure("http://localhost:8080/Veterinaria_Artemisa_war_exploded/articulos")
+        );
+
         preference.save();
 
         return ResponseEntity.status(HttpStatus.OK).body(preference.getId());
